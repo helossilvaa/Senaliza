@@ -1,0 +1,333 @@
+:root {
+  --fundo: #f8f8fa;
+  --branco: #ffffff;
+  --bola: #b10000;
+  --fonte: 'Poppins', sans-serif;
+  --cordata: #535355;
+  --vermelhoEscuro: #640d14;
+}
+
+.page {
+  display: flex;
+}
+
+.conteudoPrincipal {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.infos {
+  width: 60%;
+}
+
+.titulo {
+  color: var(--vermelhoEscuro);
+  font-weight: bold;
+}
+
+.card {
+  background: var(--branco);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  height: auto; /* Cresce conforme o conteúdo */
+  overflow: visible;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Espaçamento entre conteúdo e botão */
+}
+
+.tituloCard {
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-top: 12px;
+}
+
+.subInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.autor {
+  font-size: 0.85rem;
+  width: 50%;
+  color: gray;
+  margin-top: 15px;
+}
+
+.data {
+  font-size: 0.85rem;
+  width: 60%;
+  color: gray;
+  margin-top: 15px;
+  margin-left: 430px;
+}
+
+.descricao {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  text-align: justify;
+  height: auto;
+  overflow: visible;
+}
+
+.novaDescricao {
+  width: 100%;
+  background: var(--branco);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: auto;
+  overflow: visible;
+  margin-top: 1rem;
+}
+
+.card button {
+  align-self: flex-end; /* Alinha o botão à direita dentro do card */
+  border: none;
+  background-color: var(--vermelhoEscuro);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-family: var(--fonte);
+  font-size: 16px;
+  color: var(--branco);
+  float: right;
+  cursor: pointer;
+}
+
+.linhaTempo {
+  margin-top: 5px;
+  margin-left: 40px;
+}
+
+.tituloLinhaTempo {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.tituloLinhaTempo p {
+  font-weight: bold;
+  color: var(--vermelhoEscuro);
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.informacoesLinhaTempo {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.ponto {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: var(--vermelhoEscuro);
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+.informacoesLinhaTempo h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.informacoesLinhaTempo p {
+  font-family: var(--fonte);
+  color: var(--cordata);
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+.dataLinhaTempo {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--cordata);
+}
+
+.timelineContainer {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.formTimeline {
+  background: var(--branco);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.formTimeline label {
+  font-weight: bold;
+  color: var(--vermelhoEscuro);
+  font-size: 0.9rem;
+}
+
+.formTimeline input,
+.formTimeline textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.6rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  resize: none;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--branco);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal textarea {
+  width: 100%;
+  border-radius: 8px;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  font-family: var(--fonte);
+  resize: none;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.modalButtons button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--fonte);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.modalButtons button:first-child {
+  background-color: var(--vermelhoEscuro);
+  color: var(--branco);
+}
+
+.modalButtons button:last-child {
+  background-color: #ccc;
+  color: #333;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .conteudoPrincipal {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .infos {
+    width: 100%;
+  }
+
+  .data {
+    margin-left: 0;
+    text-align: right;
+  }
+
+  .timelineContainer {
+    flex-direction: column;
+  }
+
+  .linhaTempo {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    height: auto;  /* Cresce conforme o conteúdo */
+  }
+
+  .tituloLinhaTempo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .formTimeline {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .conteudoPrincipal {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .tituloCard {
+    font-size: 1.1rem;
+  }
+
+  .descricao {
+    font-size: 0.95rem;
+  }
+
+  .subInfo {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .autor,
+  .data {
+    width: 100%;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .linhaTempo {
+    margin-left: 0;
+  }
+
+  .informacoesLinhaTempo h4 {
+    font-size: 1rem;
+  }
+
+  .informacoesLinhaTempo p {
+    font-size: 0.8rem;
+  }
+}

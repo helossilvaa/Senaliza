@@ -1,0 +1,103 @@
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.conteiner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bola {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background:#640d14 ;
+}
+
+.titulo h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2e2e2e;
+  margin: 0;
+}
+
+.data {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.botoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.botaoVeja {
+  background: #b10000;
+  color: #fff;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.botaoVeja:hover {
+  background: #640d14;
+}
+
+.atribuirForm {
+  display: flex;
+  gap: 8px;
+}
+
+.atribuirForm select {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #d1d3e2;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #f8f9fc;
+  color: #333;
+  transition: border 0.2s ease;
+}
+
+.atribuirForm select:focus {
+  border-color: #575757;
+  outline: none;
+}
+
+.atribuirForm button {
+  background: #0a7d00;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.atribuirForm button:hover {
+  background: rgb(2, 86, 57);
+}

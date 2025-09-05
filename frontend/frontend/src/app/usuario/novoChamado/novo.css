@@ -1,0 +1,103 @@
+/* ------------------ */
+/* CSS DO SEU PROJETO */
+/* ------------------ */
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+.page {
+    display: flex;
+    height: 100vh;
+    font-family: var(--fonte);
+    background-color: #f8f8f8;
+}
+
+.formWrapper {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.cardChamados {
+    background-color: #fbfafa;
+    border: 1px solid #817e7e00;
+    border-radius: 15px;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.116);
+}
+
+
+.title {
+    border-left: 3px solid #d80000;
+    height: 32px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+h2 {
+    color: #434547;
+    padding-left: 4px;
+}
+
+.form-chamados {
+    padding-top: 20px;
+}
+
+.enviar {
+    background-color: #ad2831;
+    color: rgb(235, 229, 229);
+    margin-top: 10px;
+}
+
+.form-check-input:checked {
+    background-color: #d80000;
+    border-color: #d80000b0;
+}
+
+.form-check-input:focus {
+    border-color: #ef5252;
+    box-shadow: 0 0 0 .25rem rgba(255, 57, 57, 0.25);
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 .25rem #e2e2e2;
+}
+
+.enviar:hover {
+    color: #ffffff;
+    background-color: #6a0e14;
+    border-color: none;
+}
+
+.titulo-input {
+    font-weight: bolder;
+    color: #454546;
+}
+
+.inputText {
+    margin-top: 2px;
+    border: 1px solid #4d4a4a12;
+    height: 40px; 
+    width: 100%;
+}
+
+.inputText:focus {
+    outline: none;
+    border-color: #8f343400;
+}
+
+.form-select {
+    height: 40px;
+    width: 100%;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #8f343400;
+}
+
+.col-sm-6 {
+    min-height: 100px;
+}
