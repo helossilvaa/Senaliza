@@ -8,10 +8,6 @@
   --vermelhoEscuro: #640d14;
 }
  
-<<<<<<< HEAD
-
-=======
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 .page {
   display: flex;
   height: 100vh;
@@ -41,12 +37,7 @@
  
 .cardsContainer {
   display: grid;
-<<<<<<< HEAD
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows:max-content;
-=======
   grid-template-columns: 2fr 1fr;
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
   gap: 1.5rem;
 }
  
@@ -56,10 +47,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 1rem;
   height: auto;
-<<<<<<< HEAD
- 
-=======
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }
  
 .card h3 {
@@ -103,9 +90,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 2rem;
 }
-<<<<<<< HEAD
- 
-=======
 
 .cardsTopContainer {
   display: grid;
@@ -127,7 +111,6 @@
   font-weight: 500;
   margin-bottom: 1rem; 
 }
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
  
 .cardSmallBottom {
   margin-top: 30px;
@@ -166,15 +149,12 @@
   background: var(--bola);
   border-radius: 6px;
 }
-<<<<<<< HEAD
-=======
 
 .barraProgresso > div { height: 100%; }
 
 .progressoEmAndamento { background-color: var(--vermelhoEscuro); }
 .progressoConcluido { background-color: #b3b3b3; }
 .progressoPendente {background-color: #d52531;}
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
  
 .legenda {
   list-style: none;
@@ -194,18 +174,6 @@
   margin-right: 4px;
 }
  
-<<<<<<< HEAD
-.bolinhaAberto {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background: #d52531;
-  border-radius: 50%;
-  margin-right: 4px;
-}
- 
-=======
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 .bolinhaAndamento {
   display: inline-block;
   width: 10px;
@@ -281,35 +249,10 @@
   align-items: center;
   font-size: 22px;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 .cards{
   width: auto;
 }
  
-<<<<<<< HEAD
-.add {
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--vermelhoEscuro);
-}
- 
-.tarefas {
-  list-style: none;
-  padding: 0;
-  margin-top: 1rem;
-}
- 
-.tarefas li {
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-}
- 
-=======
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 @media (max-width: 768px) {
   .cardsContainer {
     display: grid;
@@ -332,8 +275,6 @@
   .cardsContainer {
     gap: 1rem;
   }
-<<<<<<< HEAD
-=======
 
   .cardsTopContainer {
     grid-template-columns: 1fr;
@@ -343,7 +284,6 @@
 .notificationsCard {
     margin-top: 1.5rem;
 }
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }
 @media (max-width: 425px){
   .cardsContainer {
@@ -352,11 +292,7 @@
     grid-template-rows:max-content;
     gap: 1.5rem;
   }
-<<<<<<< HEAD
-  
-=======
  
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
   .chamadoItem {
     flex-direction: column;
     align-items: flex-start;
@@ -371,8 +307,4 @@
   .cardsContainer {
     gap: 1rem;
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d

@@ -1,14 +1,14 @@
 import {create, readAll, read, update, query} from '../config/database.js';
-
-const criarChamado = async (chamadoData) => { 
+ 
+const criarChamado = async (chamadoData) => {
   try {
-    return await create('chamados', chamadoData); 
+    return await create('chamados', chamadoData);
   } catch (error) {
-    console.error('Erro ao criar chamado:', error); 
+    console.error('Erro ao criar chamado:', error);
     throw error;
   }
 };
-
+ 
 const listarChamado = async () => {
   try {
     return await readAll('chamados');
@@ -17,13 +17,13 @@ const listarChamado = async () => {
     throw error;
   }
 }
-
+ 
 const listarChamadosPendentes = async (poolsIds) => {
   try {
     if (!poolsIds || poolsIds.length === 0) {
       return [];
     }
-
+ 
     const placeholders = poolsIds.map(() => '?').join(', ');
     const sql = `
       SELECT c.*
@@ -37,7 +37,7 @@ const listarChamadosPendentes = async (poolsIds) => {
     throw error;
   }
 };
-
+ 
 const listarTodosChamadosPendentes = async () => {
     try {
         const sql = `
@@ -50,7 +50,7 @@ const listarTodosChamadosPendentes = async () => {
         throw error;
     }
 };
-
+ 
 const obterChamadoPorId = async (id) => {
   try {
     return await read('chamados', `id = ${id}`);
@@ -59,20 +59,20 @@ const obterChamadoPorId = async (id) => {
     throw error;
   }
 }
-
+ 
 const atualizarChamado = async (req, res) => {
   try {
     await update('chamados', chamadoData, `id = ${id}`);
-      const { id } = req.params; 
+      const { id } = req.params;
       const { descricao } = req.body;
-
-      const chamadoExistente = await obterChamadoPorId(id); 
+ 
+      const chamadoExistente = await obterChamadoPorId(id);
       if (!chamadoExistente) {
           return res.status(404).json({ mensagem: 'Chamado não encontrado' });
       }
-
+ 
       const descricaoAtualizada = `${chamadoExistente.descricao}\n\n${descricao}`;
-      
+     
       await atualizarChamado(id, { descricao: descricaoAtualizada });
       res.status(200).json({ mensagem: 'Chamado atualizado com sucesso' });
   } catch (error) {
@@ -80,19 +80,19 @@ const atualizarChamado = async (req, res) => {
       res.status(500).json({ mensagem: 'Erro ao atualizar chamado.' });
   }
 };
-
+ 
 const atualizarStatusChamado = async (chamadoId, novoStatus) => {
   try {
       const dadosParaAtualizar = { status: novoStatus };
       const id = `id = ${chamadoId}`;
-
+ 
       return await update('chamados', dadosParaAtualizar, id);
   } catch (error) {
       console.error('Erro ao atualizar o status do chamado:', error);
       throw error;
   }
 };
-
+ 
 const criarApontamentos = async (id, apontamentoData) => {
   try{
     await create('apontamentos', {...apontamentoData, chamado_id: id});
@@ -101,35 +101,35 @@ const criarApontamentos = async (id, apontamentoData) => {
     throw error;
   }
 }
-
+ 
 const assumirChamado = async (id, tecnicoId) => {
   try {
     const chamado = await read('chamados', `id = ${id}`);
     if (!chamado) throw new Error('Chamado não encontrado');
     if (chamado.tecnico_id) throw new Error('Chamado já foi assumido');
-
+ 
     return await update('chamados', { tecnico_id: tecnicoId, status: 'em andamento'}, `id = ${id}`);
   } catch (error) {
     console.error('Erro ao assumir chamado: ', error);
     throw error;
   }
 };
-
-//adicionado 
+ 
+//adicionado
 const atribuirChamado = async (chamadoId, tecnico_id) => {
-    try {
-      const dadosParaAtualizar = {
-        tecnico_id: tecnico_id,
-        status: 'em andamento'
-      };
-      const condicao = `id = ${chamadoId}`;
-      return await update('chamados', dadosParaAtualizar, condicao);
-    } catch (error) {
-      console.error('Erro ao atribuir chamado:', error);
-      throw error;
-    }
+    try {
+      const dadosParaAtualizar = {
+        tecnico_id: tecnico_id,
+        status: 'em andamento'
+      };
+      const condicao = `id = ${chamadoId}`;
+      return await update('chamados', dadosParaAtualizar, condicao);
+    } catch (error) {
+      console.error('Erro ao atribuir chamado:', error);
+      throw error;
+    }
   };
-
+ 
 const atualizarPrazoChamado = async (id, prazo) => {
     try {
         const dadosParaAtualizar = { prazo: prazo };
@@ -139,7 +139,7 @@ const atualizarPrazoChamado = async (id, prazo) => {
         throw error;
     }
 };
-
+ 
 const listarChamadosPorCategoria = async () => {
   try {
     const sql = `
@@ -149,7 +149,7 @@ const listarChamadosPorCategoria = async () => {
       GROUP BY p.titulo
     `;
     const resultados = await query(sql);
-
+ 
     return resultados.map(row => ({
       name: row.categoria,
       value: row.total
@@ -159,12 +159,12 @@ const listarChamadosPorCategoria = async () => {
     throw error;
   }
 };
-
+ 
 const listarRankingTecnicos = async () => {
   try {
     const chamados = await readAll('chamados');
     const concluidos = chamados.filter(c => c.status === 'concluído');
-
+ 
     const ranking = concluidos.reduce((acc, chamado) => {
       const tecnicoId = chamado.tecnico_id;
       if (tecnicoId) {
@@ -172,19 +172,19 @@ const listarRankingTecnicos = async () => {
       }
       return acc;
     }, {});
-
+ 
     const tecnicoIds = Object.keys(ranking);
     if (tecnicoIds.length === 0) return [];
-
+ 
     const placeholders = tecnicoIds.map(() => '?').join(', ');
     const sql = `SELECT id, nome FROM usuarios WHERE id IN (${placeholders})`;
     const tecnicosInfo = await query(sql, tecnicoIds);
-
+ 
     const tecnicoIdToNome = {};
     tecnicosInfo.forEach(t => {
       tecnicoIdToNome[t.id] = t.nome;
     });
-
+ 
     return Object.entries(ranking)
       .map(([tecnicoId, count]) => ({
         nomeTecnico: tecnicoIdToNome[tecnicoId] || `Técnico ${tecnicoId}`,
@@ -197,7 +197,7 @@ const listarRankingTecnicos = async () => {
     throw error;
   }
 };
-
+ 
 const listarApontamentos = async (chamadoId) => {
   try {
     return await readAll('apontamentos', `chamado_id = ${chamadoId}`);
@@ -206,5 +206,5 @@ const listarApontamentos = async (chamadoId) => {
     throw error;
   }
 }
-
+ 
 export {criarChamado, listarChamado, obterChamadoPorId, atualizarChamado, criarApontamentos, assumirChamado, listarChamadosPendentes, atualizarStatusChamado, atualizarPrazoChamado, listarChamadosPorCategoria, listarRankingTecnicos, atribuirChamado, listarTodosChamadosPendentes, listarApontamentos};

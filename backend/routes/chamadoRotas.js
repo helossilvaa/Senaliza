@@ -3,10 +3,10 @@ import { criarChamadoController, listarChamadosController, listarTodosChamadosDo
 listarRankingTecnicosController, listarChamadosPorCategoriaController, listarChamadosConcluidosDoTecnicoController,
 atribuirChamadoController, listarApontamentosController} from '../controllers/chamadosController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
-
+ 
 const router = express.Router();
-
-router.get('/', authMiddleware, listarChamadosDoUsuarioController); 
+ 
+router.get('/', authMiddleware, listarChamadosDoUsuarioController);
 router.post('/', authMiddleware, criarChamadoController);
 router.get('/pendentes', authMiddleware, listarChamadosPendentesController);
 router.get('/chamados/concluidos', authMiddleware, listarChamadosConcluidosDoTecnicoController);
@@ -23,6 +23,6 @@ router.put('/:id/status', authMiddleware, atualizarStatusChamadoController);
 router.put('/prazo/:id', authMiddleware, estipularPrazoController);
 router.put('/:id',authMiddleware, atualizarChamadoController);
 router.get('/:id', authMiddleware, obterChamadoPorIdController);
-
-
+ 
+ 
 export default router;

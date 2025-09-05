@@ -6,11 +6,5 @@
 .mainContent {
   flex-grow: 1;
   overflow-y: auto; 
-<<<<<<< HEAD
-<<<<<<<< HEAD:frontend/src/components/LayoutTecnico/page.module.css
   padding: 20px;
-========
->>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d:frontend/src/components/LayoutAdmin/page.module.css
-=======
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }
