@@ -25,19 +25,6 @@ const loginController = async (req, res) => {
       return res.status(401).json({ mensagem: 'Senha incorreta' });
     }
 
-    const ehPrimeiroLogin = await verificarPrimeiroLogin(usuario.id);
-
-    if (ehPrimeiroLogin) {
-        const mensagem = notificacaoTextos.BEM_VINDO(usuario.nome);
-        const notificacoesData = {
-            usuario_id: usuario.id,
-            mensagem,
-            visualizado: 'nao_vista'
-        };
-        await criarNotificacao(notificacoesData);
-        await marcarLoginFeito(usuario.id);
-    }
-
     // Gerar o token JWT
     const token = jwt.sign({ id: usuario.id, tipo: usuario.tipo, nome: usuario.nome, status: usuario.status }, JWT_SECRET, {
       expiresIn: '1h',

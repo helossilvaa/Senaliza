@@ -1,0 +1,119 @@
+.page {
+  min-height: 100vh;
+  background: #f8f8fa;
+  font-family: "Poppins", sans-serif;
+  color: #444;
+}
+
+.titulo {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.tabButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #e6e6e6;
+  color: #444;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tabButton:hover {
+  background: #d4d4d4;
+}
+
+.tabButton.active {
+  background: #640d14;
+  color: #fff;
+}
+
+
+/* Seções */
+.section {
+  margin-top: 20px;
+}
+
+.filterContainer {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filterContainer select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1.5px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  color: black;
+}
+
+/* Cards */
+.cardList,
+.cardsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 20px;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.cardContent h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.cardContent p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #b10000;
+  font-size: 18px;
+}
+
+.deleteBtn:hover {
+  color: #ff4444;
+}
+
+.loading {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 50px;
+  color: #666;
+}

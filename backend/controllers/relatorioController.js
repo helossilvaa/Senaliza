@@ -1,5 +1,5 @@
 import { listarRelatorios, buscarRelatorios } from '../models/relatorio.js';
-import { read } from '../config/database.js';
+import { readAll, read } from '../config/database.js';
 import fs from 'fs';
 
 
@@ -123,8 +123,8 @@ const relatorioTecnicosController = async (req, res) => {
   try {
     if (req.usuarioFuncao !== 'admin') return res.status(403).json({ mensagem: 'Acesso negado' });
 
-    const chamados = await read('chamados');
-    const tecnicos = await read('usuarios', `funcao = 'tecnico'`);
+    const chamados = await readAll('chamados');
+    const tecnicos = await readAll('usuarios', `funcao = 'tecnico'`);
 
     const relatorio = tecnicos.map(t => {
       const resolvidos = chamados.filter(c => c.tecnico_id === t.id && ['concluído','concluido'].includes(c.status.toLowerCase().trim()));
@@ -146,28 +146,47 @@ const relatorioTecnicosController = async (req, res) => {
 
 const relatorioEquipamentosController = async (req, res) => {
   try {
-    if (req.usuarioFuncao !== 'admin') return res.status(403).json({ mensagem: 'Acesso negado' });
+    if (req.usuarioFuncao !== 'admin') {
+      return res.status(403).json({ mensagem: 'Acesso negado' });
+    }
 
-    const chamados = await read('chamados');
-    const equipamentos = await read('equipamentos');
+    const chamados = await readAll('chamados');
+    const equipamentos = await readAll('equipamentos');
+    const salas = await readAll('salas'); 
 
+    
     const relatorio = equipamentos.map(eq => {
-      const chamadosEq = chamados.filter(c => c.equipamento_id === eq.id);
+      const chamadosEq = chamados.filter(c => c.equipamento_id === eq.patrimonio);
+      const salaObj = salas.find(s => s.id === eq.sala_id);
+
       return {
-        equipamento_id: eq.id,
-        nome: eq.nome || eq.patrimonio || 'Sem nome',
+        equipamento_id: eq.patrimonio,
+        nome: eq.equipamento || eq.patrimonio || 'Sem nome', 
+        sala_id: eq.sala_id, 
+        sala: salaObj ? salaObj.nome_sala : 'Sem sala',
         totalChamados: chamadosEq.length
       };
     });
 
-    const maisOcorrencias = relatorio.reduce((max, eq) => eq.totalChamados > max.totalChamados ? eq : max, { totalChamados: 0 });
+    const porSala = {};
+    relatorio.forEach(eq => {
+      if (!porSala[eq.sala]) porSala[eq.sala] = []; 
+      porSala[eq.sala].push(eq);
+    });
 
-    res.status(200).json({ relatorio, maisOcorrencias });
+    for (const sala in porSala) {
+      porSala[sala].sort((a, b) => b.totalChamados - a.totalChamados);
+    }
+
+    res.status(200).json({ relatorio, porSala });
   } catch (error) {
     console.error('Erro ao gerar relatório de equipamentos:', error);
     res.status(500).json({ mensagem: 'Erro ao gerar relatório de equipamentos' });
   }
 };
+
+
+
 
 export { listarRelatoriosController, buscarRelatoriosController, listarPdfsGeradosController, listarRelatoriosRecentesController, relatorioTecnicosController, relatorioEquipamentosController};
 

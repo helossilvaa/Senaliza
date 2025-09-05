@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { listarRelatoriosController, buscarRelatoriosController, listarPdfsGeradosController, gerarRelatorioEquipamentosController, gerarRelatorioTecnicosController } from '../controllers/relatorioController.js';
+import { listarRelatoriosController, buscarRelatoriosController, listarPdfsGeradosController, relatorioTecnicosController, relatorioEquipamentosController} from '../controllers/relatorioController.js';
 import { gerarRelatorioPdfPorIdController } from '../controllers/relatorioPDFcontroller.js';
 import authMiddleware from '../middlewares/authMiddleware.js'; 
 
@@ -19,7 +19,7 @@ router.get('/pdfs/:nomeDoArquivo', (req, res) => {
 });
 
 router.get('/pdf/:id', authMiddleware, gerarRelatorioPdfPorIdController);
-router.get('/tecnicos', authMiddleware, gerarRelatorioTecnicosController); // Técnicos
-router.get('/equipamentos', authMiddleware, gerarRelatorioEquipamentosController);
+router.get('/tecnicos', authMiddleware, relatorioTecnicosController); 
+router.get('/equipamentos', authMiddleware, relatorioEquipamentosController);
 
 export default router;

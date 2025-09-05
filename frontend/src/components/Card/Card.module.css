@@ -1,0 +1,140 @@
+:root {
+    --fundo: #f8f8fa;
+    --branco: #ffffff;
+    --preto: #000000;
+    --bola: #b10000;
+    --fonte: 'Poppins', sans-serif;
+    --cordata: #535355;
+    --vermelhoEscuro: #640d14;
+}
+
+.card {
+    width: 30%;
+    height: 25vh;
+    background-color: white;
+    border-radius: 15px;
+    margin-bottom: 2%;
+    padding: 2%;
+    font-family: var(--fonte);
+}
+
+.cabecalho {
+    display: flex;
+    gap: 5px;
+    margin-top: 3px;
+}
+
+.bola {
+    border-radius: 50%;
+    width: 6px;
+    height: 6px;
+    margin-top: 8px;
+    background-color: var(--bola);
+}
+
+.titulo h5 {
+    font-size: 17px;
+}
+
+.data p {
+    font-size: 13px;
+    margin: 8px 0 0 8px;
+    color: #535355;
+}
+
+.botoes {
+    display: flex;
+    gap: 48%;
+    margin: 12px 0 0 8px;
+}
+
+.botaoVeja {
+    text-decoration: none;
+    color: var(--botao);
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.botaoAceitar button {
+    background-color: var(--botao);
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    width: 65px;
+}
+
+.botaoAceitar p {
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    margin: 0;
+}
+
+.botaoAceitar button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+@media (max-width: 1024px) {
+    .card {
+        width: 45%;
+        height: auto;
+    }
+
+    .botoes {
+        gap: 40%;
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+        height: auto;
+        padding: 4%;
+    }
+
+    .titulo h5 {
+        font-size: 16px;
+    }
+
+    .data p {
+        font-size: 12px;
+    }
+
+    .botoes {
+        gap: 30%;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 100%;
+        padding: 5%;
+    }
+
+    .cabecalho {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .titulo h5 {
+        font-size: 14px;
+        margin-top: -15px;
+        margin-left: 10px;
+    }
+
+    .data p {
+        font-size: 11px;
+    }
+
+    .botoes {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .botaoAceitar button {
+        width: 100%;
+    }
+}

@@ -41,7 +41,7 @@ const fakeUsers = [
     nome: 'Arioci',
     senha: '12345',
     email: '11223344@educ123.sp.senai.br',
-    funcao: 'administrador',
+    funcao: 'admin',
   },
 ];
 
