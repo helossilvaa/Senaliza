@@ -44,11 +44,7 @@ export default function DashboardAdmin() {
 
         const fetchChamados = async () => {
             try {
-<<<<<<< HEAD
-                const res = await fetch(`${API_URL}/chamados`, config);
-=======
                 const res = await fetch(`${API_URL}/chamados/todos`, config);
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
                 if (!res.ok) throw new Error("Erro ao buscar chamados");
                 const data = await res.json();
                 setChamados(data);
@@ -118,11 +114,7 @@ export default function DashboardAdmin() {
         };
 
         const fetchRelatoriosRecentes = async () => {
-<<<<<<< HEAD
-            const limite = 3;
-=======
             const limite = 5;
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
             try {
                 const res = await fetch(`${API_URL}/relatorios/recentes?limite=${limite}`, {
                     headers: {

@@ -5,14 +5,8 @@
 
 .mainContent {
   flex-grow: 1;
-<<<<<<< HEAD
   overflow-y: auto; /* Permite que apenas a área do conteúdo role */
   padding: 20px;
-=======
   overflow-y: auto; 
-<<<<<<<< HEAD:frontend/src/components/LayoutTecnico/page.module.css
   padding: 20px;
-========
->>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d:frontend/src/components/LayoutAdmin/page.module.css
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }

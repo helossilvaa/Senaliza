@@ -6,7 +6,6 @@
     --botao: #640d14;
 }
 
-<<<<<<< HEAD
 .documentos{
     background-color: var(--fundo);
     width: 300px;
@@ -34,64 +33,12 @@
 }
 
 .link p{
-=======
-.documentos {
-    background-color: var(--fundo);
-    width: 100%;
-    max-width: 600px;
-    border-radius: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 15px;
-    margin-bottom: 10px;
-    font-family: var(--fonte);
-    box-sizing: border-box;
-}
-
-.icon {
-    font-size: 30px;
-    margin-right: 15px;
-    flex-shrink: 0;
-}
-
-.icon:hover {
-    color: var(--botao);
-}
-
-.info {
-    flex: 1;
-    min-width: 0;
-}
-
-.titulo p {
-    margin: 0;
-    font-weight: bold;
-    font-family: var(--fonte);
-    overflow-wrap: break-word;
-}
-
-.link p {
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
     margin: 0;
     font-family: var(--fonte);
     font-size: 13px;
     cursor: pointer;
 }
 
-<<<<<<< HEAD
-.link:hover{
-    text-decoration: underline;
-}
-
-.baixar{
-    font-size: 25px;
-    margin-left: 50px ;
-}
-
-.baixar:hover{
-    text-decoration: underline;
-    color:#640d14
-=======
 .link p:hover {
     text-decoration: underline;
 }
@@ -138,5 +85,4 @@
     .baixar {
         font-size: 22px;
     }
->>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }
