@@ -5,48 +5,57 @@
     --cordata: #535355;
     --botao: #640d14;
 }
-
-.documentos{
+ 
+.documentos {
     background-color: var(--fundo);
-    width: 300px;
+    width: 100%;
+    max-width: 600px;
     border-radius: 20px;
     display: flex;
+    flex-wrap: wrap;
     padding: 15px;
-    align-items: center;
+    margin-bottom: 10px;
     font-family: var(--fonte);
+    box-sizing: border-box;
 }
-
-.icon{
+ 
+.icon {
     font-size: 30px;
-    margin-right: 10px;
+    margin-right: 15px;
+    flex-shrink: 0;
 }
-
-.icon:hover{
-    color: #640d14;
+ 
+.icon:hover {
+    color: var(--botao);
 }
-
-.titulo p{
-    font-family: var(--fonte);
+ 
+.info {
+    flex: 1;
+    min-width: 0;
+}
+ 
+.titulo p {
     margin: 0;
     font-weight: bold;
-    margin-right: 100px;
+    font-family: var(--fonte);
+    overflow-wrap: break-word;
 }
-
-.link p{
+ 
+.link p {
     margin: 0;
     font-family: var(--fonte);
     font-size: 13px;
     cursor: pointer;
 }
-
+ 
 .link p:hover {
     text-decoration: underline;
 }
-
+ 
 .download {
     margin-left: auto;
 }
-
+ 
 .baixar {
     font-size: 25px;
     color: #000000;
@@ -54,34 +63,34 @@
     border: none;
     cursor: pointer;
 }
-
+ 
 .baixar:hover {
     text-decoration: underline;
     color: var(--botao);
 }
-
+ 
 @media (max-width: 768px) {
     .documentos {
         flex-direction: column;
         align-items: flex-start;
         padding: 20px;
     }
-
+ 
     .icon {
         margin-bottom: 10px;
         margin-right: 0;
     }
-
+ 
     .titulo p {
         margin-bottom: 5px;
     }
-
+ 
     .download {
         margin-left: 0;
         margin-top: 10px;
         align-self: flex-end;
     }
-
+ 
     .baixar {
         font-size: 22px;
     }

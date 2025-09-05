@@ -7,13 +7,13 @@
   --cordata: #535355;
   --vermelhoEscuro: #640d14;
 }
-
+ 
 .page {
   display: flex;
   height: 100vh;
   font-family: var(--fonte);
 }
-
+ 
 .dashboardContainer {
   flex: 1;
   padding: 1rem;
@@ -21,22 +21,22 @@
   min-height: 100vh;
   overflow-y: auto;
 }
-
-
+ 
+ 
 .welcome {
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: #333;
 }
-
+ 
 .cardsContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 160px 300px;
   gap: 1.5rem;
 }
-
+ 
 .cardStatusChamados {
   background-color: white;
   border-radius: 12px;
@@ -45,11 +45,11 @@
   width: 790px;
   height: 190px;
 }
-
+ 
 .cardStatusChamados h3 {
   font-size: 23px;
 }
-
+ 
 .cardRelatorios {
   background-color: white;
   border-radius: 12px;
@@ -58,11 +58,11 @@
   height: 475px;
   text-align: center;
 }
-
+ 
 .cardRelatorios h3 {
   font-size: 23px;
 }
-
+ 
 .cardLarge {
   width: 100%;
   height: 260px;
@@ -73,13 +73,13 @@
   padding: 1rem;
   display: flex;
 }
-
+ 
 .numeroChamados {
   font-size: 2rem;
   font-weight: bold;
   color: #333;
 }
-
+ 
 .barraProgresso {
   display: flex;
   width: 100%;
@@ -88,13 +88,13 @@
   overflow: hidden;
   background: #e0e0e0;
 }
-
+ 
 .barraProgresso > div { height: 100%; }
-
+ 
 .progressoEmAndamento { background-color: var(--vermelhoEscuro); }
 .progressoConcluido { background-color: #b3b3b3; }
 .progressoPendente {background-color: #d52531;}
-
+ 
 .legenda {
   list-style: none;
   display: flex;
@@ -103,7 +103,7 @@
   color: var(--cordata);
   margin-top: 1rem;
 }
-
+ 
 .bolinhaFinalizado {
   display: inline-block;
   width: 10px;
@@ -112,7 +112,7 @@
   border-radius: 50%;
   margin-right: 4px;
 }
-
+ 
 .bolinhaAberto {
   display: inline-block;
   width: 10px;
@@ -121,7 +121,7 @@
   border-radius: 50%;
   margin-right: 4px;
 }
-
+ 
 .bolinhaAndamento {
   display: inline-block;
   width: 10px;
@@ -130,38 +130,38 @@
   border-radius: 50%;
   margin-right: 4px;
 }
-
+ 
 .graficoTecnicos{
   width: 40%;
 }
-
+ 
 .graficoTecnicos h4{
   font-size: 15px;
   font-weight: bold;
   margin-top: 3px;
 }
-
+ 
 .estatistica{
   width: 50%;
 }
-
+ 
 .estatistica h4{
   font-size: 15px;
   font-weight: bold;
   margin-top: 3px;
 }
-
+ 
 .tecnicoBar {
   margin: 12px 0;
 }
-
+ 
 .nomeTecnico {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 4px;
   display: block;
 }
-
+ 
 .preenchimento {
   width: 100%;
   height: 25px;
@@ -176,40 +176,40 @@
   padding-right: 8px;
   transition: width 0.4s ease;
 }
-
+ 
 .graficoObjetos{
   margin-top: -30px;
 }
-
+ 
 @media (max-width: 1024px) {
   .cardsContainer {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: 1.5rem;
   }
-
+ 
   .cardStatusChamados {
     width: auto;
     height: auto;
   }
 }
-
+ 
 @media (max-width: 768px) {
   .page {
     display: block;
     height: auto;
   }
-
+ 
   .welcome {
     font-size: 1.5rem;
   }
-
+ 
   .cardsContainer {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     gap: 1rem;
   }
-
+ 
   .cardStatusChamados,
   .cardRelatorios,
   .cardLarge {
@@ -217,64 +217,65 @@
     height: auto;
     padding: 0.8rem;
   }
-
+ 
   .cardStatusChamados h3,
   .cardRelatorios h3 {
     font-size: 20px;
   }
-
+ 
   .cardLarge {
     flex-direction: column;
     height: auto;
   }
-
+ 
   .graficoTecnicos,
   .estatistica {
     width: 100%;
   }
-
+ 
   .graficoObjetos {
     margin-top: 10px;
   }
 }
-
+ 
 @media (max-width: 480px) {
   .welcome {
     font-size: 1.2rem;
     margin-bottom: 1rem;
   }
-
+ 
   .cardsContainer {
     gap: 0.8rem;
   }
-
+ 
   .cardStatusChamados,
   .cardRelatorios {
     padding: 0.6rem;
   }
-
+ 
   .cardStatusChamados h3,
   .cardRelatorios h3 {
     font-size: 18px;
   }
-
+ 
   .legenda {
     flex-wrap: wrap;
     gap: 0.5rem;
     font-size: 0.8rem;
   }
-
+ 
   .numeroChamados {
     font-size: 1.5rem;
   }
-
+ 
   .nomeTecnico {
     font-size: 12px;
   }
-
+ 
   .preenchimento {
     height: 20px;
     font-size: 11px;
     padding-right: 6px;
   }
+
 }
