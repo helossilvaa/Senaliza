@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.13.1",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "jwt-decode": "^4.0.0",
+    "mysql2": "^3.14.4"
+  },
+  "devDependencies": {
+    "@types/jwt-decode": "^3.1.0"
+  }
+}
