@@ -36,7 +36,11 @@ export default function DashboardTecnico() {
         }
 
         setNomeUsuario(decoded.nome || 'Usuário não encontrado');
+<<<<<<< HEAD
         setTecnicoId(decoded.id); // <<--- armazena o id do técnico logado
+=======
+        setTecnicoId(decoded.id);
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 
         const config = { headers: { Authorization: `Bearer ${token}` } };
 

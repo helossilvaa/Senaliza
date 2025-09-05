@@ -10,23 +10,38 @@
 
 .page {
   display: flex;
+<<<<<<< HEAD
   height: 100vh;
   width: 100%;
   font-family: var(--fonte);
   overflow-x: hidden;
+=======
+  width: 100%;
+  font-family: var(--fonte);
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }
 
 .dashboardContainer {
   flex: 1;
+<<<<<<< HEAD
   background-color: #f7f7f9;
   min-height: 100vh;
   overflow-y: auto;
+=======
+  background-color: #f8f8fa;
+  min-height: 100vh;
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }
 
 .welcome {
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
+<<<<<<< HEAD
+=======
+  margin-top: 2rem;
+  margin-left: 2rem;
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
   color: #333;
 }
 
@@ -35,6 +50,10 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 160px 300px;
   gap: 1.5rem;
+<<<<<<< HEAD
+=======
+  margin-left: 2rem;
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 }
 
 .cardStatusChamados, .cardNotificacoes, .cardLarge, .cardSmallBottom {

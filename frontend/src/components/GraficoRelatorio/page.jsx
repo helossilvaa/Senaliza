@@ -12,6 +12,7 @@ import {
   Legend
 } from 'chart.js';
 
+<<<<<<< HEAD
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function Graficos() {
@@ -35,17 +36,53 @@ export default function Graficos() {
   }, []);
 
 
+=======
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export default function Graficos() {
+  const [tecnicos, setTecnicos] = useState([]);
+  const [equipamentos, setEquipamentos] = useState([]);
+
+  useEffect(() => {
+    // Buscar dados de técnicos
+    fetch('/api/relatorios/tecnicos', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => setTecnicos(data))
+      .catch(err => console.error(err));
+
+    // Buscar dados de equipamentos
+    fetch('/api/relatorios/equipamentos', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => setEquipamentos(data.relatorio))
+      .catch(err => console.error(err));
+  }, []);
+
+  // Dados para gráfico de técnicos
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
   const dataTecnicos = {
     labels: tecnicos.map(t => t.nome),
     datasets: [
       {
         label: 'Chamados Resolvidos',
+<<<<<<< HEAD
         data: tecnicos.map(t => t.totalChamadosResolvidos || 0),
         backgroundColor: 'rgba(168, 11, 0, 0.6)'
+=======
+        data: tecnicos.map(t => t.totalChamadosResolvidos),
+        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
       }
     ]
   };
 
+<<<<<<< HEAD
 
   const nomesEquipamentos = new Set();
   Object.values(equipamentosPorSala).forEach(lista =>
@@ -82,11 +119,24 @@ export default function Graficos() {
       legend: { position: 'top' },
       title: { display: true, text: 'Chamados por Equipamento e Sala' }
     }
+=======
+  // Dados para gráfico de equipamentos
+  const dataEquipamentos = {
+    labels: equipamentos.map(eq => eq.nome),
+    datasets: [
+      {
+        label: 'Total de Chamados',
+        data: equipamentos.map(eq => eq.totalChamados),
+        backgroundColor: 'rgba(255, 99, 132, 0.6)'
+      }
+    ]
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
   };
 
   return (
     <div style={{ padding: '20px' }}>
       <h2>Gráfico de Técnicos</h2>
+<<<<<<< HEAD
       {tecnicos.length > 0 ? (
         <Bar
           data={dataTecnicos}
@@ -108,6 +158,12 @@ export default function Graficos() {
       ) : (
         <p>Nenhum equipamento registrado.</p>
       )}
+=======
+      <Bar data={dataTecnicos} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+
+      <h2 style={{ marginTop: '50px' }}>Gráfico de Equipamentos</h2>
+      <Bar data={dataEquipamentos} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
     </div>
   );
 }

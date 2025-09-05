@@ -18,11 +18,14 @@ export default function InfoPage({ params }) {
   const [usuarioNome, setUsuarioNome] = useState("");
   const [mostrarCalendario, setMostrarCalendario] = useState(false);
   const [mostrarForm, setMostrarForm] = useState(false);
+<<<<<<< HEAD
   const [showConfirmarModal, setShowConfirmarModal] = useState(false);
   const [showSolucaoModal, setShowSolucaoModal] = useState(false);
   const [solucaoTexto, setSolucaoTexto] = useState("");
   const [isFinalizando, setIsFinalizando] = useState(false);
 
+=======
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 
   const API_URL = "http://localhost:8080";
   const router = useRouter();
@@ -146,6 +149,7 @@ export default function InfoPage({ params }) {
     }
   };
 
+<<<<<<< HEAD
   const handleEnviarSolucao = async () => {
     if (solucaoTexto.trim() === "") {
       alert("Por favor, descreva a solução.");
@@ -174,6 +178,8 @@ export default function InfoPage({ params }) {
   };
   
 
+=======
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
   if (loading) return <p>Carregando...</p>;
   if (!chamado) return <p>Chamado não encontrado.</p>;
 
@@ -196,6 +202,7 @@ export default function InfoPage({ params }) {
                 {isChamadoPendente && (
                   <button onClick={() => setMostrarCalendario(true)}>Aceitar</button>
                 )}
+<<<<<<< HEAD
 
                 {/* BOTÃO FINALIZAR */}
                 {isChamadoAssumido && (
@@ -208,6 +215,8 @@ export default function InfoPage({ params }) {
                 </button>
                 
                 )}
+=======
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
               </div>
 
               {/* TÍTULO + ÍCONE PARA ABRIR FORM */}
@@ -274,7 +283,11 @@ export default function InfoPage({ params }) {
           {mostrarCalendario && (
             <div className={styles.colunaDireita}>
               <h3>Estipular Prazo</h3>
+<<<<<<< HEAD
               <CalendarPage onDateSelect={setPrazoSelecionado} markedDate={prazoSelecionado} />
+=======
+              <CalendarPage onDateSelect={setPrazoSelecionado} markedDate={prazoSelecionado}  />
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
               {prazoSelecionado && isChamadoPendente && (
                 <button onClick={handleAssumirChamado}>Confirmar</button>
               )}
@@ -282,6 +295,7 @@ export default function InfoPage({ params }) {
           )}
 
         </div>
+<<<<<<< HEAD
 
         {/* MODAL 1 - Confirmar Finalização */}
 <div
@@ -375,6 +389,8 @@ export default function InfoPage({ params }) {
 </div>
 {showSolucaoModal && <div className="modal-backdrop fade show"></div>}
 
+=======
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
       </div>
     </Layout>
   );

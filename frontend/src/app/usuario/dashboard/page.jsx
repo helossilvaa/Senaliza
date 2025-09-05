@@ -1,6 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import Calendar from '@/components/Calendario/page';
+=======
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 import styles from './page.module.css';
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
@@ -42,6 +45,7 @@ export default function DashboardUsuario() {
             const userId = decoded.id;
             const usuarioFuncao = decoded.funcao;
 
+<<<<<<< HEAD
             // Buscar dados do usuário
             fetch(`${API_URL}/usuarios/${userId}`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -77,6 +81,39 @@ export default function DashboardUsuario() {
                 setError("Erro ao buscar chamados.");
             })
             .finally(() => setIsLoading(false));
+=======
+            fetch(`${API_URL}/usuarios/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(data => setNomeUsuario(data.nome))
+                .catch(err => {
+                    console.error("Erro ao buscar usuário:", err);
+                    setNomeUsuario('Usuário');
+                });
+
+            fetch(`${API_URL}/notificacoes`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    const filtered = data.filter(n => usuarioFuncao === 'usuario' ? n.usuario_id === userId : n.tecnico_id === userId);
+                    setNotifications(filtered);
+                    setNotificacoesNaoLidas(filtered.filter(n => n.visualizado === 0).length);
+                })
+                .catch(err => console.error("Erro ao buscar notificações:", err));
+
+            fetch(`${API_URL}/chamados`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(res => res.json())
+                .then(data => setChamados(data))
+                .catch(err => {
+                    console.error("Erro ao buscar chamados:", err);
+                    setError("Erro ao buscar chamados.");
+                })
+                .finally(() => setIsLoading(false));
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
 
         } catch (err) {
             console.error("Token inválido:", err);
@@ -100,7 +137,11 @@ export default function DashboardUsuario() {
         <LayoutUser>
             <div className={styles.dashboardContainer}>
                 <h2 className={styles.welcome}>Olá, {nomeUsuario}</h2>
+<<<<<<< HEAD
                 <div className={styles.cardsContainer}>
+=======
+                <div className={styles.cardsTopContainer}>
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
                     <div className={styles.cardStatusChamados}>
                         <h3>Status dos chamados da rede:</h3>
                         <p className={styles.numeroChamados}>{totalChamados}</p>
@@ -123,12 +164,16 @@ export default function DashboardUsuario() {
                             <li><span className={styles.bolinhaFinalizado}></span> Concluído ({statusCounts['concluído']})</li>
                         </ul>
                     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
                     <div className={styles.cardNotificacoes}>
                         <h3>Você tem</h3>
                         <p className={styles.numeroNotificacoes}>{notificacoesNaoLidas}</p>
                         <p className={styles.textoNotificacoes}>notificações novas</p>
                     </div>
+<<<<<<< HEAD
 
                     <div className={styles.cardLarge}>
                         <h3>Notificações recentes</h3>
@@ -153,8 +198,37 @@ export default function DashboardUsuario() {
                             )}
                         </ul>
                     </div>
+=======
+                </div>
+                <div className={styles.notificationsCard}>
+                    <h3>Notificações recentes</h3>
+                    <ul className="list-group list-group-flush p-2">
+                        {isLoading ? (
+                            <p className="text-muted text-center mt-3">Carregando notificações...</p>
+                        ) : notifications.length === 0 ? (
+                            <p className="text-muted text-center mt-3">Nenhuma notificação por enquanto.</p>
+                        ) : (
+                            notifications.map((n) => (
+                                <li
+                                    key={n.id}
+                                    className="list-group-item d-flex align-items-center justify-content-between notification-item"
+                                    style={{ marginTop: '10px'}}
+                                >
+                                    <div>
+                                        <p className="mb-1 fw-semibold textNotification">{n.mensagem}</p>
+                                    </div>
+                                    {n.visualizado === 0 && <span className="badge bg-danger rounded-circle p-2"></span>}
+                                </li>
+                            ))
+                        )}
+                    </ul>
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
                 </div>
             </div>
         </LayoutUser>
     );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 11e2a8bf548595774595b8631ee4c33531c41a1d
