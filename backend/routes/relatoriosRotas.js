@@ -1,8 +1,9 @@
 import express from 'express';
 import path from 'path';
-import { listarRelatoriosController, buscarRelatoriosController, listarPdfsGeradosController, gerarRelatorioEquipamentosController, gerarRelatorioTecnicosController } from '../controllers/relatorioController.js';
+import fs from 'fs';
+import { listarRelatoriosController, buscarRelatoriosController, listarPdfsGeradosController, relatorioEquipamentosController, relatorioTecnicosController, listarRelatoriosRecentesController } from '../controllers/relatorioController.js';
 import { gerarRelatorioPdfPorIdController } from '../controllers/relatorioPDFcontroller.js';
-import authMiddleware from '../middlewares/authMiddleware.js'; 
+import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
@@ -12,14 +13,24 @@ router.get('/buscar', authMiddleware, buscarRelatoriosController);
 
 router.get('/pdfs', authMiddleware, listarPdfsGeradosController);
 
-router.get('/pdfs/:nomeDoArquivo', (req, res) => {
+router.get('/download/:nomeDoArquivo', (req, res) => {
   const nomeDoArquivo = req.params.nomeDoArquivo;
   const caminhoDoArquivo = path.join('pdfs_gerados', nomeDoArquivo);
-  res.sendFile(path.resolve(caminhoDoArquivo));
+
+  if (fs.existsSync(caminhoDoArquivo)) {
+    res.setHeader('Content-Disposition', `attachment; filename="${nomeDoArquivo}"`);
+    res.sendFile(path.resolve(caminhoDoArquivo));
+  } else {
+    console.error(`Arquivo PDF não encontrado para download: ${caminhoDoArquivo}`);
+    res.status(404).json({ mensagem: 'Arquivo PDF não encontrado.' });
+  }
 });
 
 router.get('/pdf/:id', authMiddleware, gerarRelatorioPdfPorIdController);
-router.get('/tecnicos', authMiddleware, gerarRelatorioTecnicosController); // Técnicos
-router.get('/equipamentos', authMiddleware, gerarRelatorioEquipamentosController);
+
+router.get('/tecnicos', authMiddleware, relatorioTecnicosController);
+router.get('/equipamentos', authMiddleware, relatorioEquipamentosController);
+
+router.get('/recentes', authMiddleware, listarRelatoriosRecentesController);
 
 export default router;

@@ -1,0 +1,27 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.notification-item {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-left: 4px solid transparent;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa9d;
+  border-left: 4px solid var(--bs-danger);
+}
+
+h1.card-title{
+    color: #535355;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.card{
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: none;
+}

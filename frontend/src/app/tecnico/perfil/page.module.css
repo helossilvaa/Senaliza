@@ -1,0 +1,103 @@
+.main {
+    background-color: #f2f2f2;
+    padding: 50px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .card {
+    background: #fff;
+    padding: 30px;
+    width: 100%;
+    max-width: 700px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 60%;
+    background-color: #ccc;
+  }
+  
+  .infoPrincipal h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+  
+  .infoPrincipal p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .infoGrid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+  
+  .infoGrid > div {
+    flex: 1;
+  }
+  
+  .label {
+    font-size: 13px;
+    font-weight: bold;
+  }
+  
+  .inputLike {
+    background: #f1f1f1;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 9px;
+  }
+  
+  .emailBox {
+    margin-top: 20px;
+  }
+  
+  /* Responsividade */
+  
+  @media (max-width: 720px) {
+    .main {
+      padding: 20px;
+    }
+  
+    .header {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+  
+    .avatar {
+      width: 70px;
+      height: 70px;
+    }
+  
+    .infoPrincipal h2 {
+      font-size: 18px;
+      text-align: center;
+    }
+  
+    .infoPrincipal p {
+      font-size: 12px;
+      text-align: center;
+    }
+  
+    .infoGrid {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+  

@@ -11,6 +11,7 @@ router.post('/', authMiddleware, criarChamadoController);
 router.get('/pendentes', authMiddleware, listarChamadosPendentesController);
 router.get('/chamados/concluidos', authMiddleware, listarChamadosConcluidosDoTecnicoController);
 router.get('/chamadostecnico', authMiddleware, listarTodosChamadosDoTecnicoController);
+router.get('/todos', authMiddleware, listarChamadosController);
 router.get('/historico', authMiddleware, listarHistoricoChamadosController);
 router.get('/categorias', listarChamadosPorCategoriaController);
 router.get('/ranking-tecnicos', authMiddleware, listarRankingTecnicosController);

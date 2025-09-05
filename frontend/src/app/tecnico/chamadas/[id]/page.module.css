@@ -1,0 +1,156 @@
+:root {
+  --fundo: #f8f8fa;
+  --branco: #ffffff;
+  --bola: #b10000;
+  --fonte: 'Poppins', sans-serif;
+  --cordata: #535355;
+  --vermelhoEscuro: #640d14;
+}
+
+.page {
+  display: flex;
+  padding: 2rem;
+  background: var(--fundo);
+}
+
+.conteudoPrincipal {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.colunaEsquerda {
+  width: 60%;
+}
+
+.colunaDireita {
+  width: 35%;
+}
+
+.infos h3 {
+  color: var(--vermelhoEscuro);
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.card {
+  background: var(--branco);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.linhaTempo {
+  margin-top: 1.5rem;
+}
+
+.tituloLinhaTempo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.tituloLinhaTempo p {
+  font-weight: bold;
+  color: var(--vermelhoEscuro);
+  font-size: 1.2rem;
+}
+
+.tituloLinhaTempo i {
+  font-size: 1.2rem;
+  color: var(--vermelhoEscuro);
+  cursor: pointer;
+}
+
+.infosLinhaTempo {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.informacoesLinhaTempo {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+/* Animação apenas para novos apontamentos */
+.novoApontamento {
+  animation: slideFadeIn 0.4s ease forwards;
+}
+
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ponto {
+  width: 10px;
+  height: 10px;
+  background: var(--vermelhoEscuro);
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+.informacoesLinhaTempo h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.dataLinhaTempo {
+  font-size: 0.85rem;
+  color: var(--cordata);
+  margin-top: 3px;
+}
+
+.formTimeline {
+  margin-bottom: 1rem;
+  background: var(--branco);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formTimeline textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  resize: none;
+}
+
+.btnEnviar {
+  background: var(--vermelhoEscuro);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btnEnviar:hover {
+  background: var(--bola);
+}
+
+@media (max-width: 1024px) {
+  .conteudoPrincipal {
+    flex-direction: column;
+  }
+
+  .colunaEsquerda, .colunaDireita {
+    width: 100%;
+  }
+}

@@ -86,17 +86,17 @@ const listarChamadosDoUsuarioController = async (req, res) => {
 
 
 const obterChamadoPorIdController = async (req, res) => {
-    try {
-        const chamado = await obterChamadoPorId(req.params.id);
-        if (!chamado) {
-            return res.status(404).json({ mensagem: 'Chamado não encontrado' });
-        }
-        res.status(200).json(chamado);
+    try {
+        const chamado = await obterChamadoPorId(req.params.id);
+        if (!chamado) {
+            return res.status(404).json({ mensagem: 'Chamado não encontrado' });
+        }
+        res.status(200).json(chamado);
 
-    } catch (error) {
-        console.error("Erro ao obter chamado por ID: ", error);
-        res.status(500).json({ mensagem: 'Erro ao obter chamado por ID' });
-    }
+    } catch (error) {
+        console.error("Erro ao obter chamado por ID: ", error);
+        res.status(500).json({ mensagem: 'Erro ao obter chamado por ID' });
+    }
 };
 
 const atualizarChamadoController = async (req, res) => {
@@ -131,58 +131,58 @@ const atualizarChamadoController = async (req, res) => {
 };
 
 const criarApontamentoController = async (req, res) => {
-    try {
-        const {
-            apontamento
-        } = req.body;
+    try {
+        const {
+            apontamento
+        } = req.body;
 
-        const userId = req.usuarioId;
-        const chamadoId = req.params.id;
+        const userId = req.usuarioId;
+        const chamadoId = req.params.id;
 
-        const chamadoExistente = await obterChamadoPorId(chamadoId);
+        const chamadoExistente = await obterChamadoPorId(chamadoId);
 
-        if (!chamadoExistente) {
-            return res.status(404).json({mensagem: 'Chamado não encontrado'});
-        };
+        if (!chamadoExistente) {
+            return res.status(404).json({ mensagem: 'Chamado não encontrado' });
+        };
 
-        const tipoApontamento = (userId === chamadoExistente.usuario_id) ? 'usuario' : 'tecnico';
+        const tipoApontamento = (userId === chamadoExistente.usuario_id) ? 'usuario' : 'tecnico';
 
-        if (tipoApontamento === 'tecnico' && chamadoExistente.tecnico_id !== userId) {
-            return res.status(403).json({ mensagem: 'Você não tem permissão para adicionar apontamentos a este chamado.' });
-        }
+        if (tipoApontamento === 'tecnico' && chamadoExistente.tecnico_id !== userId) {
+            return res.status(403).json({ mensagem: 'Você não tem permissão para adicionar apontamentos a este chamado.' });
+        }
 
-        const apontamentoData = {
-            usuario_id: req.usuarioId,
-            apontamento: apontamento,
-            tipo: tipoApontamento
-        }
+        const apontamentoData = {
+            usuario_id: req.usuarioId,
+            apontamento: apontamento,
+            tipo: tipoApontamento
+        }
 
-        const apontamentoId = await criarApontamentos(chamadoId, apontamentoData);
+        const apontamentoId = await criarApontamentos(chamadoId, apontamentoData);
 
-        if (tipoApontamento === 'tecnico') {
-            const mensagem = notificacaoTextos.NOVO_APONTAMENTO_TECNICO(chamadoId);
-            await criarNotificacao({
-                usuario_id: chamadoExistente.usuario_id,
-                tecnico_id: userId,
-                mensagem,
-                visualizado: 0
-            });
-        }
+        if (tipoApontamento === 'tecnico') {
+            const mensagem = notificacaoTextos.NOVO_APONTAMENTO_TECNICO(chamadoId);
+            await criarNotificacao({
+                usuario_id: chamadoExistente.usuario_id,
+                tecnico_id: userId,
+                mensagem,
+                visualizado: 0
+            });
+        }
 
-        res.status(201).json({mensagem: 'Apontamento criado com sucesso', apontamentoData: apontamentoId});
-        
-    } catch (error) {
-        console.error('Erro ao criar apontamento: ', error);
-        res.status(500).json({mensagem: 'Erro ao criar apontamento. '});
-    }
+        res.status(201).json({ mensagem: 'Apontamento criado com sucesso', apontamentoData: apontamentoId });
+
+    } catch (error) {
+        console.error('Erro ao criar apontamento: ', error);
+        res.status(500).json({ mensagem: 'Erro ao criar apontamento. ' });
+    }
 };
 
 const listarApontamentosController = async (req, res) => {
     try {
-        
+
         const { id } = req.params;
 
-       
+
         const apontamentos = await listarApontamentos(id);
 
         res.status(200).json(apontamentos);
@@ -198,14 +198,14 @@ const atribuirChamadoController = async (req, res) => {
     try {
         const { id } = req.params;
         const { tecnicoId } = req.body;
-        
+
         console.log(`Requisição para atribuir chamado ${id}. Recebido tecnicoId:`, tecnicoId, `(Tipo: ${typeof tecnicoId})`);
 
         const chamadoExistente = await obterChamadoPorId(id);
         if (!chamadoExistente) {
             return res.status(404).json({ mensagem: 'Chamado não encontrado.' });
         }
-        
+
         if (chamadoExistente.tecnico_id) {
             return res.status(400).json({ mensagem: 'Este chamado já está atribuído a um técnico.' });
         }
@@ -214,8 +214,8 @@ const atribuirChamadoController = async (req, res) => {
         if (tecnicoStatus.status !== 'ativo') {
             return res.status(400).json({ mensagem: 'Não é possível atribuir chamado a um técnico inativo.' });
         }
-        
-        
+
+
         const resultado = await atribuirChamado(id, tecnicoId);
 
         const mensagem = `Você foi atribuído ao chamado #${id}.`;
@@ -308,80 +308,80 @@ const estipularPrazoController = async (req, res) => {
 
 //atualizado
 const atualizarStatusChamadoController = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { status, solucao } = req.body; 
-        const tecnicoId = req.usuarioId; 
+    try {
+        const { id } = req.params;
+        const { status, solucao } = req.body;
+        const tecnicoId = req.usuarioId;
 
-        const chamadoExistente = await obterChamadoPorId(id);
-        if (!chamadoExistente) {
-            return res.status(404).json({ mensagem: 'Chamado não encontrado.' });
-        }
+        const chamadoExistente = await obterChamadoPorId(id);
+        if (!chamadoExistente) {
+            return res.status(404).json({ mensagem: 'Chamado não encontrado.' });
+        }
 
-        
-        if (chamadoExistente.tecnico_id !== tecnicoId) {
-            return res.status(403).json({ mensagem: 'Você não tem permissão para alterar o status deste chamado.' });
-        }
 
-        await atualizarStatusChamado(id, status);
+        if (chamadoExistente.tecnico_id !== tecnicoId) {
+            return res.status(403).json({ mensagem: 'Você não tem permissão para alterar o status deste chamado.' });
+        }
 
-        let mensagem;
-        let notificacoesData;
+        await atualizarStatusChamado(id, status);
 
-        if (status === 'concluido') { 
-            const comeco = new Date(chamadoExistente.criado_em); 
-            const fim = new Date();
-            
-            const solucaoFornecida = solucao || null;
+        let mensagem;
+        let notificacoesData;
 
-            const relatorioData = {
-                chamado_id: chamadoExistente.id,
-                tecnico_id: tecnicoId,
-                solucao: solucaoFornecida, 
-                comeco: comeco,
-                fim: fim
-            };
+        if (status === 'concluído') {
+            const comeco = new Date(chamadoExistente.criado_em);
+            const fim = new Date();
 
-            await criarRelatorio(relatorioData);
+            const solucaoFornecida = solucao || null;
 
-           
-            mensagem = notificacaoTextos.CHAMADO_CONCLUIDO(id); 
-            notificacoesData = {
-                usuario_id: chamadoExistente.usuario_id,
-                tecnico_id: tecnicoId,
-                mensagem,
-                visualizado: 0
-            };
-            await criarNotificacao(notificacoesData);
+            const relatorioData = {
+                chamado_id: chamadoExistente.id,
+                tecnico_id: tecnicoId,
+                solucao: solucaoFornecida,
+                comeco: comeco,
+                fim: fim
+            };
 
-        } else if (status === 'em andamento') {
-            
-            mensagem = notificacaoTextos.CHAMADO_EM_ANDAMENTO(id, req.usuarioNome);
-            notificacoesData = {
-                usuario_id: chamadoExistente.usuario_id,
-                tecnico_id: tecnicoId,
-                mensagem,
-                visualizado: 0,
-            };
-            await criarNotificacao(notificacoesData);
-        }
+            await criarRelatorio(relatorioData);
 
-        return res.status(200).json({ mensagem: `Status do chamado ${id} atualizado para ${status}.` });
 
-    } catch (error) {
-        console.error('Erro ao atualizar status do chamado:', error);
-        return res.status(500).json({ mensagem: 'Erro interno ao atualizar status.' });
-    }
+            mensagem = notificacaoTextos.CHAMADO_CONCLUIDO(id);
+            notificacoesData = {
+                usuario_id: chamadoExistente.usuario_id,
+                tecnico_id: tecnicoId,
+                mensagem,
+                visualizado: 0
+            };
+            await criarNotificacao(notificacoesData);
+
+        } else if (status === 'em andamento') {
+
+            mensagem = notificacaoTextos.CHAMADO_EM_ANDAMENTO(id, req.usuarioNome);
+            notificacoesData = {
+                usuario_id: chamadoExistente.usuario_id,
+                tecnico_id: tecnicoId,
+                mensagem,
+                visualizado: 0,
+            };
+            await criarNotificacao(notificacoesData);
+        }
+
+        return res.status(200).json({ mensagem: `Status do chamado ${id} atualizado para ${status}.` });
+
+    } catch (error) {
+        console.error('Erro ao atualizar status do chamado:', error);
+        return res.status(500).json({ mensagem: 'Erro interno ao atualizar status.' });
+    }
 };
 
 const listarChamadosPendentesController = async (req, res) => {
     try {
-        
+
         if (req.usuarioFuncao === 'admin') {
             const chamadosPendentes = await listarTodosChamadosPendentes();
             return res.status(200).json(chamadosPendentes);
         } else {
-            
+
             const tecnicoId = req.usuarioId;
             if (!tecnicoId) {
                 return res.status(400).json({ mensagem: 'ID do técnico ausente.' });
