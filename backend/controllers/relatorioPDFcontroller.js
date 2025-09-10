@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 
 const gerarRelatorioPdfPorIdController = async (req, res) => {
+  
   try {
     const { id } = req.params;
     

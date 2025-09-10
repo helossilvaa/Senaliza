@@ -252,8 +252,16 @@
 .cards{
   width: auto;
 }
+
+.dashboardContainer  {
+  margin-top: 60px;
+}
  
 @media (max-width: 768px) {
+
+  .dashboardContainer  {
+  margin-top: 60px;
+}
   .cardsContainer {
     display: grid;
     grid-template-columns: repeat(1, 1fr);

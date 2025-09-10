@@ -24,4 +24,18 @@ h1.card-title{
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     border: none;
+    margin-top: 60px;
+}
+
+@media (max-width: 768px) {
+   .card {
+     margin-top: 60px;
+   }
+}
+
+@media (max-width: 480px) {
+ .card {
+     margin-top: 60px;
+   }
+
 }

@@ -194,3 +194,119 @@
     gap: 14px;
 }
 
+
+
+
+   @media (max-width: 768px) {
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0;
+    height: auto; 
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+    overflow: visible; 
+    background-color: #000;
+    z-index: 9999;
+    transition: max-height 0.4s ease-in-out;
+  }
+
+  #sidebar:not(.open-sidebar) .senaiLogo {
+    background-image: url('/Senalisa.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 73px auto;
+    height: 60px;
+    padding-left: 75px;
+    flex: 1;
+  }
+
+  #sidebar:not(.open-sidebar) .senaiLogo img {
+    display: none; 
+  }
+
+  .OpenClose {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+    height: 60px;
+    margin: 0;
+  }
+
+  #sidebar_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    flex-direction: column;
+  }
+
+#side_items {
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease-in-out;
+  background-color: #000;
+  width: 100%;
+  padding: 0;
+  border-top: none;
+  margin: 0;
+}
+
+#sidebar.open-sidebar #side_items {
+  max-height: 500px; 
+}
+
+#sidebar.open-sidebar .side-item a {
+    justify-content: center;
+    gap: 1px;
+}
+
+
+
+  .side-item a {
+    padding: 7px 15px;
+    justify-content: flex-start;
+  }
+
+  .item-description {
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+    margin-left: 10px;
+  }
+
+  #sidebar.open-sidebar {
+    width: 100% !important; 
+    max-width: 100% !important; 
+    height: auto !important;  
+  }
+
+ #open_btn {
+    margin-left: auto;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+
+   .senaiLogo {
+    position: absolute;
+    left: 16px;
+    transform: translateX(-10%);
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo {
+    height: 33px;
+  }
+
+}

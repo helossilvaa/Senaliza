@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+import LayoutUser from '@/components/LayoutUser/layout';
 
 export default function PerfilUsuario() {
   const [dadosUsuario, setDadosUsuario] = useState(null);
@@ -74,6 +75,7 @@ export default function PerfilUsuario() {
   if (!dadosUsuario) return null;
 
   return (
+     <LayoutUser>
     <main className={styles.main}>
       <div className={styles.card}>
         <div className={styles.header}>
@@ -110,5 +112,6 @@ export default function PerfilUsuario() {
         </div>
       </div>
     </main>
+    </LayoutUser>
   );
 }

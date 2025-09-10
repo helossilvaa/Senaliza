@@ -3,22 +3,25 @@
   background: #f8f8fa;
   font-family: "Poppins", sans-serif;
   color: #444;
+  padding: 20px;
 }
-
+ 
 .titulo {
   font-size: 28px;
   font-weight: 700;
   margin-bottom: 20px;
   color: #222;
+  text-align: left;
 }
-
+ 
 /* Tabs */
 .tabs {
   display: flex;
   gap: 15px;
   margin-bottom: 25px;
+  flex-wrap: wrap;
 }
-
+ 
 .tabButton {
   padding: 10px 20px;
   border: none;
@@ -29,30 +32,58 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
+  flex-shrink: 0;
+  white-space: nowrap; /* Evita quebra feia em telas menores */
 }
-
+ 
 .tabButton:hover {
   background: #d4d4d4;
 }
-
+ 
 .tabButton.active {
   background: #640d14;
   color: #fff;
 }
-
-
+ 
 /* Seções */
 .section {
   margin-top: 20px;
 }
+ 
+.botaoAtivo {
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1.5px solid #640d14;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+  margin-top: 10px;
+}
+ 
+.botaoAtivo:hover {
+  background: #ffffff;
+  border-color: #b10000;
+}
+
 
 .filterContainer {
   margin-bottom: 20px;
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
-
+ 
+.filterContainer label {
+  font-size: 14px;
+  font-weight: 500;
+}
+ 
 .filterContainer select {
   padding: 8px 12px;
   border-radius: 6px;
@@ -60,8 +91,9 @@
   background: #fff;
   cursor: pointer;
   color: black;
+  min-width: 180px;
 }
-
+ 
 /* Cards */
 .cardList,
 .cardsContainer {
@@ -69,7 +101,7 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
-
+ 
 .card {
   background: #fff;
   border-radius: 10px;
@@ -77,25 +109,28 @@
   padding: 20px;
   position: relative;
   transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-
+ 
 .card:hover {
   transform: translateY(-3px);
 }
-
+ 
 .cardContent h3 {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 10px;
   color: #222;
 }
-
+ 
 .cardContent p {
   margin: 4px 0;
   font-size: 14px;
   color: #555;
 }
-
+ 
 .deleteBtn {
   position: absolute;
   top: 12px;
@@ -106,14 +141,89 @@
   color: #b10000;
   font-size: 18px;
 }
-
+ 
 .deleteBtn:hover {
   color: #ff4444;
 }
-
+ 
 .loading {
   font-size: 18px;
   text-align: center;
   margin-top: 50px;
   color: #666;
+}
+ 
+/* Responsividade */
+@media (max-width: 1024px) {
+  .titulo {
+    font-size: 24px;
+    text-align: center;
+  }
+ 
+  .tabs {
+    justify-content: center;
+  }
+}
+ 
+@media (max-width: 768px) {
+  .titulo {
+    font-size: 22px;
+  }
+ 
+  .tabs {
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+ 
+  .tabButton {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+ 
+  .filterContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+ 
+  .filterContainer select {
+    width: 100%;
+  }
+ 
+  .cardsContainer {
+    grid-template-columns: 1fr; /* Força apenas 1 card por linha em tablets */
+  }
+}
+ 
+@media (max-width: 480px) {
+  .page {
+    padding: 12px;
+  }
+ 
+  .titulo {
+    font-size: 20px;
+    text-align: center;
+  }
+ 
+  .tabButton {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+ 
+  .card {
+    padding: 15px;
+  }
+ 
+  .cardContent h3 {
+    font-size: 16px;
+  }
+ 
+  .cardContent p {
+    font-size: 13px;
+  }
+ 
+  .cardsContainer {
+    grid-template-columns: 1fr; /* Celulares sempre 1 card por linha */
+  }
 }

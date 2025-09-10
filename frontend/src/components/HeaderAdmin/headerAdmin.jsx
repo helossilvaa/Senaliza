@@ -1,21 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useSidebar } from '@/components/HeaderAdmin/sidebarContext';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import './headerAdmin.css';
 
 export default function HeaderAdmin() {
-  const [isExpanded, setIsExpanded] = useState(false);
+    const { isExpanded, toggleSidebar } = useSidebar();
 
-  const toggleSidebar = () => {
-    setIsExpanded(prev => !prev);
-  };
-
-  const handleLogout = () => {
+    const handleLogout = () => {
 
         localStorage.removeItem('token');
         window.location.href = '/login';
     };
-
   return (
     <>
       <link

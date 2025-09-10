@@ -5,7 +5,7 @@ import Card from "@/components/Card/Card";
 import styles from "@/app/tecnico/Chamadas/page.module.css";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import Layout from '@/components/LayoutTecnico/page'; 
+import LayoutTecnico from '@/components/LayoutTecnico/layout'; 
 
 export default function Chamadas() {
   const [chamados, setChamados] = useState([]);
@@ -88,7 +88,7 @@ export default function Chamadas() {
   if (loading) return <p>Carregando chamados...</p>;
 
   return (
-    <Layout>
+    <LayoutTecnico>
     <div className={styles.container}>
       <div className={styles.chamadas}>
         <h1>Chamados Pendentes</h1>
@@ -107,6 +107,7 @@ export default function Chamadas() {
         </div>
       </div>
     </div>
-    </Layout>
+    </LayoutTecnico>
   );
+
 }

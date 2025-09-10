@@ -51,7 +51,6 @@
 
 .subInfo {
   width: 100%;
-  display: flex;
   flex-direction: row;
 }
 
@@ -64,14 +63,12 @@
 
 .data {
   font-size: 0.85rem;
-  width: 60%;
   color: gray;
-  margin-top: 15px;
-  margin-left: 430px;
+  float: right;
+  margin: 0;
 }
 
 .descricao {
-  margin-top: 0.5rem;
   font-size: 1.1rem;
   text-align: justify;
   height: auto;
@@ -160,6 +157,7 @@
 .timelineContainer {
   display: flex;
   gap: 2rem;
+  width: 40%;
   align-items: flex-start;
 }
 
@@ -192,7 +190,7 @@
   resize: none;
 }
 
-/* Modal */
+
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -279,7 +277,7 @@
 
 @media (max-width: 768px) {
   .card {
-    height: auto;  /* Cresce conforme o conteúdo */
+    height: auto; 
   }
 
   .tituloLinhaTempo {
@@ -297,6 +295,7 @@
   .conteudoPrincipal {
     padding: 1rem;
     gap: 1rem;
+    margin-top: 60px;
   }
 
   .tituloCard {
@@ -329,5 +328,9 @@
 
   .informacoesLinhaTempo p {
     font-size: 0.8rem;
+  }
+
+  .tituloLinhaTempo p {
+    width: 300px;
   }
 }

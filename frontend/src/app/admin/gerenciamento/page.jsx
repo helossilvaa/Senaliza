@@ -1,13 +1,13 @@
 "use client";
-
+ 
 import { useEffect, useState } from "react";
 // O HeaderAdmin não é mais necessário aqui, pois será renderizado pelo layout
 import CardAdmin from "@/components/CardAdmin/page";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import LayoutAdmin from "@/components/LayoutAdmin/page"; // Importe o layout
-
+import LayoutAdmin from "@/components/LayoutAdmin/layout"; // Importe o layout
+ 
 export default function ChamadosAdmin() {
   const [activeTab, setActiveTab] = useState("chamados");
   const [chamados, setChamados] = useState([]);
@@ -16,16 +16,21 @@ export default function ChamadosAdmin() {
   const [selectedPool, setSelectedPool] = useState("");
   const [selectedTecnico, setSelectedTecnico] = useState("");
   const [loading, setLoading] = useState(true);
+  const [salas, setSalas] = useState([]);
+  const [equipamentos, setEquipamentos] = useState([]);
+ 
+ 
+ 
   const router = useRouter();
   const API_URL = "http://localhost:8080";
-
+ 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/login");
       return;
     }
-
+ 
     const decoded = jwtDecode(token);
     if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem("token");
@@ -33,35 +38,43 @@ export default function ChamadosAdmin() {
       router.push("/login");
       return;
     }
-      
-
+     
+ 
     const fetchData = async () => {
       try {
         setLoading(true);
         const chamadosRes = await fetch(`${API_URL}/chamados/pendentes`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+ 
         const poolsRes = await fetch(`${API_URL}/pools`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+ 
         const tecnicosRes = await fetch(`${API_URL}/usuarios/tecnicosPools`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+        const salasRes = await fetch(`${API_URL}/salas`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+       
+        const equipamentosRes = await fetch(`${API_URL}/equipamentos`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+ 
         if (!chamadosRes.ok || !poolsRes.ok || !tecnicosRes.ok) {
           throw new Error("Erro ao buscar dados.");
         }
-
+ 
         const chamadosData = await chamadosRes.json();
         const poolsData = await poolsRes.json();
         const tecnicosData = await tecnicosRes.json();
-
-        console.log("Chamados:", chamadosData);
-        console.log("Pools:", poolsData);
-        console.log("Técnicos:", tecnicosData);
-
+        const salasData = await salasRes.json();
+        const equipamentosData = await equipamentosRes.json();
+       
+        setSalas(salasData);
+        setEquipamentos(equipamentosData);
+ 
         setChamados(chamadosData);
         setPools(poolsData);
         setTecnicos(tecnicosData);
@@ -71,19 +84,19 @@ export default function ChamadosAdmin() {
         setLoading(false);
       }
     };
-
+ 
     fetchData();
   }, [router]);
-
+ 
   const atribuirChamado = async (chamadoId, tecnicoId) => {
     const token = localStorage.getItem("token");
-
+ 
     const tecnicoIdNumerico = parseInt(tecnicoId, 10);
     if (isNaN(tecnicoIdNumerico)) {
       alert("Erro: ID do técnico inválido.");
       return;
     }
-
+ 
     try {
       const res = await fetch(`${API_URL}/chamados/${chamadoId}/atribuir`, {
         method: "PUT",
@@ -93,12 +106,12 @@ export default function ChamadosAdmin() {
         },
         body: JSON.stringify({ tecnicoId: tecnicoIdNumerico }),
       });
-
+ 
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.mensagem || "Erro desconhecido ao atribuir chamado.");
       }
-
+ 
       setChamados((prev) =>
         prev.map((c) =>
           c.id === chamadoId ? { ...c, tecnico_id: tecnicoIdNumerico, status: "em andamento" } : c
@@ -112,14 +125,14 @@ export default function ChamadosAdmin() {
   };
    const mudarStatusTecnico = async (id, novoStatus) => {
     const token = localStorage.getItem("token");
-
+ 
     try {
-
+ 
       setTecnicos((prev) =>
         prev.map((tec) => (tec.id === id ? { ...tec, status: novoStatus } : tec))
       );
-      
-      
+     
+     
       const res = await fetch(`${API_URL}/usuarios/tecnicos/${id}/status`, {
         method: "PUT",
         headers: {
@@ -128,34 +141,34 @@ export default function ChamadosAdmin() {
         },
         body: JSON.stringify({ status: novoStatus }),
       });
-
+ 
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.mensagem || "Erro desconhecido ao mudar status.");
       }
-
+ 
       alert(`Status do técnico alterado para "${novoStatus}" com sucesso!`);
     } catch (err) {
       console.error(err);
       alert(`Falha ao mudar o status: ${err.message}`);
     }
   };
-  
-
+ 
+ 
   const chamadosFiltrados = selectedPool
     ? chamados.filter((chamado) => chamado.tipo_id === parseInt(selectedPool, 10))
     : chamados;
-
+ 
   if (loading) return <p>Carregando chamados...</p>;
-
+ 
   return (
-  
+ 
     <LayoutAdmin>
       <div className={styles.page}>
         <div className="container-fluid p-4">
           <h1 className={styles.titulo}>Painel de Administração</h1>
-
-          
+ 
+         
           <div className={styles.tabs}>
             <button
               className={`${styles.tabButton} ${activeTab === "chamados" ? styles.active : ""}`}
@@ -176,7 +189,7 @@ export default function ChamadosAdmin() {
               Chamados por Técnico
             </button>
           </div>
-
+ 
          
           {activeTab === "chamados" && (
             <section className={styles.section}>
@@ -195,7 +208,7 @@ export default function ChamadosAdmin() {
                   ))}
                 </select>
               </div>
-
+ 
               <div className={styles.cardList}>
                 {chamadosFiltrados.length === 0 ? (
                   <p>Nenhum chamado encontrado.</p>
@@ -204,14 +217,18 @@ export default function ChamadosAdmin() {
                     const tecnicosDoPool = tecnicos.filter((tecnico) =>
                       tecnico.pools?.some((pool) => pool.id === chamado.tipo_id)
                     );
-
+ 
                     return (
                       <CardAdmin
                         key={chamado.id}
                         id={chamado.id}
                         titulo={chamado.titulo}
+                        equipamentos={equipamentos}
+                        salas = {salas}
                         data={chamado.criado_em}
                         tecnicos={tecnicosDoPool}
+                        chamado={chamado}
+                        pools={pools}
                         onAtribuir={atribuirChamado}
                       />
                     );
@@ -220,8 +237,8 @@ export default function ChamadosAdmin() {
               </div>
             </section>
           )}
-
-        
+ 
+       
           {activeTab === "tecnicos" && (
             <section className={styles.section}>
               <div className={styles.cardsContainer}>
@@ -239,7 +256,7 @@ export default function ChamadosAdmin() {
                     <select
                       value={tec.status}
                       onChange={(e) => mudarStatusTecnico(tec.id, e.target.value)}
-                      className={styles.statusSelect}
+                      className={styles.botaoAtivo}
                     >
                       <option value="ativo">Ativo</option>
                       <option value="inativo">Inativo</option>
@@ -249,19 +266,20 @@ export default function ChamadosAdmin() {
               </div>
             </section>
           )}
-
+ 
          
           {activeTab === "porTecnico" && (
             <section className={styles.section}>
               <h2>Chamados por Técnico</h2>
-
-              
+ 
+             
               <div className={styles.filterContainer}>
                 <label htmlFor="tecnico-select">Selecione o Técnico:</label>
                 <select
                   id="tecnico-select"
                   value={selectedTecnico}
                   onChange={(e) => setSelectedTecnico(e.target.value)}
+                 
                 >
                   <option value="">Selecione</option>
                   {tecnicos.map((tec) => (
@@ -271,24 +289,24 @@ export default function ChamadosAdmin() {
                   ))}
                 </select>
               </div>
-
+ 
               {selectedTecnico && (
                 (() => {
                   const tecnico = tecnicos.find((t) => t.id === Number(selectedTecnico));
   if (!tecnico) return <p>Técnico não encontrado.</p>;
-
+ 
   const chamadosDoTecnico = chamados.filter(
     (c) => Number(c.tecnico_id) === Number(tecnico.id)
   );
   const emAndamento = chamadosDoTecnico.filter(
     (c) => c.status.toLowerCase() === "em andamento"
   );
-
+ 
                   return (
                     <div className={styles.tecnicoInfo}>
                       <h3>{tecnico.nome}</h3>
                       <p><strong>Total de Chamados:</strong> {chamadosDoTecnico.length}</p>
-
+ 
                       <h4>Chamados em Andamento</h4>
                       {emAndamento.length > 0 ? (
                         <div className={styles.cardList}>

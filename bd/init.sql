@@ -70,7 +70,7 @@ CREATE TABLE relatorios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     chamado_id INT,
     tecnico_id INT,
-    descricao TEXT,
+    solucao TEXT,
     comeco TIMESTAMP NOT NULL,
     fim TIMESTAMP null,
     duracao INT AS (TIMESTAMPDIFF(SECOND, comeco, fim)) STORED,
@@ -100,19 +100,6 @@ CREATE TABLE apontamentos (
 );
 
 
--- Tabela `avaliacoes`
-CREATE TABLE avaliacoes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT NOT NULL,
-    chamado_id INT NOT NULL,
-    tecnico_id INT NOT NULL,
-    comentario TEXT,
-    pontuacao INT NOT NULL,
-    data_avaliacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (chamado_id) REFERENCES chamados(id),
-    FOREIGN KEY (tecnico_id) REFERENCES usuarios(id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-);
 
 -- Tabela `notificacoes`
 CREATE TABLE notificacoes (
@@ -127,24 +114,6 @@ CREATE TABLE notificacoes (
 );
 
 
-CREATE TABLE chats (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  usuario_id INT NOT NULL,
-  tecnico_id INT NOT NULL,
-  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-  FOREIGN KEY (tecnico_id) REFERENCES usuarios(id)
-);
-
-CREATE TABLE chat_mensagens (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  chat_id INT NOT NULL,
-  remetente_id INT NOT NULL,
-  mensagem TEXT NOT NULL,
-  criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (chat_id) REFERENCES chats(id),
-  FOREIGN KEY (remetente_id) REFERENCES usuarios(id)
-);
 
 CREATE TABLE tarefas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -168,8 +137,23 @@ INSERT INTO pool (titulo, descricao, status) VALUES
 ('apoio_tecnico', 'Suporte técnico em sala de aula', 'ativo'),
 ('limpeza', 'Serviço de limpeza dos laboratórios e áreas comuns', 'inativo');
 
--- fazer select do pool_tecnico manualmente
 
+DELIMITER //
+
+CREATE TRIGGER after_usuario_insert
+AFTER INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+    IF NEW.funcao = 'tecnico' THEN
+        INSERT INTO pool_tecnico (id_pool, tecnico_id)
+        SELECT id, NEW.id
+        FROM pool
+        WHERE titulo = NEW.setor;
+    END IF;
+END;
+//
+
+DELIMITER ;
 
 INSERT INTO salas (nome_sala) VALUES
 ('2026_A01_PRD_SL38_DEPOSITO'),

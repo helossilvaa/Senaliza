@@ -1,20 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useSidebar } from '@/components/HeaderTecnico/sidebarContext';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import './headerTecnico.css';
 
 export default function HeaderTecnico() {
-  const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsExpanded(prev => !prev);
-  };
+  const { isExpanded, toggleSidebar } = useSidebar();
 
   const handleLogout = () => {
 
-        localStorage.removeItem('token');
-        window.location.href = '/login';
-    };
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
 
   return (
     <>
@@ -66,6 +63,12 @@ export default function HeaderTecnico() {
               <a href="/tecnico/meusChamados" className="d-flex align-items-center">
                 <i className="bi bi-megaphone me-1" />
                 <span className="item-description">Chamados</span>
+              </a>
+            </li>
+            <li className="side-item">
+              <a href="/tecnico/historico" className="d-flex align-items-center">
+                <i className="bi bi-clock-history"></i>
+                <span className="item-description">Histórico</span>
               </a>
             </li>
 

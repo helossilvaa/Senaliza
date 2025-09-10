@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import './chamados.css';
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import LayoutUser from '@/components/LayoutUser/page'; 
+import LayoutUser from '@/components/LayoutUser/layout'; 
 
 export default function Chamados() {
     const [filtro, setFiltro] = useState("Todas");
@@ -69,8 +69,7 @@ export default function Chamados() {
             <div className="container-fluid p-4">
                 <h2 className="fw-bold mb-5">Meus Chamados</h2>
 
-                
-                <div className="tabs mb-3 d-flex gap-4">
+                <div className="tabs mb-3 d-flex gap-4 flex-wrap">
                     {["Todas", "em andamento", "concluído"].map((tab) => (
                         <a
                             key={tab}
@@ -87,23 +86,22 @@ export default function Chamados() {
                 </div>
                 <hr />
 
-              
                 {!loading && !error && (
                     <div className="table-responsive">
-                        <table className="table">
+                        <table className="table table-bordered">
                             <thead className="table-header">
                                 <tr>
-                                    <th>Número do chamado</th>
+                                    <th>ID</th>
                                     <th>Título</th>
-                                    <th>Técnico resp.</th>
                                     <th>Data</th>
                                     <th>Status</th>
+                                    <th>Ações</th> 
                                 </tr>
                             </thead>
                             <tbody>
                                 {chamadosFiltrados.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="text-center text-muted">
+                                        <td colSpan="6" className="text-center text-muted">
                                             Nenhum chamado encontrado.
                                         </td>
                                     </tr>
@@ -112,12 +110,19 @@ export default function Chamados() {
                                         <tr key={chamado.id}>
                                             <td>{chamado.id}</td>
                                             <td>{chamado.titulo}</td>
-                                            <td>{chamado.tecnico_nome || '-'}</td>
                                             <td>{new Date(chamado.criado_em).toLocaleDateString()}</td>
                                             <td>
                                                 <span className={`status ${chamado.status.toLowerCase().replace(" ", "-")}`}>
                                                     {chamado.status}
                                                 </span>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-vermelho"
+                                                    onClick={() => router.push(`chamados/${chamado.id}`)}
+                                                >
+                                                    Ver detalhes
+                                                </button>
                                             </td>
                                         </tr>
                                     ))

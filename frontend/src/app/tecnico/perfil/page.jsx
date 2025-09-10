@@ -3,6 +3,7 @@ import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+import LayoutTecnico from "@/components/LayoutTecnico/layout";
 
 export default function PerfilUsuario() {
   const [dadosUsuario, setDadosUsuario] = useState(null);
@@ -22,10 +23,11 @@ export default function PerfilUsuario() {
         }
 
         const decoded = jwtDecode(token);
-        if (decoded.funcao !== "usuario") {
+        if (!["admin", "tecnico", "usuario"].includes(decoded.funcao)) {
           router.push("/");
           return;
         }
+        
 
         if (decoded.exp < Date.now() / 1000) {
           localStorage.removeItem("token");
@@ -74,6 +76,7 @@ export default function PerfilUsuario() {
   if (!dadosUsuario) return null;
 
   return (
+    <LayoutTecnico>
     <main className={styles.main}>
       <div className={styles.card}>
         <div className={styles.header}>
@@ -110,5 +113,6 @@ export default function PerfilUsuario() {
         </div>
       </div>
     </main>
+    </LayoutTecnico>
   );
 }

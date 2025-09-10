@@ -1,7 +1,7 @@
 'use client';
 import Header from '@/components/Header/header';
 import { SidebarProvider } from '@/components/Header/sidebarContext';
-import styles from './page.module.css';
+import styles from './layout.module.css';
 
 export default function LayoutUser({ children }) {
   return (

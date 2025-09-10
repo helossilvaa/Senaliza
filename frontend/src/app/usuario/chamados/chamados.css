@@ -1,32 +1,16 @@
-*{
+/* Fonte geral */
+* {
     font-family: 'Poppins', sans-serif;
 }
-body{
+
+body {
     background-color: #f8f8fa;
 }
-  /* Cabeçalho da tabela */
-  .table-header th {
-    background-color: #cdcdcd; /* nova cor do cabeçalho */
-    color: #000000;
-    padding: 12px;
-    text-align: left;
-  }
-  
-  /* Linhas da tabela */
-  table tr {
-    border-bottom: 1px solid #ddd;
-  }
-  
-  /* Linhas alternadas */
-  table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  /* Células */
-  table td {
-    padding: 10px;
-  }
-  
+
+/* Tabs */
+.tabs {
+    flex-wrap: wrap;
+}
 
 .tab {
     cursor: pointer;
@@ -35,41 +19,87 @@ body{
     color: #6c757d;
     border-bottom: 2px solid transparent;
     text-decoration: none;
-  }
+}
 
-  .tab.active {
+.tab.active {
     color: #d10000;
     border-bottom: 2px solid #d10000;
-  }
-  
-  .table-header {
-    background-color: #e5e5e5;
-  }
-  
-  .status {
+}
+
+/* Cabeçalho da Tabela */
+.table-header th {
+    background-color: #cdcdcd;
+    color: #000000;
+    padding: 12px;
+    text-align: left;
+}
+
+/* Tabela Responsiva */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table td {
+    padding: 10px;
+}
+
+/* Status */
+.status {
     font-weight: 500;
-  }
-  
-  .status.finalizado {
+}
+
+.status.concluído {
     color: green;
-  }
-  
-  .status.em-progresso {
-    color: rgb(255, 0, 0);
-  }
-  
- 
-  .container-fluid h2{
-    color: #54575a;
-  }
-
-  .status.concluído {
-    color: green; 
     font-weight: bold;
-  }
-  
-  tr.concluido {
-    opacity: 0.5;          
-  }
-  
+}
 
+.status.em-andamento,
+.status.em-progresso {
+    color: #d10000;
+}
+
+
+.btn-vermelho {
+    background-color: #640d14;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-vermelho:hover {
+    background-color: #b10000;
+    color: white;
+}
+
+/* Responsividade extra */
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tab {
+        padding: 4px 0;
+    }
+
+    .table td, .table th {
+        white-space: nowrap;
+    }
+}

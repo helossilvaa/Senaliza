@@ -13,18 +13,17 @@ router.get('/buscar', authMiddleware, buscarRelatoriosController);
 
 router.get('/pdfs', authMiddleware, listarPdfsGeradosController);
 
-router.get('/download/:nomeDoArquivo', (req, res) => {
-  const nomeDoArquivo = req.params.nomeDoArquivo;
-  const caminhoDoArquivo = path.join('pdfs_gerados', nomeDoArquivo);
+router.get('/pdfs/:nomeArquivo', (req, res) => {
+  const { nomeArquivo } = req.params;
+  const filePath = path.join(process.cwd(), 'pdfs_gerados', nomeArquivo);
 
-  if (fs.existsSync(caminhoDoArquivo)) {
-    res.setHeader('Content-Disposition', `attachment; filename="${nomeDoArquivo}"`);
-    res.sendFile(path.resolve(caminhoDoArquivo));
-  } else {
-    console.error(`Arquivo PDF não encontrado para download: ${caminhoDoArquivo}`);
-    res.status(404).json({ mensagem: 'Arquivo PDF não encontrado.' });
-  }
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.status(404).send('Arquivo não encontrado');
+    }
+  });
 });
+
 
 router.get('/pdf/:id', authMiddleware, gerarRelatorioPdfPorIdController);
 router.get('/tecnicos', authMiddleware, relatorioTecnicosController); 

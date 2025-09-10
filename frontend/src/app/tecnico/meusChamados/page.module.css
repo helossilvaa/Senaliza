@@ -31,3 +31,16 @@
     gap: 20px;
     justify-content: flex-start;
 }
+
+@media (max-width: 768px) {
+    .titulo h1 {
+        margin-top: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+ .titulo h1 {
+        margin-top: 60px;
+    }
+
+}

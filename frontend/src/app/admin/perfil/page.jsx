@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import HeaderAdmin from "@/components/HeaderAdmin/headerAdmin";
+import LayoutAdmin from "@/components/LayoutAdmin/layout";
 
 export default function PerfilUsuario() {
   const [dadosUsuario, setDadosUsuario] = useState(null);
@@ -76,9 +76,8 @@ export default function PerfilUsuario() {
   if (!dadosUsuario) return null;
 
   return (
+    <LayoutAdmin>
     <main className={styles.main}>
-
-      <HeaderAdmin/>
       <div className={styles.card}>
         <div className={styles.header}>
           <div className={styles.avatar}></div>
@@ -114,5 +113,6 @@ export default function PerfilUsuario() {
         </div>
       </div>
     </main>
+    </LayoutAdmin>
   );
 }

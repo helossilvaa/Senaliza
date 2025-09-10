@@ -1,9 +1,8 @@
 'use client'
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Header from '@/components/Header/header';
-import { SidebarProvider } from '@/components/Header/sidebarContext';
 import "./notificacoes.css";
+import Layout from '@/components/LayoutTecnico/layout';
 
 export default function Notificacoes() {
   const [selected, setSelected] = useState(null);
@@ -63,10 +62,9 @@ export default function Notificacoes() {
   };
 
   return (
-    <SidebarProvider>
+    <Layout>
       <div className="container-fluid vh-100">
         <div className="row h-100">
-          <Header />
           <main className="col p-4 d-flex flex-column flex-md-row gap-4">
             <div className="card">
               <div className="card-body">
@@ -98,6 +96,6 @@ export default function Notificacoes() {
           </main>
         </div>
       </div>
-    </SidebarProvider>
+    </Layout>
   );
 }

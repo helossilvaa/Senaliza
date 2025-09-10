@@ -51,8 +51,9 @@
   gap: 8px;
 }
 
+
 .botaoVeja {
-  background: #b10000;
+  background: #920101;
   color: #fff;
   font-size: 0.9rem;
   text-align: center;
@@ -88,7 +89,7 @@
 }
 
 .atribuirForm button {
-  background: #0a7d00;
+  background: #85121bd6;
   color: #fff;
   font-size: 0.9rem;
   padding: 6px 12px;
@@ -99,5 +100,81 @@
 }
 
 .atribuirForm button:hover {
-  background: rgb(2, 86, 57);
+  background: #640d14;
+}
+
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .titulo {
+    font-size: 24px;
+    text-align: center;
+  }
+ 
+  .tabs {
+    justify-content: center;
+  }
+}
+ 
+@media (max-width: 768px) {
+  .titulo {
+    font-size: 22px;
+  }
+ 
+  .tabs {
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+ 
+  .tabButton {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+ 
+  .filterContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+ 
+  .filterContainer select {
+    width: 100%;
+  }
+ 
+  .cardsContainer {
+    grid-template-columns: 1fr; /* Força apenas 1 card por linha em tablets */
+  }
+}
+ 
+@media (max-width: 480px) {
+  .page {
+    padding: 12px;
+  }
+ 
+  .titulo {
+    font-size: 20px;
+    text-align: center;
+  }
+ 
+  .tabButton {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+ 
+  .card {
+    padding: 15px;
+  }
+ 
+  .cardContent h3 {
+    font-size: 16px;
+  }
+ 
+  .cardContent p {
+    font-size: 13px;
+  }
+ 
+  .cardsContainer {
+    grid-template-columns: 1fr; /* Celulares sempre 1 card por linha */
+  }
 }

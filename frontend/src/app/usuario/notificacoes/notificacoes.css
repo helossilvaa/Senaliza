@@ -26,3 +26,15 @@ h1.card-title{
     border: none;
 }
 
+@media (max-width: 768px) {
+   .card {
+     margin-top: 60px;
+   }
+}
+
+@media (max-width: 480px) {
+ .card {
+     margin-top: 60px;
+   }
+
+}

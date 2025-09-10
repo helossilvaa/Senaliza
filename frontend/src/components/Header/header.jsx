@@ -1,14 +1,13 @@
 'use client';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import './header.css';
-
 import { useSidebar } from '@/components/Header/sidebarContext';
 
 export default function Sidebar() {
 
     const { isExpanded, toggleSidebar } = useSidebar();
 
-     const handleLogout = () => {
+    const handleLogout = () => {
 
         localStorage.removeItem('token');
         window.location.href = '/login';
@@ -47,12 +46,12 @@ export default function Sidebar() {
                                 <span className="item-description">Notificações</span>
                             </a>
                         </li>
-                        <li className="side-item">
+                        {/* <li className="side-item">
                             <a href="/usuario/chat" className="d-flex align-items-center">
                                 <i className="bi bi-chat-left-text" />
                                 <span className="item-description">Conversas</span>
                             </a>
-                        </li>
+                        </li> */}
                         <li className="side-item">
                             <a href="/usuario/chamados" className="d-flex align-items-center">
                                 <i className="bi bi-exclamation-circle-fill" />
@@ -66,24 +65,22 @@ export default function Sidebar() {
                             </a>
                         </li>
                         <div className="personal">
-                        <div className='d-flex flex-column align-items-center mt-3'>
-                            <li className="side-item">
-                            <a href="#" className="d-flex align-items-center">
-                                <i className="bi bi-person-fill" />
-                                <span className="item-description">Perfil</span>
-                            </a>
-                        </li>
-                        <li className="side-item">
-                            <a href="#" className="d-flex align-items-center" onClick={handleLogout}>
-                                <i className="text-danger bi bi-box-arrow-right" />
-                                <span className="item-description">Sair</span>
-                            </a>
-                        </li>
-                        </div>
+                            <div className='d-flex flex-column align-items-center mt-3'>
+                                <li className="side-item">
+                                    <a href="/usuario/perfil" className="d-flex align-items-center">
+                                        <i className="bi bi-person-fill" />
+                                        <span className="item-description">Perfil</span>
+                                    </a>
+                                </li>
+                                <li className="side-item">
+                                    <a href=" " className="d-flex align-items-center" onClick={handleLogout}>
+                                        <i className="text-danger bi bi-box-arrow-right" />
+                                        <span className="item-description">Sair</span>
+                                    </a>
+                                </li>
+                            </div>
                         </div>
                     </ul>
-                    
-
                 </div>
             </nav>
         </>

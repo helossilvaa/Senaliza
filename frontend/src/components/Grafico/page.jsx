@@ -1,6 +1,6 @@
 "use client";
 
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer  } from "recharts";
 
 const COLORS = ["#640d14", "#d52531", "#b10000", "#000000", "#b3b3b3"];
 
@@ -35,24 +35,28 @@ const renderCustomizedLabel = ({
 export default function CategoriasChamados({ data }) {
     if (!data?.length) return <p style={{ marginTop: '30px' }}>Carregando dados...</p>;
 
-    return (
-        <PieChart width={400} height={250}>
-            <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-                label={renderCustomizedLabel}
-                labelLine={false}
-            >
-                {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-            </Pie>
-            <Tooltip />
-            <Legend layout="vertical" verticalAlign="middle" align="right" />
-        </PieChart>
+     return (
+        <div style={{ width: "100%", height: 250 }}>
+            <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                    <Pie
+                        data={data}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius="80%"
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={renderCustomizedLabel}
+                        labelLine={false}
+                    >
+                        {data.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend layout="vertical" verticalAlign="middle" align="right" />
+                </PieChart>
+            </ResponsiveContainer>
+        </div>
     );
 }

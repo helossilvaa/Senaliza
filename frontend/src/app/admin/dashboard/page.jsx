@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 
 import styles from "@/app/admin/Dashboard/page.module.css";
-import HeaderAdmin from "@/components/HeaderAdmin/headerAdmin";
+import LayoutAdmin from "@/components/LayoutAdmin/layout";
 import Relatorios from "@/components/Relatorios/page";
 import CategoriasChamados from "@/components/Grafico/page";
 
@@ -163,8 +163,8 @@ export default function DashboardAdmin() {
     };
 
     return (
+        <LayoutAdmin>
         <div className={styles.page}>
-            <HeaderAdmin />
             <div className={styles.dashboardContainer}>
                 <h2 className={styles.welcome}>Olá, {nomeUsuario}!</h2>
 
@@ -254,6 +254,7 @@ export default function DashboardAdmin() {
                 </div>
             </div>
         </div>
+        </LayoutAdmin>
     );
 
 }

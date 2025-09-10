@@ -1,11 +1,11 @@
 "use client";
  
-import styles from '@/app/tecnico/Dashboard/page.module.css';
+import styles from './page.module.css';
 import TarefasPage from '@/components/ListaTarefa/listaTarefa'
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import Layout from '@/components/LayoutTecnico/page';
+import Layout from '@/components/LayoutTecnico/layout';
  
 export default function DashboardTecnico() {
   const [chamados, setChamados] = useState([]);

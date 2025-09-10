@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import './novo.css';
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
-import LayoutUser from '@/components/LayoutUser/page';
+import LayoutUser from '@/components/LayoutUser/layout';
 
 export default function Chamados() {
     const [titulo, setTitulo] = useState('');

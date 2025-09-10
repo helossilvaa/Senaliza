@@ -28,10 +28,9 @@ export default function Notificacoes() {
         if (!res.ok) throw new Error('Erro ao buscar notificações');
 
         const data = await res.json();
-
-        // **Aqui não filtramos nada**: o backend já retorna apenas notificações do usuário ou técnico
         setNotifications(data);
         setIsLoading(false);
+         console.log("Notificações:", data);
       } catch (err) {
         console.error("Erro:", err);
         setError("Erro ao carregar notificações.");
@@ -40,6 +39,9 @@ export default function Notificacoes() {
     };
 
     fetchNotifications();
+
+   
+
   }, [router]);
 
   const handleNotificationClick = async (notification) => {

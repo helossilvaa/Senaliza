@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import LayoutUser from '@/components/LayoutUser/page';
+import LayoutUser from '@/components/LayoutUser/layout';
+import Loading from '@/app/loading';
 
 export default function DashboardUsuario() {
     const [chamados, setChamados] = useState([]);
@@ -90,6 +91,10 @@ export default function DashboardUsuario() {
         'em andamento': chamados.filter(c => c.status?.toLowerCase().includes("andamento")).length,
         'concluído': chamados.filter(c => c.status?.toLowerCase().includes("concluído")).length,
     };
+
+    if (isLoading) {
+    return <Loading />;
+}
 
     return (
         <LayoutUser>
