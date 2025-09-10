@@ -93,8 +93,8 @@ export default function DashboardUsuario() {
     };
 
     if (isLoading) {
-    return <Loading />;
-}
+        return <Loading />;
+    }
 
     return (
         <LayoutUser>
@@ -132,16 +132,14 @@ export default function DashboardUsuario() {
                 <div className={styles.notificationsCard}>
                     <h3>Notificações recentes</h3>
                     <ul className="list-group list-group-flush p-2">
-                        {isLoading ? (
-                            <p className="text-muted text-center mt-3">Carregando notificações...</p>
-                        ) : notifications.length === 0 ? (
+                        {notifications.length === 0 ? (
                             <p className="text-muted text-center mt-3">Nenhuma notificação por enquanto.</p>
                         ) : (
                             notifications.map((n) => (
                                 <li
                                     key={n.id}
                                     className="list-group-item d-flex align-items-center justify-content-between notification-item"
-                                    style={{ marginTop: '10px'}}
+                                    style={{ marginTop: '10px' }}
                                 >
                                     <div>
                                         <p className="mb-1 fw-semibold textNotification">{n.mensagem}</p>

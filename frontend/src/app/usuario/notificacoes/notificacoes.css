@@ -1,6 +1,11 @@
 *{
     font-family: 'Poppins', sans-serif;
+    
 }
+.flex-md-row {
+  background-color: #f8f8fa;
+}
+
 
 .notification-item {
   cursor: pointer;

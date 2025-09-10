@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import styles from "@/app/login/page.module.css";
+import Loading from "@/app/loading";
 
 export default function Login() {
   const [loginParams, setLoginParams] = useState({ username: "", password: "" });
@@ -99,45 +100,58 @@ export default function Login() {
   return (
     <main className={styles.page}>
       <div className={styles.imagem}>
-        <img src="Senalisa.png" alt="Logo Senalisa" />
+        <img src="Senaliza.png" alt="Logo Senalisa" />
       </div>
+  
       <div className={styles.formulario}>
-        <form onSubmit={login}>
-          <h1>Entrar</h1>
-
-          <div className={styles.camposPreenchimento}>
-            <label htmlFor="floatingInput">Usuário</label>
-            <input
-              type="text"
-              className="form-control"
-              id="floatingInput"
-              value={loginParams.username}
-              onChange={(e) => setLoginParams({ ...loginParams, username: e.target.value })}
-            />
-          </div>
-
-          <div className={styles.camposPreenchimento}>
-            <label htmlFor="floatingPassword">Senha</label>
-            <input
-              type="password"
-              className="form-control"
-              id="floatingPassword"
-              value={loginParams.password}
-              onChange={(e) => setLoginParams({ ...loginParams, password: e.target.value })}
-            />
-          </div>
-
-          <button type="submit" disabled={loading} className={styles.botao}>
-            Entrar
-          </button>
-
-          {retorno && (
-            <div className={`alert alert-${retorno.status === "success" ? "success" : "danger"}`}>
-              {retorno.mensagem}
+        {loading ? (
+          <Loading />  
+        ) : (
+          <form onSubmit={login}>
+            <h1>Entrar</h1>
+  
+            <div className={styles.camposPreenchimento}>
+              <label htmlFor="floatingInput">Usuário</label>
+              <input
+                type="text"
+                className="form-control"
+                id="floatingInput"
+                value={loginParams.username}
+                onChange={(e) =>
+                  setLoginParams({ ...loginParams, username: e.target.value })
+                }
+              />
             </div>
-          )}
-        </form>
+  
+            <div className={styles.camposPreenchimento}>
+              <label htmlFor="floatingPassword">Senha</label>
+              <input
+                type="password"
+                className="form-control"
+                id="floatingPassword"
+                value={loginParams.password}
+                onChange={(e) =>
+                  setLoginParams({ ...loginParams, password: e.target.value })
+                }
+              />
+            </div>
+  
+            <button type="submit" disabled={loading} className={styles.botao}>
+              Entrar
+            </button>
+  
+            {retorno && (
+              <div
+                className={`alert alert-${
+                  retorno.status === "success" ? "success" : "danger"
+                }`}
+              >
+                {retorno.mensagem}
+              </div>
+            )}
+          </form>
+        )}
       </div>
     </main>
   );
-}
+}  

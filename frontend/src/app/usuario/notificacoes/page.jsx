@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Header from '@/components/Header/header';
 import { SidebarProvider } from '@/components/Header/sidebarContext';
 import "./notificacoes.css";
+import Loading from '@/app/loading';
 
 export default function Notificacoes() {
   const [selected, setSelected] = useState(null);
@@ -11,7 +12,7 @@ export default function Notificacoes() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
-  
+
   const API_URL = "http://localhost:8080";
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function Notificacoes() {
         const data = await res.json();
         setNotifications(data);
         setIsLoading(false);
-         console.log("Notificações:", data);
+        console.log("Notificações:", data);
       } catch (err) {
         console.error("Erro:", err);
         setError("Erro ao carregar notificações.");
@@ -40,7 +41,7 @@ export default function Notificacoes() {
 
     fetchNotifications();
 
-   
+
 
   }, [router]);
 
@@ -74,15 +75,24 @@ export default function Notificacoes() {
               <div className="card-body">
                 <h1 className="card-title mb-3">Notificações</h1>
                 <ul className="list-group list-group-flush">
-                  {isLoading ? <p className="text-muted text-center mt-3">Carregando...</p> :
-                   notifications.length === 0 ? <p className="text-muted text-center mt-3">Nenhuma notificação.</p> :
-                   notifications.map(n => (
-                     <li key={n.id} className="list-group-item d-flex justify-content-between" onClick={() => handleNotificationClick(n)}>
-                       <span>{n.mensagem}</span>
-                       {n.visualizado === 0 && <span className="badge bg-danger rounded-circle p-2"></span>}
-                     </li>
-                   ))
-                  }
+                  {isLoading ? (
+                    <div className="d-flex justify-content-center align-items-center mt-3">
+                      <Loading />
+                    </div>
+                  ) : notifications.length === 0 ? (
+                    <p className="text-muted text-center mt-3">Nenhuma notificação.</p>
+                  ) : (
+                    notifications.map(n => (
+                      <li
+                        key={n.id}
+                        className="list-group-item d-flex justify-content-between"
+                        onClick={() => handleNotificationClick(n)}
+                      >
+                        <span>{n.mensagem}</span>
+                        {n.visualizado === 0 && <span className="badge bg-danger rounded-circle p-2"></span>}
+                      </li>
+                    ))
+                  )}
                 </ul>
               </div>
             </div>

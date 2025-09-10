@@ -4,6 +4,7 @@ import './chamados.css';
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import LayoutUser from '@/components/LayoutUser/layout'; 
+import Loading from '@/app/loading';
 
 export default function Chamados() {
     const [filtro, setFiltro] = useState("Todas");
@@ -86,7 +87,11 @@ export default function Chamados() {
                 </div>
                 <hr />
 
-                {!loading && !error && (
+                {loading ? (
+                    <Loading />
+                ) : error ? (
+                    <p className="text-danger">{error}</p>
+                ) : (
                     <div className="table-responsive">
                         <table className="table table-bordered">
                             <thead className="table-header">

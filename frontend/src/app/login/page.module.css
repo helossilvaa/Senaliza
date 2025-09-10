@@ -7,14 +7,14 @@
     --cordata: #535355;
     --vermelhoEscuro: #640d14;
 }
-
+ 
 body {
     font-family: var(--fonte);
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
+ 
 .page {
     background-image: linear-gradient(to right, #310000, #ad2831);
     width: 100vw;
@@ -24,7 +24,7 @@ body {
     align-items: center;
     overflow: hidden;
 }
-
+ 
 .imagem {
     width: 60%;
     display: flex;
@@ -32,12 +32,12 @@ body {
     align-items: center;
     padding-right: 5rem;
 }
-
+ 
 .imagem img {
     width: 450px;
     height: auto;
 }
-
+ 
 .formulario {
     width: 60%;
     display: flex;
@@ -45,7 +45,7 @@ body {
     align-items: center;
     padding-left: 5rem;
 }
-
+ 
 .formulario form {
     background-color: var(--branco);
     padding: 3rem;
@@ -58,7 +58,7 @@ body {
     flex-direction: column;
     gap: 1.5rem;
 }
-
+ 
 .formulario h1 {
     font-family: var(--fonte);
     font-size: 2rem;
@@ -67,19 +67,23 @@ body {
     color: var(--vermelhoEscuro);
     text-align: center;
 }
-
+ 
 .camposPreenchimento {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
-
+ 
 .camposPreenchimento label {
     font-family: var(--fonte);
     font-size: 1rem;
     color: var(--vermelhoEscuro);
 }
-
+ 
+.camposPreenchimento input{
+    width: 300px;
+}
+ 
 .formControl {
     width: 300px;
     padding: 0.75rem 1rem;
@@ -89,16 +93,16 @@ body {
     font-size: 1rem;
     transition: border-color 0.2s;
 }
-
+ 
 .formControl:focus {
     outline: none;
     border-color: var(--bola);
 }
-
+ 
 .formControl input{
     background-color: #f2f2f2;
 }
-
+ 
 .botao{
     background-color: var(--vermelhoEscuro);
     color: var(--branco);
@@ -113,16 +117,16 @@ body {
     cursor: pointer;
     transition: background-color 0.2s;
 }
-
+ 
 .botao:hover:enabled {
     background-color: #7b121a;
 }
-
+ 
 .botao:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
-
+ 
 .alert {
     padding: 1rem;
     border-radius: 0.75rem;
@@ -130,19 +134,19 @@ body {
     font-size: 0.9rem;
     text-align: center;
 }
-
+ 
 .alertSuccess {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 }
-
+ 
 .alertDanger {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
-
+ 
 @media (max-width: 1024px) {
     .imagem {
         display: none;

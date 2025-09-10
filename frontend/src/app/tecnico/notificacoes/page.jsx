@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import "./notificacoes.css";
 import Layout from '@/components/LayoutTecnico/layout';
+import Loading from "@/app/loading";
 
 export default function Notificacoes() {
   const [selected, setSelected] = useState(null);
@@ -21,19 +22,20 @@ export default function Notificacoes() {
 
         const res = await fetch(`${API_URL}/notificacoes`, {
           method: "GET",
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${token}` 
+          }
         });
 
         if (!res.ok) throw new Error('Erro ao buscar notificações');
 
         const data = await res.json();
-
-        // **Aqui não filtramos nada**: o backend já retorna apenas notificações do usuário ou técnico
         setNotifications(data);
-        setIsLoading(false);
       } catch (err) {
         console.error("Erro:", err);
         setError("Erro ao carregar notificações.");
+      } finally {
         setIsLoading(false);
       }
     };
@@ -43,7 +45,9 @@ export default function Notificacoes() {
 
   const handleNotificationClick = async (notification) => {
     setSelected({ ...notification, visualizado: 1 });
-    setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, visualizado: 1 } : n));
+    setNotifications(prev => 
+      prev.map(n => n.id === notification.id ? { ...n, visualizado: 1 } : n)
+    );
 
     if (notification.visualizado === 1) return;
 
@@ -51,15 +55,22 @@ export default function Notificacoes() {
       const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/notificacoes/${notification.id}/marcarvista`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}` 
+        }
       });
       if (!response.ok) throw new Error('Erro ao marcar notificação como vista');
     } catch (error) {
       console.error("Erro ao marcar notificação como vista:", error);
-      setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, visualizado: 0 } : n));
+      setNotifications(prev => 
+        prev.map(n => n.id === notification.id ? { ...n, visualizado: 0 } : n)
+      );
       setSelected(notification);
     }
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <Layout>
@@ -69,22 +80,36 @@ export default function Notificacoes() {
             <div className="card">
               <div className="card-body">
                 <h1 className="card-title mb-3">Notificações</h1>
-                <ul className="list-group list-group-flush">
-                  {isLoading ? <p className="text-muted text-center mt-3">Carregando...</p> :
-                   notifications.length === 0 ? <p className="text-muted text-center mt-3">Nenhuma notificação.</p> :
-                   notifications.map(n => (
-                     <li key={n.id} className="list-group-item d-flex justify-content-between" onClick={() => handleNotificationClick(n)}>
-                       <span>{n.mensagem}</span>
-                       {n.visualizado === 0 && <span className="badge bg-danger rounded-circle p-2"></span>}
-                     </li>
-                   ))
-                  }
-                </ul>
+
+                {error ? (
+                  <p className="text-danger text-center mt-3">{error}</p>
+                ) : notifications.length === 0 ? (
+                  <p className="text-muted text-center mt-3">Nenhuma notificação.</p>
+                ) : (
+                  <ul className="list-group list-group-flush">
+                    {notifications.map(n => (
+                      <li 
+                        key={n.id} 
+                        className="list-group-item d-flex justify-content-between"
+                        onClick={() => handleNotificationClick(n)}
+                      >
+                        <span>{n.mensagem}</span>
+                        {n.visualizado === 0 && (
+                          <span className="badge bg-danger rounded-circle p-2"></span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
+
             {selected && (
               <div className="card shadow-sm flex-grow-1 rounded-4 animate__animated animate__fadeInRight">
-                <div className="card-header d-flex justify-content-between align-items-center text-white rounded-top-4" style={{ backgroundColor: '#b10000', height: '60px' }}>
+                <div 
+                  className="card-header d-flex justify-content-between align-items-center text-white rounded-top-4" 
+                  style={{ backgroundColor: '#b10000', height: '60px' }}
+                >
                   <h6 className="mb-0">Detalhes da Notificação</h6>
                   <button className="btn-close btn-close-white" onClick={() => setSelected(null)}></button>
                 </div>

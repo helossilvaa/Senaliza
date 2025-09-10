@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import LayoutAdmin from "@/components/LayoutAdmin/layout";
 import { Bar } from "react-chartjs-2";
-import Relatorios from "@/components/Relatorios/page";
+import Loading from "@/app/loading"; 
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,7 +33,7 @@ export default function RelatoriosPage() {
   const [rawPdfs, setRawPdfs] = useState([]);
   const [pdfsGerados, setPdfsGerados] = useState([]);
   const [selectedChamado, setSelectedChamado] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading global inicial
   const [modalAberto, setModalAberto] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
 
@@ -94,14 +94,14 @@ export default function RelatoriosPage() {
         setRawPdfs(pdfsData);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false); 
       }
     };
 
     fetchData();
   }, [router]);
 
-
-  
   const handleGerarPdf = async () => {
     if (!selectedChamado) return alert("Selecione um chamado");
 
@@ -139,7 +139,6 @@ export default function RelatoriosPage() {
     }
   };
 
-  // Gráfico de técnicos
   const dataTecnicos = {
     labels: tecnicos.map(t => t.nome),
     datasets: [
@@ -151,13 +150,16 @@ export default function RelatoriosPage() {
     ]
   };
 
+  if (loading) return <Loading />; 
+
   return (
+  <div className={styles.mainContent}>
     <LayoutAdmin>
+      
       <div className={styles.page}>
         <div className="container-fluid p-4">
           <h1>Relatórios</h1>
 
-          {/* Tabs */}
           <div className={styles.tabs}>
             {["chamados", "tecnicos", "equipamentos"].map(tab => (
               <div
@@ -172,9 +174,7 @@ export default function RelatoriosPage() {
             <div className={styles.activeLine} style={lineStyle}></div>
           </div>
 
-         
           <div className={styles.tabContent}>
-        
             {activeTab === "chamados" && (
               <div>
                 <select
@@ -199,7 +199,6 @@ export default function RelatoriosPage() {
               </div>
             )}
 
-            
             {activeTab === "tecnicos" && (
               <div>
                 {tecnicos.length > 0 ? (
@@ -209,10 +208,7 @@ export default function RelatoriosPage() {
                       responsive: true,
                       plugins: {
                         legend: { position: "top" },
-                        title: {
-                          display: true,
-                          text: "Chamados Resolvidos por Técnico"
-                        }
+                        title: { display: true, text: "Chamados Resolvidos por Técnico" }
                       }
                     }}
                   />
@@ -222,7 +218,6 @@ export default function RelatoriosPage() {
               </div>
             )}
 
-           
             {activeTab === "equipamentos" && (
               <div>
                 {equipamentos.length > 0 ? (
@@ -250,18 +245,13 @@ export default function RelatoriosPage() {
                         indexAxis: "y",
                         plugins: {
                           legend: { position: "top" },
-                          title: {
-                            display: true,
-                            text: "Top 5 Equipamentos que Mais Quebram (Geral)"
-                          }
+                          title: { display: true, text: "Top 5 Equipamentos que Mais Quebram (Geral)" }
                         },
                         scales: {
                           x: { beginAtZero: true },
                           y: { ticks: { autoSkip: false } }
                         },
-                        elements: {
-                          bar: { barThickness: 30, maxBarThickness: 50 }
-                        }
+                        elements: { bar: { barThickness: 30, maxBarThickness: 50 } }
                       }}
                     />
                   </div>
@@ -272,24 +262,17 @@ export default function RelatoriosPage() {
             )}
           </div>
         </div>
-      </div>
 
-   
-      {modalAberto && (
-        <div className={styles.modalOverlay} onClick={() => setModalAberto(false)}>
-          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-            <button className={styles.closeButton} onClick={() => setModalAberto(false)}>
-              X
-            </button>
-            <iframe
-              src={pdfUrl}
-              width="100%"
-              height="600px"
-              title="Visualizador de PDF"
-            />
+        {modalAberto && (
+          <div className={styles.modalOverlay} onClick={() => setModalAberto(false)}>
+            <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+              <button className={styles.closeButton} onClick={() => setModalAberto(false)}>X</button>
+              <iframe src={pdfUrl} width="100%" height="600px" title="Visualizador de PDF" />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </LayoutAdmin>
+    </div>
   );
 }

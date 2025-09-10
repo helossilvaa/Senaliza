@@ -253,9 +253,6 @@
   width: auto;
 }
 
-.dashboardContainer  {
-  margin-top: 60px;
-}
  
 @media (max-width: 768px) {
 
@@ -299,6 +296,7 @@
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows:max-content;
     gap: 1.5rem;
+    margin-top: 60px;
   }
  
   .chamadoItem {

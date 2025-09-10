@@ -6,6 +6,7 @@ import styles from "@/app/tecnico/Chamadas/page.module.css";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import LayoutTecnico from '@/components/LayoutTecnico/layout'; 
+import Loading from "@/app/loading";
 
 export default function Chamadas() {
   const [chamados, setChamados] = useState([]);
@@ -85,7 +86,7 @@ export default function Chamadas() {
     }
   };
 
-  if (loading) return <p>Carregando chamados...</p>;
+  if (loading) return <Loading />; ;
 
   return (
     <LayoutTecnico>

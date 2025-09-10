@@ -1,16 +1,21 @@
 'use client';
 import { useSidebar } from '@/components/HeaderAdmin/sidebarContext';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import './headerAdmin.css';
 
 export default function HeaderAdmin() {
-    const { isExpanded, toggleSidebar } = useSidebar();
+  const { isExpanded, toggleSidebar } = useSidebar();
+  const pathname = usePathname();
 
-    const handleLogout = () => {
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
 
-        localStorage.removeItem('token');
-        window.location.href = '/login';
-    };
+  const isActive = (href) => pathname === href;
+
   return (
     <>
       <link
@@ -25,7 +30,7 @@ export default function HeaderAdmin() {
         <div id="sidebar_content">
           <div className="OpenClose d-flex justify-content-center align-items-center p-2">
             <div className="senaiLogo">
-              {isExpanded && <img src="/Senalisa.png" className="logo" alt="Logo" />}
+              {isExpanded && <img src="/Senaliza.png" className="logo" alt="Logo" />}
             </div>
             <button id="open_btn" onClick={toggleSidebar}>
               <i id="open_btn_icon" className="bi bi-list" />
@@ -33,34 +38,35 @@ export default function HeaderAdmin() {
           </div>
 
           <ul id="side_items">
-            <li className="side-item active mt-4">
-              <a href="/admin/dashboard" className="d-flex align-items-center">
+            <li className={`side-item mt-4 ${isActive('/admin/dashboard') ? 'active' : ''}`}>
+              <Link href="/admin/dashboard" className="d-flex align-items-center">
                 <i className="bi bi-speedometer2" />
                 <span className="item-description">Dashboard</span>
-              </a>
+              </Link>
             </li>
-            <li className="side-item">
-              <a href="/admin/relatorios" className="d-flex align-items-center">
+            <li className={`side-item ${isActive('/admin/relatorios') ? 'active' : ''}`}>
+              <Link href="/admin/relatorios" className="d-flex align-items-center">
                 <i className="bi bi-file-bar-graph" />
                 <span className="item-description">Relatórios</span>
-              </a>
+              </Link>
             </li>
-            <li className="side-item">
-              <a href="/admin/gerenciamento" className="d-flex align-items-center">
+            <li className={`side-item ${isActive('/admin/gerenciamento') ? 'active' : ''}`}>
+              <Link href="/admin/gerenciamento" className="d-flex align-items-center">
                 <i className="bi bi-eye-fill" />
                 <span className="item-description">Gerenciamento</span>
-              </a>
+              </Link>
             </li>
+
             <div className="personal">
               <div className="d-flex flex-column align-items-center mt-3">
-                <li className="side-item">
-                  <a href="/admin/perfil" className="d-flex align-items-center">
+                <li className={`side-item ${isActive('/admin/perfil') ? 'active' : ''}`}>
+                  <Link href="/admin/perfil" className="d-flex align-items-center">
                     <i className="bi bi-person-fill" />
                     <span className="item-description">Perfil</span>
-                  </a>
+                  </Link>
                 </li>
                 <li className="side-item">
-                  <a href="" className="d-flex align-items-center" onClick={handleLogout}>
+                  <a href="#" className="d-flex align-items-center" onClick={handleLogout}>
                     <i className="text-danger bi bi-box-arrow-right" />
                     <span className="item-description">Sair</span>
                   </a>

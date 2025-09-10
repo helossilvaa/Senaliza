@@ -59,7 +59,7 @@ export default function Relatorios({ relatorio }) {
       const data = errorBody;
       const arquivo = data.arquivo;
  
-      window.open(`${API_URL}/relatorios/download/${arquivo}`, "_blank");
+      window.open(`${API_URL}/relatorios/pdfs/${arquivo}`, "_blank");
     } catch (error) {
       console.error("Erro ao gerar e baixar o PDF:", error.message || error);
     }

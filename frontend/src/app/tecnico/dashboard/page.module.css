@@ -7,93 +7,84 @@
   --cordata: #535355;
   --vermelhoEscuro: #640d14;
 }
-
+ 
 .page {
   display: flex;
   width: 100%;
   font-family: var(--fonte);
 }
-
+ 
+ 
 .dashboardContainer {
   flex: 1;
-  background-color: var(--fundo);
-  min-height: 100vh;
-  padding-top: 60px;
+  padding: 2rem;
+  background-color: #f8f8fa;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
 }
-
+ 
+ 
 .welcome {
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  margin-top: 2rem;
-  margin-left: 2rem;
   color: #333;
 }
-
+ 
+ 
 .cardsContainer {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 160px 300px;
+  grid-template-columns: 2fr 1fr;
   gap: 1.5rem;
-  margin-left: 2rem;
 }
-
+ 
 .cardStatusChamados,
 .cardNotificacoes,
 .cardLarge,
 .cardSmallBottom {
   background-color: var(--branco);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 1rem;
 }
-
-.cardStatusChamados {
-  width: 790px;
-  height: 190px;
-}
-
+ 
+ 
 .cardStatusChamados h3 {
   font-size: 23px;
 }
-
+ 
 .cardNotificacoes {
-  height: 190px;
-  width: 320px;
   text-align: center;
 }
-
+ 
 .cardNotificacoes h3 {
   font-size: 22px;
 }
-
+ 
 .textoNotificacoes {
   font-size: 20px;
-  margin-top: -14px;
 }
-
+ 
 .cardLarge {
-  width: 790px;
-  height: 270px;
   margin-top: 30px;
 }
-
+ 
 .cardLarge h3 {
   font-size: 22px;
 }
-
+ 
 .cardSmallBottom {
   margin-top: 30px;
-  width: 320px;
-  height: 270px;
 }
-
+ 
 .numeroChamados {
   font-size: 2rem;
   font-weight: bold;
   color: #333;
 }
-
+ 
 .barraProgresso {
   display: flex;
   width: 100%;
@@ -102,25 +93,25 @@
   overflow: hidden;
   background: #e0e0e0;
 }
-
+ 
 .progresso {
   width: 70%;
   height: 100%;
   border-radius: 6px;
 }
-
-.barraProgresso > div {
+ 
+.barraProgresso>div {
   height: 100%;
 }
-
+ 
 .progressoEmAndamento {
   background-color: var(--vermelhoEscuro);
 }
-
+ 
 .progressoFinalizado {
   background-color: #b3b3b3;
 }
-
+ 
 .legenda {
   list-style: none;
   display: flex;
@@ -129,7 +120,7 @@
   color: var(--cordata);
   margin-top: 1rem;
 }
-
+ 
 .bolinhaFinalizado {
   display: inline-block;
   width: 10px;
@@ -138,7 +129,7 @@
   border-radius: 50%;
   margin-right: 4px;
 }
-
+ 
 .bolinhaAndamento {
   display: inline-block;
   width: 10px;
@@ -147,14 +138,14 @@
   border-radius: 50%;
   margin-right: 4px;
 }
-
+ 
 .numeroNotificacoes {
   font-size: 3.5rem;
   font-weight: bold;
   color: var(--bola);
   margin: 0.5rem 0;
 }
-
+ 
 .chamadoItem {
   display: flex;
   justify-content: space-between;
@@ -164,19 +155,19 @@
   margin-top: 0.6rem;
   border: 1px solid black;
 }
-
+ 
 .chamadoItem h4 {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
 }
-
+ 
 .chamadoItem p {
   font-size: 0.85rem;
   color: var(--cordata);
   margin: 0;
 }
-
+ 
 .btnVerMais {
   background: transparent;
   border: 1px solid var(--vermelhoEscuro);
@@ -187,12 +178,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
+ 
 .btnVerMais:hover {
   background-color: var(--vermelhoEscuro);
   color: var(--branco);
 }
-
+ 
 .btnAceitar {
   background: var(--bola);
   border: none;
@@ -203,12 +194,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
+ 
 .btnAceitar:hover {
   background-color: var(--vermelhoEscuro);
 }
-
-
+ 
+ 
 @media (max-width: 1024px) {
   .cardsContainer {
     grid-template-columns: 1fr;
@@ -218,94 +209,94 @@
     display: flex;
     flex-direction: column;
   }
-
+ 
   .cardNotificacoes {
     margin-top: 1.5rem;
     width: 100%;
   }
-
+ 
   .cardStatusChamados,
   .cardLarge,
   .cardSmallBottom {
     width: 100%;
   }
-
+ 
   .cardLarge {
     margin-top: 1.5rem;
   }
 }
-
-
+ 
+ 
 @media (max-width: 768px) {
   .welcome {
     margin-left: 0;
   }
-
+ 
   .cardsContainer {
     grid-template-columns: 1fr;
     gap: 1rem;
     margin-left: 0;
     padding: 0 1rem;
   }
-
+ 
   .chamadoItem {
     flex-direction: column;
     align-items: flex-start;
   }
-
+ 
   .chamadoItem div:last-child {
     margin-top: 0.5rem;
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
   }
-
-
+ 
+ 
   .cardStatusChamados,
   .cardLarge,
   .cardSmallBottom {
     height: 230px;
   }
 }
-
-
+ 
+ 
 @media (max-width: 480px) {
   .dashboardContainer {
-    padding: 60px 1rem 1rem; 
+    padding: 75px 1rem 1rem;
   }
-
+ 
   .welcome {
     font-size: 1.2rem;
     margin-top: 0;
   }
-
+ 
   .cardNotificacoes {
     margin-top: 1.5rem;
   }
-
+ 
   .numeroNotificacoes {
     font-size: 3rem;
   }
-
+ 
   .cardLarge {
     height: auto;
     margin-top: 1rem;
   }
-
+ 
   .cardSmallBottom {
     margin-top: 1rem;
   }
-
+ 
   .legenda {
     flex-direction: column;
     gap: 0.3rem;
   }
-
+ 
   .chamadoItem {
     flex-direction: column;
     align-items: stretch;
   }
-
+ 
   .chamadoItem div:last-child {
     flex-direction: column;
     gap: 0.3rem;

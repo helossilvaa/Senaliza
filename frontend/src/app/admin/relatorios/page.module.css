@@ -9,6 +9,10 @@
   --cinza-escuro: #444444;
 }
 
+.mainContent{
+  background-color: var(--fundo);
+}
+
 .tituloPrincipal {
   margin-bottom: 20px;
   padding-left: 10px;
@@ -197,6 +201,11 @@ button.buttonPage  {
   background: transparent;
   cursor: pointer;
   margin-bottom: 0.5rem;
+  color: #000000;
+}
+
+.closeButton:hover {
+  background-color: none;
 }
 
 @media (max-width: 768px) {

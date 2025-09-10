@@ -4,18 +4,17 @@ import * as React from "react";
 import styles from "@/app/usuario/chamados/[id]/page.module.css";
 import LayoutUser from '@/components/LayoutUser/layout'; 
 import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode"; // Import corrigido
+import { jwtDecode } from "jwt-decode"; 
 import { useEffect, useState } from "react";
+import Loading from "@/app/loading";
 
 export default function InfoPage({ params }) {
-  const { id } = React.use(params); // params já é objeto
+  const { id } = React.use(params); 
   const [chamado, setChamado] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-
   const API_URL = "http://localhost:8080";
   const [timelineItems, setTimelineItems] = useState([]);
-
   const [showModal, setShowModal] = useState(false);
   const [comentarioModal, setComentarioModal] = useState("");
 
@@ -59,7 +58,7 @@ export default function InfoPage({ params }) {
   }, [id, router]);
 
   const handleEnviarComentario = async () => {
-    if (!comentarioModal.trim()) return;
+    if (!comentarioModal.trim() || chamado.status === "finalizado") return;
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -69,7 +68,6 @@ export default function InfoPage({ params }) {
     }
 
     try {
-      // Envia comentário como apontamento tipo 'usuario' para a API
       const res = await fetch(`${API_URL}/chamados/${id}/apontamentos`, {
         method: "POST",
         headers: {
@@ -86,7 +84,6 @@ export default function InfoPage({ params }) {
 
       const novoApontamento = await res.json();
 
-      // Atualiza o estado para aparecer imediatamente
       setTimelineItems((prev) => [...prev, novoApontamento]);
       setComentarioModal("");
       setShowModal(false);
@@ -96,7 +93,7 @@ export default function InfoPage({ params }) {
     }
   };
 
-  if (loading) return <p>Carregando...</p>;
+  if (loading) return <Loading />;
   if (!chamado) return <p>Chamado não encontrado.</p>;
 
   return (
@@ -119,14 +116,27 @@ export default function InfoPage({ params }) {
                   </p>
                 </div>
                 <p className={styles.descricao}>{chamado.descricao}</p>
+
                 <div className={styles.botao}>
-                  <button onClick={() => setShowModal(true)}>
+                  <button
+                    onClick={() => chamado.status !== "concluído" ? setShowModal(true) : null}
+                    disabled={chamado.status === "concluído"}
+                    title={chamado.status === "concluído" ? "Chamado finalizado — não é possível adicionar comentários" : ""}
+                    style={{
+                      backgroundColor: chamado.status === "concluído" ? "#c0c0c0" : "#640d14",
+                      cursor: chamado.status === "concluído" ? "not-allowed" : "pointer",
+                      color: "#fff",
+                      border: "none",
+                      padding: "0.5rem 1rem",
+                      borderRadius: "4px",
+                    }}
+                  >
                     Adicionar Comentário
                   </button>
                 </div>
               </div>
 
-              {/* Comentários do usuário (tipo 'usuario') */}
+              {/* Comentários do usuário */}
               {timelineItems
                 .filter((item) => item.tipo === "usuario")
                 .map((item) => (
@@ -193,7 +203,7 @@ export default function InfoPage({ params }) {
           </div>
 
           {/* Modal para adicionar comentário */}
-          {showModal && (
+          {showModal && chamado.status !== "finalizado" && (
             <div className={styles.modalOverlay}>
               <div className={styles.modal}>
                 <h3>Adicionar Comentário</h3>

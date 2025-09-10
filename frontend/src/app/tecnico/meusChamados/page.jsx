@@ -5,6 +5,7 @@ import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import Layout from '@/components/LayoutTecnico/layout';
+import Loading from '@/app/loading'; // importando o Loading
 
 export default function MeusChamadosPage() {
   const [chamados, setChamados] = useState([]);
@@ -50,7 +51,6 @@ export default function MeusChamadosPage() {
     fetchChamados();
   }, [router]);
 
-
   useEffect(() => {
     const filtrados = chamados.filter(chamado => chamado.status === 'em andamento');
     setChamadosFiltrados(filtrados);
@@ -66,7 +66,7 @@ export default function MeusChamadosPage() {
 
           <div className={styles.card}>
             {loading ? (
-              <p>Carregando...</p>
+              <Loading /> 
             ) : chamadosFiltrados.length === 0 ? (
               <p>Nenhum chamado em andamento.</p>
             ) : (

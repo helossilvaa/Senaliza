@@ -132,18 +132,14 @@ const atualizarChamadoController = async (req, res) => {
 
 const criarApontamentoController = async (req, res) => {
     try {
-        const {
-            apontamento
-        } = req.body;
-
+        const { apontamento } = req.body;
         const userId = req.usuarioId;
         const chamadoId = req.params.id;
 
         const chamadoExistente = await obterChamadoPorId(chamadoId);
-
         if (!chamadoExistente) {
             return res.status(404).json({ mensagem: 'Chamado não encontrado' });
-        };
+        }
 
         const tipoApontamento = (userId === chamadoExistente.usuario_id) ? 'usuario' : 'tecnico';
 
@@ -153,38 +149,45 @@ const criarApontamentoController = async (req, res) => {
 
         const apontamentoData = {
             usuario_id: req.usuarioId,
-            apontamento: apontamento,
+            apontamento,
             tipo: tipoApontamento
         }
 
         const apontamentoId = await criarApontamentos(chamadoId, apontamentoData);
 
+        
         if (tipoApontamento === 'tecnico') {
             const mensagem = notificacaoTextos.NOVO_APONTAMENTO_TECNICO(chamadoId, apontamento);
-            await criarNotificacao({
-                usuario_id: chamadoExistente.usuario_id,
-                tecnico_id: userId,
-                mensagem,
-                visualizado: 0
-            });
+            if (chamadoExistente.usuario_id) {
+                await criarNotificacao({
+                    usuario_id: chamadoExistente.usuario_id,
+                    tecnico_id: userId,
+                    mensagem,
+                    visualizado: 0
+                });
+            }
         } else if (tipoApontamento === 'usuario') {
-            const nomeUsuario = req.usuarioNome || 'Usuário';
-            const mensagem = notificacaoTextos.NOVO_APONTAMENTO_USUARIO(chamadoId, apontamento, nomeUsuario);
-            await criarNotificacao({
-                usuario_id: chamadoExistente.usuario_id, 
-                tecnico_id: chamadoExistente.tecnico_id, 
-                mensagem,
-                visualizado: 0
-            });
+           
+            if (chamadoExistente.tecnico_id) {
+                const nomeUsuario = req.usuarioNome || 'Usuário';
+                const mensagem = notificacaoTextos.NOVO_APONTAMENTO_USUARIO(chamadoId, apontamento, nomeUsuario);
+                await criarNotificacao({
+                    usuario_id: chamadoExistente.usuario_id,
+                    tecnico_id: chamadoExistente.tecnico_id,
+                    mensagem,
+                    visualizado: 0
+                });
+            }
         }
 
         res.status(201).json({ mensagem: 'Apontamento criado com sucesso', apontamentoData: apontamentoId });
 
     } catch (error) {
         console.error('Erro ao criar apontamento: ', error);
-        res.status(500).json({ mensagem: 'Erro ao criar apontamento. ' });
+        res.status(500).json({ mensagem: 'Erro ao criar apontamento.' });
     }
 };
+
 
 const listarApontamentosController = async (req, res) => {
     try {

@@ -5,9 +5,10 @@ import CalendarPage from "@/components/Calendario/page";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import Layout from "@/components/LayoutTecnico/layout";
+import Loading from "@/app/loading";
 
 export default function InfoPage({ params }) {
-  const { id } = React.use(params);  // Recebe o id do chamado via props
+  const { id } = React.use(params);  
  const [chamado, setChamado] = useState(null);
   const [loading, setLoading] = useState(true);
   const [prazoSelecionado, setPrazoSelecionado] = useState(null);
@@ -163,13 +164,14 @@ export default function InfoPage({ params }) {
     }
   };
 
-  if (loading) return <p>Carregando...</p>;
+  if (loading) return <Loading />; 
   if (!chamado) return <p>Chamado não encontrado.</p>;
 
   const isChamadoPendente = chamado.status === "pendente";
   const isChamadoAssumido = chamado.status === "em andamento" && chamado.tecnico_id === usuarioLogado.id;
 
   return (
+    <div className={styles.mainContent}>
     <Layout>
       <div className={styles.page}>
         <div className={styles.conteudoPrincipal}>
@@ -303,7 +305,7 @@ export default function InfoPage({ params }) {
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" onClick={() => setShowConfirmarModal(false)} disabled={isFinalizando}>Cancelar</button>
-                  <button className="btn btn-primary" onClick={() => { setShowConfirmarModal(false); setShowSolucaoModal(true); }} disabled={isFinalizando}>Confirmar</button>
+                  <button className="btn btn-danger" onClick={() => { setShowConfirmarModal(false); setShowSolucaoModal(true); }} disabled={isFinalizando}>Confirmar</button>
                 </div>
               </div>
             </div>
@@ -330,7 +332,7 @@ export default function InfoPage({ params }) {
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" onClick={() => setShowSolucaoModal(false)} disabled={isFinalizando}>Cancelar</button>
-                  <button className="btn btn-success" onClick={handleEnviarSolucao} disabled={isFinalizando}>{isFinalizando ? "Finalizando..." : "Finalizar Chamado"}</button>
+                  <button className="btn btn-danger" onClick={handleEnviarSolucao} disabled={isFinalizando}>{isFinalizando ? "Finalizando..." : "Finalizar Chamado"}</button>
                 </div>
               </div>
             </div>
@@ -338,5 +340,6 @@ export default function InfoPage({ params }) {
         )}
       </div>
     </Layout>
+    </div>
   );
 }

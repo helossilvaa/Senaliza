@@ -4,6 +4,7 @@ import './novo.css';
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import LayoutUser from '@/components/LayoutUser/layout';
+import Loading from '@/app/loading';
 
 export default function Chamados() {
     const [titulo, setTitulo] = useState('');
@@ -18,6 +19,8 @@ export default function Chamados() {
     const [chamadoCriado, setChamadoCriado] = useState(null);
     const [error, setError] = useState('');
     const [equipamentosFiltrados, setEquipamentosFiltrados] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);   // 🔹 Loading inicial
+    const [isSubmitting, setIsSubmitting] = useState(false); // 🔹 Loading no submit
     const router = useRouter();
 
     const API_URL = 'http://localhost:8080';
@@ -64,10 +67,13 @@ export default function Chamados() {
             }
         };
 
-        fetchData("salas", setSalas);
-        fetchData("equipamentos", setEquipamentos);
-        fetchData("pools", setPools);
-        fetchData("chamados", setChamados);
+        Promise.all([
+            fetchData("salas", setSalas),
+            fetchData("equipamentos", setEquipamentos),
+            fetchData("pools", setPools),
+            fetchData("chamados", setChamados),
+        ]).finally(() => setIsLoading(false));
+
     }, []);
 
     
@@ -95,6 +101,7 @@ export default function Chamados() {
         e.preventDefault();
         setError('');
         setChamadoCriado(null);
+        setIsSubmitting(true);
 
         try {
             const token = localStorage.getItem('token');
@@ -126,7 +133,6 @@ export default function Chamados() {
             const data = await res.json();
             setChamadoCriado(data.chamadoId);
 
-            
             setTitulo('');
             setDescricao('');
             setTipoId('');
@@ -134,8 +140,14 @@ export default function Chamados() {
             setEquipamentoId('');
         } catch (err) {
             setError(err.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
+
+    if (isLoading) {
+        return <Loading />; // 🔹 Loading global enquanto busca dados iniciais
+    }
 
     return (
         <LayoutUser>
@@ -147,7 +159,6 @@ export default function Chamados() {
 
                     <form className="js-validate form-chamados" onSubmit={handleSubmit}>
                         <div className="row">
-                           
                             <div className="col-sm-6 mb-4">
                                 <label className="input-label titulo-input">Título</label>
                                 <input
@@ -160,7 +171,6 @@ export default function Chamados() {
                                 />
                             </div>
 
-                           
                             <div className="col-sm-6 mb-4">
                                 <label className="input-label titulo-input">Tipo de assistência</label>
                                 <select
@@ -176,7 +186,6 @@ export default function Chamados() {
                                 </select>
                             </div>
 
-                            
                             <div className="col-sm-6 mb-4">
                                 <label className="input-label titulo-input">Sala</label>
                                 <select
@@ -192,7 +201,6 @@ export default function Chamados() {
                                 </select>
                             </div>
 
-                          
                             <div className="col-sm-6 mb-4">
                                 <label className="input-label titulo-input">Equipamento</label>
                                 <select
@@ -216,7 +224,6 @@ export default function Chamados() {
                             </div>
                         </div>
 
-                        
                         <div className="js-form-message mb-6">
                             <label className="input-label titulo-input">Descrição</label>
                             <textarea
@@ -229,11 +236,12 @@ export default function Chamados() {
                             />
                         </div>
 
-
                         {error && <p className="text-danger">{error}</p>}
                         {chamadoCriado && <p className="text-success">Chamado criado com sucesso! ID: {chamadoCriado}</p>}
 
-                        <button type="submit" className="btn btn-wide mb-4 enviar">Enviar</button>
+                        <button type="submit" className="btn btn-wide mb-4 enviar" disabled={isSubmitting}>
+                            {isSubmitting ? <Loading /> : "Enviar"}
+                        </button>
                     </form>
                 </div>
             </div>
