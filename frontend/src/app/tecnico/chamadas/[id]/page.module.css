@@ -95,6 +95,10 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
+.labelApontamento {
+  color: black;
+}
  
 .card button:hover {
   background-color: var(--bola);

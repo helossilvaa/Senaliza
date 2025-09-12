@@ -255,7 +255,7 @@
   .cardStatusChamados,
   .cardLarge,
   .cardSmallBottom {
-    height: 230px;
+    height: auto;
   }
 }
  

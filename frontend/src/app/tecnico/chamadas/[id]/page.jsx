@@ -7,9 +7,24 @@ import { jwtDecode } from "jwt-decode";
 import Layout from "@/components/LayoutTecnico/layout";
 import Loading from "@/app/loading";
 
+function getDiasAtePrazo(prazo) {
+  if (!prazo) return [];
+  const hoje = new Date();
+  const fim = new Date(prazo);
+  const dias = [];
+  let d = new Date(hoje);
+
+  while (d <= fim) {
+    dias.push(d.toISOString().split("T")[0]);
+    d.setDate(d.getDate() + 1);
+  }
+
+  return dias;
+}
+
 export default function InfoPage({ params }) {
   const { id } = React.use(params);  
- const [chamado, setChamado] = useState(null);
+  const [chamado, setChamado] = useState(null);
   const [loading, setLoading] = useState(true);
   const [prazoSelecionado, setPrazoSelecionado] = useState(null);
   const [apontamentoTexto, setApontamentoTexto] = useState("");
@@ -28,7 +43,11 @@ export default function InfoPage({ params }) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) { router.push("/login"); return; }
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
     const decoded = jwtDecode(token);
     setUsuarioLogado(decoded);
     if (decoded.exp < Date.now() / 1000) {
@@ -53,12 +72,11 @@ export default function InfoPage({ params }) {
           data.apontamentos = apontRes.ok ? await apontRes.json() : [];
         }
 
-        console.log("Apontamentos carregados:", data.apontamentos);
         setChamado(data);
 
         if (data.status === "em andamento" && data.tecnico_id === decoded.id) {
           setMostrarCalendario(true);
-          setPrazoSelecionado(data.prazo || null);
+          setPrazoSelecionado(data.prazo); // <- pega do banco
         }
       } catch (err) {
         console.error(err);
@@ -85,7 +103,8 @@ export default function InfoPage({ params }) {
 
   const handleCriarApontamento = async () => {
     if (!apontamentoTexto.trim()) {
-      alert("Preencha o apontamento."); return;
+      alert("Preencha o apontamento.");
+      return;
     }
     setIsEnviandoApontamento(true);
     const token = localStorage.getItem("token");
@@ -100,7 +119,7 @@ export default function InfoPage({ params }) {
       });
       if (!res.ok) throw new Error("Erro ao criar apontamento");
       const novoApontamento = await res.json();
-      setChamado(prev => ({
+      setChamado((prev) => ({
         ...prev,
         apontamentos: [...(prev.apontamentos || []), novoApontamento],
       }));
@@ -114,9 +133,15 @@ export default function InfoPage({ params }) {
     }
   };
 
+  
   const handleAssumirChamado = async () => {
-    if (!prazoSelecionado) { alert("Selecione um prazo."); return; }
+    if (!prazoSelecionado) {
+      alert("Selecione um prazo.");
+      return;
+    }
+
     const token = localStorage.getItem("token");
+
     try {
       const res = await fetch(`${API_URL}/chamados/assumir/${id}`, {
         method: "PUT",
@@ -126,14 +151,16 @@ export default function InfoPage({ params }) {
         },
         body: JSON.stringify({ prazo: prazoSelecionado }),
       });
-      if (!res.ok) throw new Error("Erro ao assumir chamado");
-      alert("Chamado assumido!");
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Erro ao assumir chamado");
+      }
+
+      const data = await res.json(); // <- chamado atualizado
+      setChamado(data);
+      alert("Chamado assumido com prazo salvo!");
       setMostrarCalendario(true);
-      setChamado(prev => ({
-        ...prev,
-        status: "em andamento",
-        tecnico_id: usuarioLogado.id,
-      }));
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -141,7 +168,10 @@ export default function InfoPage({ params }) {
   };
 
   const handleEnviarSolucao = async () => {
-    if (!solucaoTexto.trim()) { alert("Descreva a solução."); return; }
+    if (!solucaoTexto.trim()) {
+      alert("Descreva a solução.");
+      return;
+    }
     const token = localStorage.getItem("token");
     setIsFinalizando(true);
     try {
@@ -164,182 +194,176 @@ export default function InfoPage({ params }) {
     }
   };
 
-  if (loading) return <Loading />; 
+  const isChamadoPendente = chamado?.status === "pendente";
+  const isChamadoAssumido = chamado?.status === "em andamento" && chamado.tecnico_id === usuarioLogado?.id;
+
+  if (loading) return <Loading />;
   if (!chamado) return <p>Chamado não encontrado.</p>;
 
-  const isChamadoPendente = chamado.status === "pendente";
-  const isChamadoAssumido = chamado.status === "em andamento" && chamado.tecnico_id === usuarioLogado.id;
+  // Função que gera array de datas de hoje até o prazo
+  const getDiasAtePrazo = (prazo) => {
+    if (!prazo) return [];
+    const hoje = new Date();
+    const fim = new Date(prazo);
+    const dias = [];
+    let d = new Date(hoje);
+    d.setHours(0,0,0,0);
+    fim.setHours(0,0,0,0);
+
+    while (d <= fim) {
+      dias.push(d.toISOString().split("T")[0]);
+      d.setDate(d.getDate() + 1);
+    }
+    return dias;
+  };
 
   return (
     <div className={styles.mainContent}>
-    <Layout>
-      <div className={styles.page}>
-        <div className={styles.conteudoPrincipal}>
-          <div className={styles.colunaEsquerda}>
-            <div className={styles.infos}>
-              <h3>Informações</h3>
-              <div className={styles.card}>
-                <h2>{chamado.titulo}</h2>
-                <p>{usuarioNome}</p>
-                <p>{chamado.descricao}</p>
-                {isChamadoPendente && <button onClick={() => setMostrarCalendario(true)}>Aceitar</button>}
-                {isChamadoAssumido && (
-                  <div className={styles.botao}>
+      <Layout>
+        <div className={styles.page}>
+          <div className={styles.conteudoPrincipal}>
+            <div className={styles.colunaEsquerda}>
+              <div className={styles.infos}>
+                <h3>Informações</h3>
+                <div className={styles.card}>
+                  <h2>{chamado.titulo}</h2>
+                  <p>{usuarioNome}</p>
+                  <p>{chamado.descricao}</p>
+                  {isChamadoPendente && <button onClick={() => setMostrarCalendario(true)}>Aceitar</button>}
+                  {isChamadoAssumido && (
+                    <div className={styles.botao}>
+                      <button
+                        className={styles.concluido}
+                        onClick={() => setShowConfirmarModal(true)}
+                        disabled={isFinalizando}
+                      >
+                        {isFinalizando ? "Finalizando..." : "Finalizar"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {(isChamadoAssumido || chamado.apontamentos?.length > 0) && (
+                  <div className={styles.tituloLinhaTempo}>
+                    <p>Acompanhe a resolução do problema</p>
+                    <i
+                      className="bi bi-plus-circle"
+                      style={{ cursor: "pointer", marginBottom: "8px" }}
+                      onClick={() => setMostrarForm(!mostrarForm)}
+                    />
+                  </div>
+                )}
+
+                {mostrarForm && (
+                  <div className={styles.formTimeline}>
+                    <label>Apontamento</label>
+                    <textarea
+                      value={apontamentoTexto}
+                      onChange={e => setApontamentoTexto(e.target.value)}
+                      placeholder="Descreva brevemente o apontamento"
+                      rows={3}
+                      className={styles.labelApontamento}
+                    />
                     <button
-                      className={styles.concluido}
-                      onClick={() => setShowConfirmarModal(true)}
-                      disabled={isFinalizando}
+                      className={styles.btnEnviar}
+                      onClick={handleCriarApontamento}
+                      disabled={isEnviandoApontamento}
                     >
-                      {isFinalizando ? "Finalizando..." : "Finalizar"}
+                      {isEnviandoApontamento ? "Enviando..." : "Enviar"}
                     </button>
                   </div>
                 )}
+
+                {/* Apontamentos */}
+                {["tecnico", "usuario"].map(tipo => {
+                  const filtered = chamado.apontamentos?.filter(a => a.tipo === tipo);
+                  if (!filtered?.length) return null;
+                  return (
+                    <div key={tipo}>
+                      <h4 style={{ marginTop: "20px" }}>{tipo === "tecnico" ? "Apontamentos do Técnico" : "Apontamentos do Usuário"}</h4>
+                      <div className={styles.linhaTempo}>
+                        <div className={styles.infosLinhaTempo}>
+                          {filtered.map((apont, idx) => (
+                            <div key={apont.id ?? `${tipo}-${idx}`} className={styles.informacoesLinhaTempo}>
+                              <span className={styles.ponto}></span>
+                              <div>
+                                <h4>{apont.apontamento}</h4>
+                                <p className={styles.dataLinhaTempo}>
+                                  {new Date(apont.criado_em).toLocaleDateString("pt-BR", { day: "numeric", month: "long" })}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              {(isChamadoAssumido || chamado.apontamentos?.length > 0) && (
-                <div className={styles.tituloLinhaTempo}>
-                  <p>Acompanhe a resolução do problema</p>
-                  <i
-                    className="bi bi-plus-circle"
-                    style={{ cursor: "pointer", marginBottom: "8px" }}
-                    onClick={() => setMostrarForm(!mostrarForm)}
-                  />
-                </div>
-              )}
-              {mostrarForm && (
-                <div className={styles.formTimeline}>
-                  <label>Apontamento</label>
-                  <textarea
-                    value={apontamentoTexto}
-                    onChange={e => setApontamentoTexto(e.target.value)}
-                    placeholder="Descreva brevemente o apontamento"
-                    rows={3}
-                  />
-                  <button
-                    className={styles.btnEnviar}
-                    onClick={handleCriarApontamento}
-                    disabled={isEnviandoApontamento}
-                  >
-                    {isEnviandoApontamento ? "Enviando..." : "Enviar"}
-                  </button>
-                </div>
-              )}
-
-              {/* Linha do tempo do Técnico */}
-              {chamado.apontamentos?.filter(a => a.tipo === "tecnico").length > 0 && (
-                <>
-                  <h4 style={{ marginTop: "20px" }}>Apontamentos do Técnico</h4>
-                  <div className={styles.linhaTempo}>
-                    <div className={styles.infosLinhaTempo}>
-                      {chamado.apontamentos
-                        .filter(a => a.tipo === "tecnico")
-                        .map((apont, idx) => (
-                          <div key={apont.id ?? `tec-${idx}`} className={styles.informacoesLinhaTempo}>
-                            <span className={styles.ponto}></span>
-                            <div>
-                              <h4>{apont.apontamento}</h4>
-                              <p className={styles.dataLinhaTempo}>
-                                {new Date(apont.criado_em).toLocaleDateString("pt-BR", {
-                                  day: "numeric",
-                                  month: "long",
-                                })}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* Linha do tempo do Usuário */}
-              {chamado.apontamentos?.filter(a => a.tipo === "usuario").length > 0 && (
-                <>
-                  <h4 style={{ marginTop: "20px" }}>Apontamentos do Usuário</h4>
-                  <div className={styles.linhaTempo}>
-                    <div className={styles.infosLinhaTempo}>
-                      {chamado.apontamentos
-                        .filter(a => a.tipo === "usuario")
-                        .map((apont, idx) => (
-                          <div key={apont.id ?? `usu-${idx}`} className={styles.informacoesLinhaTempo}>
-                            <span className={styles.ponto}></span>
-                            <div>
-                              <h4>{apont.apontamento}</h4>
-                              <p className={styles.dataLinhaTempo}>
-                                {new Date(apont.criado_em).toLocaleDateString("pt-BR", {
-                                  day: "numeric",
-                                  month: "long",
-                                })}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
+
+            {mostrarCalendario && (
+              <div className={styles.colunaDireita}>
+                <h3>Estipular Prazo</h3>
+                <CalendarPage
+                  onDateSelect={setPrazoSelecionado}
+                  markedDates={getDiasAtePrazo(prazoSelecionado)}
+                />
+                {prazoSelecionado && isChamadoPendente && (
+                  <button onClick={handleAssumirChamado}>Confirmar</button>
+                )}
+              </div>
+            )}
           </div>
 
-          {mostrarCalendario && (
-            <div className={styles.colunaDireita}>
-              <h3>Estipular Prazo</h3>
-              <CalendarPage onDateSelect={setPrazoSelecionado} markedDate={prazoSelecionado} />
-              {prazoSelecionado && isChamadoPendente && (
-                <button onClick={handleAssumirChamado}>Confirmar</button>
-              )}
+          {/* Modais */}
+          {showConfirmarModal && (
+            <div className="modal show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Confirmar Finalização</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowConfirmarModal(false)}></button>
+                  </div>
+                  <div className="modal-body">
+                    <p>Deseja realmente finalizar o chamado?</p>
+                  </div>
+                  <div className="modal-footer">
+                    <button className="btn btn-secondary" onClick={() => setShowConfirmarModal(false)} disabled={isFinalizando}>Cancelar</button>
+                    <button className="btn btn-danger" onClick={() => { setShowConfirmarModal(false); setShowSolucaoModal(true); }} disabled={isFinalizando}>Confirmar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showSolucaoModal && (
+            <div className="modal show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Descreva a Solução</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowSolucaoModal(false)}></button>
+                  </div>
+                  <div className="modal-body">
+                    <textarea
+                      rows={5}
+                      className="form-control"
+                      value={solucaoTexto}
+                      onChange={e => setSolucaoTexto(e.target.value)}
+                      placeholder="Descreva a solução implementada"
+                    />
+                  </div>
+                  <div className="modal-footer">
+                    <button className="btn btn-secondary" onClick={() => setShowSolucaoModal(false)} disabled={isFinalizando}>Cancelar</button>
+                    <button className="btn btn-danger" onClick={handleEnviarSolucao} disabled={isFinalizando}>{isFinalizando ? "Finalizando..." : "Finalizar Chamado"}</button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
-
-        {/* Modal Confirmar Finalização */}
-        {showConfirmarModal && (
-          <div className="modal show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirmar Finalização</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowConfirmarModal(false)}></button>
-                </div>
-                <div className="modal-body">
-                  <p>Deseja realmente finalizar o chamado?</p>
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" onClick={() => setShowConfirmarModal(false)} disabled={isFinalizando}>Cancelar</button>
-                  <button className="btn btn-danger" onClick={() => { setShowConfirmarModal(false); setShowSolucaoModal(true); }} disabled={isFinalizando}>Confirmar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Modal para solução */}
-        {showSolucaoModal && (
-          <div className="modal show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Descreva a Solução</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowSolucaoModal(false)}></button>
-                </div>
-                <div className="modal-body">
-                  <textarea
-                    rows={5}
-                    className="form-control"
-                    value={solucaoTexto}
-                    onChange={e => setSolucaoTexto(e.target.value)}
-                    placeholder="Descreva a solução implementada"
-                  />
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" onClick={() => setShowSolucaoModal(false)} disabled={isFinalizando}>Cancelar</button>
-                  <button className="btn btn-danger" onClick={handleEnviarSolucao} disabled={isFinalizando}>{isFinalizando ? "Finalizando..." : "Finalizar Chamado"}</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </Layout>
+      </Layout>
     </div>
   );
 }

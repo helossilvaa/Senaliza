@@ -1,3 +1,4 @@
+-- SQLBook: Code
 drop database senaliza;
 create database senaliza;
 use senaliza;
