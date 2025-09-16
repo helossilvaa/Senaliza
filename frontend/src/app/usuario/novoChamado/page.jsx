@@ -5,6 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import LayoutUser from '@/components/LayoutUser/layout';
 import Loading from '@/app/loading';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Chamados() {
     const [titulo, setTitulo] = useState('');
@@ -16,13 +18,12 @@ export default function Chamados() {
     const [equipamentos, setEquipamentos] = useState([]);
     const [pools, setPools] = useState([]);
     const [chamados, setChamados] = useState([]);
-    const [chamadoCriado, setChamadoCriado] = useState(null);
-    const [error, setError] = useState('');
     const [equipamentosFiltrados, setEquipamentosFiltrados] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);   // 🔹 Loading inicial
-    const [isSubmitting, setIsSubmitting] = useState(false); // 🔹 Loading no submit
-    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
 
+    const router = useRouter();
     const API_URL = 'http://localhost:8080';
 
     useEffect(() => {
@@ -40,8 +41,8 @@ export default function Chamados() {
             }
             if (decoded.exp < Date.now() / 1000) {
                 localStorage.removeItem("token");
-                alert('Seu Login Expirou.');
-                router.push('/login');
+                toast.error('Seu login expirou.');
+                setTimeout(() => router.push('/login'), 3000);
                 return;
             }
 
@@ -76,7 +77,6 @@ export default function Chamados() {
 
     }, []);
 
-    
     useEffect(() => {
         if (!salaId) {
             setEquipamentosFiltrados([]);
@@ -96,11 +96,9 @@ export default function Chamados() {
         setEquipamentoId('');
     }, [salaId, equipamentos, chamados]);
 
-    // 🔹 Criar chamado
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        setChamadoCriado(null);
         setIsSubmitting(true);
 
         try {
@@ -131,7 +129,8 @@ export default function Chamados() {
             }
 
             const data = await res.json();
-            setChamadoCriado(data.chamadoId);
+
+            toast.success(`Chamado criado com sucesso!`);
 
             setTitulo('');
             setDescricao('');
@@ -139,18 +138,20 @@ export default function Chamados() {
             setSalaId('');
             setEquipamentoId('');
         } catch (err) {
-            setError(err.message);
+            console.error(err);
+            toast.error(err.message || 'Erro inesperado');
         } finally {
             setIsSubmitting(false);
         }
     };
 
     if (isLoading) {
-        return <Loading />; // 🔹 Loading global enquanto busca dados iniciais
+        return <Loading />;
     }
 
     return (
         <LayoutUser>
+            <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
             <div className="formWrapper">
                 <div className="cardChamados p-4">
                     <div className="title">
@@ -235,9 +236,6 @@ export default function Chamados() {
                                 required
                             />
                         </div>
-
-                        {error && <p className="text-danger">{error}</p>}
-                        {chamadoCriado && <p className="text-success">Chamado criado com sucesso! ID: {chamadoCriado}</p>}
 
                         <button type="submit" className="btn btn-wide mb-4 enviar" disabled={isSubmitting}>
                             {isSubmitting ? <Loading /> : "Enviar"}

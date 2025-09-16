@@ -18,7 +18,6 @@
 .dashboardContainer {
   flex: 1;
   padding: 2rem;
-  background-color: #f8f8fa;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

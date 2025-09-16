@@ -3,14 +3,16 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import styles from "@/app/login/page.module.css";
 import Loading from "@/app/loading";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [loginParams, setLoginParams] = useState({ username: "", password: "" });
-  const [retorno, setRetorno] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const router = useRouter();
+
   const API_URL = "http://localhost:8080";
+
 
   useEffect(() => {
     const checkToken = async () => {
@@ -39,9 +41,6 @@ export default function Login() {
           router.push("/tecnico/dashboard");
         } else if (funcao === "admin") {
           router.push("/admin/dashboard");
-        } else {
-          console.warn("Função desconhecida:", funcao);
-          localStorage.removeItem("token");
         }
       } catch (err) {
         console.error("Erro ao validar token:", err);
@@ -54,7 +53,6 @@ export default function Login() {
 
   const login = async (e) => {
     e.preventDefault();
-    setRetorno(null);
     setLoading(true);
 
     try {
@@ -68,30 +66,23 @@ export default function Login() {
 
       const data = await res.json();
 
-      if (res.ok) {
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-        }
+      if (res.ok && data.token) {
+        localStorage.setItem("token", data.token);
+        toast.success("Login realizado com sucesso!");
 
-        setRetorno({
-          status: "success",
-          mensagem: "Login realizado com sucesso!",
-        });
-
-        
-        if (data.usuario.funcao === "usuario") {
-          router.push("/usuario/dashboard");
-        } else if (data.usuario.funcao === "tecnico") {
-          router.push("/tecnico/dashboard");
-        } else {
-          router.push("/admin/dashboard");
-        }
+       
+        setTimeout(() => {
+          const funcao = data.usuario.funcao;
+          if (funcao === "usuario") router.push("/usuario/dashboard");
+          else if (funcao === "tecnico") router.push("/tecnico/dashboard");
+          else router.push("/admin/dashboard");
+        }, 1000);
       } else {
-        setRetorno({ status: "error", mensagem: data.error || "Credenciais inválidas" });
+        toast.error(data.error || "Credenciais inválidas");
       }
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      setRetorno({ status: "error", mensagem: "Erro na requisição" });
+      toast.error("Erro na requisição. Verifique sua conexão.");
     } finally {
       setLoading(false);
     }
@@ -99,17 +90,20 @@ export default function Login() {
 
   return (
     <main className={styles.page}>
+     
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
+
       <div className={styles.imagem}>
         <img src="Senaliza.png" alt="Logo Senalisa" />
       </div>
-  
+
       <div className={styles.formulario}>
         {loading ? (
-          <Loading />  
+          <Loading />
         ) : (
           <form onSubmit={login}>
             <h1>Entrar</h1>
-  
+
             <div className={styles.camposPreenchimento}>
               <label htmlFor="floatingInput">Usuário</label>
               <input
@@ -122,7 +116,7 @@ export default function Login() {
                 }
               />
             </div>
-  
+
             <div className={styles.camposPreenchimento}>
               <label htmlFor="floatingPassword">Senha</label>
               <input
@@ -135,23 +129,13 @@ export default function Login() {
                 }
               />
             </div>
-  
+
             <button type="submit" disabled={loading} className={styles.botao}>
               Entrar
             </button>
-  
-            {retorno && (
-              <div
-                className={`alert alert-${
-                  retorno.status === "success" ? "success" : "danger"
-                }`}
-              >
-                {retorno.mensagem}
-              </div>
-            )}
           </form>
         )}
       </div>
     </main>
   );
-}  
+}

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import LayoutUser from '@/components/LayoutUser/layout';
 import Loading from '@/app/loading';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function DashboardUsuario() {
     const [chamados, setChamados] = useState([]);
@@ -34,8 +36,12 @@ export default function DashboardUsuario() {
 
             if (decoded.exp < Date.now() / 1000) {
                 localStorage.removeItem("token");
-                alert('Seu login expirou.');
-                router.push('/login');
+                toast.error('Seu login expirou. Faça login novamente.');
+
+                setTimeout(() => {
+                    router.push('/login');
+                }, 3000); 
+
                 return;
             }
 
@@ -98,6 +104,7 @@ export default function DashboardUsuario() {
 
     return (
         <LayoutUser>
+            <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
             <div className={styles.dashboardContainer}>
                 <h2 className={styles.welcome}>Olá, {nomeUsuario}</h2>
                 <div className={styles.cardsTopContainer}>
