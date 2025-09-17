@@ -188,4 +188,4 @@ const listarApontamentos = async (chamadoId) => {
   }
 }
  
-export {criarChamado, listarChamado, obterChamadoPorId, atualizarChamado, criarApontamentos, assumirChamado, listarChamadosPendentes, atualizarStatusChamado, atualizarPrazoChamado, listarChamadosPorCategoria, listarRankingTecnicos, atribuirChamado, listarTodosChamadosPendentes, listarApontamentos};
+export {criarChamado, listarChamado, obterChamadoPorId, criarApontamentos, assumirChamado, listarChamadosPendentes, atualizarStatusChamado, atualizarPrazoChamado, listarChamadosPorCategoria, listarRankingTecnicos, atribuirChamado, listarTodosChamadosPendentes, listarApontamentos};

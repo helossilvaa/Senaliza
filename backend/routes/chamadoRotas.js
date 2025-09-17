@@ -1,5 +1,5 @@
 import express from 'express';
-import { criarChamadoController, listarChamadosController, listarTodosChamadosDoTecnicoController, obterChamadoPorIdController, atualizarChamadoController, assumirChamadoController, criarApontamentoController, listarChamadosDoUsuarioController, listarChamadosPendentesController, atualizarStatusChamadoController, listarHistoricoChamadosController, estipularPrazoController,
+import { criarChamadoController, listarChamadosController, listarTodosChamadosDoTecnicoController, obterChamadoPorIdController, assumirChamadoController, criarApontamentoController, listarChamadosDoUsuarioController, listarChamadosPendentesController, atualizarStatusChamadoController, listarHistoricoChamadosController, estipularPrazoController,
 listarRankingTecnicosController, listarChamadosPorCategoriaController, listarChamadosConcluidosDoTecnicoController,
 atribuirChamadoController, listarApontamentosController} from '../controllers/chamadosController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
@@ -21,7 +21,6 @@ router.get('/:id/apontamentos', authMiddleware, listarApontamentosController)
 router.put('/assumir/:id', authMiddleware, assumirChamadoController);
 router.put('/:id/status', authMiddleware, atualizarStatusChamadoController);
 router.put('/prazo/:id', authMiddleware, estipularPrazoController);
-router.put('/:id',authMiddleware, atualizarChamadoController);
 router.get('/:id', authMiddleware, obterChamadoPorIdController);
  
  

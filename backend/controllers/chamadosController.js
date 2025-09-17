@@ -1,4 +1,4 @@
-import { criarChamado, listarChamado, obterChamadoPorId, atualizarChamado, criarApontamentos, assumirChamado, atualizarStatusChamado, listarChamadosPendentes, atualizarPrazoChamado, listarChamadosPorCategoria, listarRankingTecnicos, atribuirChamado, listarTodosChamadosPendentes, listarApontamentos } from "../models/chamado.js";
+import { criarChamado, listarChamado, obterChamadoPorId, criarApontamentos, assumirChamado, atualizarStatusChamado, listarChamadosPendentes, atualizarPrazoChamado, listarChamadosPorCategoria, listarRankingTecnicos, atribuirChamado, listarTodosChamadosPendentes, listarApontamentos} from "../models/chamado.js";
 import { listarPoolsTecnico } from "../models/poolTecnico.js";
 import { criarNotificacao } from "../models/notificacoes.js";
 import { criarRelatorio } from "../models/relatorio.js";
@@ -99,36 +99,7 @@ const obterChamadoPorIdController = async (req, res) => {
     }
 };
 
-const atualizarChamadoController = async (req, res) => {
 
-    try {
-        const {
-            chamado_id,
-            descricao,
-        } = req.body;
-
-        const chamadoExistente = await obterChamadoPorId(chamado_id);
-
-        if (!chamadoExistente) {
-            return res.status(404).json({ mensagem: 'Chamado não encontrado' });
-        }
-
-        const descricaoAtualizada = `${chamadoExistente.descricao}\n\n${descricao}`;
-
-        const chamadoAtualizado = {
-            chamado_id,
-            descricao: descricaoAtualizada
-        }
-
-        await atualizarChamado(chamadoAtualizado);
-
-        res.status(200).json({ mensagem: 'Chamado atualizado com sucesso' });
-
-    } catch (error) {
-        console.error('Erro ao atualizar chamado: ', error);
-        res.status(500).json({ mensagem: 'Erro ao atualizar chamado.' });
-    }
-};
 
 const criarApontamentoController = async (req, res) => {
     try {
@@ -480,4 +451,4 @@ const listarChamadosConcluidosDoTecnicoController = async (req, res) => {
     }
 };
 
-export { listarChamadosController, atualizarChamadoController, criarChamadoController, obterChamadoPorIdController, criarApontamentoController, assumirChamadoController, listarChamadosPendentesController, listarTodosChamadosDoTecnicoController, atualizarStatusChamadoController, listarHistoricoChamadosController, estipularPrazoController, listarChamadosPorCategoriaController, listarRankingTecnicosController, listarChamadosDoUsuarioController, listarChamadosConcluidosDoTecnicoController, atribuirChamadoController, listarApontamentosController };
+export { listarChamadosController,criarChamadoController, obterChamadoPorIdController, criarApontamentoController, assumirChamadoController, listarChamadosPendentesController, listarTodosChamadosDoTecnicoController, atualizarStatusChamadoController, listarHistoricoChamadosController, estipularPrazoController, listarChamadosPorCategoriaController, listarRankingTecnicosController, listarChamadosDoUsuarioController, listarChamadosConcluidosDoTecnicoController, atribuirChamadoController, listarApontamentosController};
