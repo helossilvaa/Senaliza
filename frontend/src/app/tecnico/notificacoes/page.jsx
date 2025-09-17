@@ -1,9 +1,13 @@
 'use client'
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import LayoutTecnico from "@/components/LayoutTecnico/layout";
+import { SidebarProvider } from '@/components/Header/sidebarContext';
 import "./notificacoes.css";
-import Layout from '@/components/LayoutTecnico/layout';
-import Loading from "@/app/loading";
+import Loading from '@/app/loading';
+import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Notificacoes() {
   const [selected, setSelected] = useState(null);
@@ -11,20 +15,32 @@ export default function Notificacoes() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
-  
+
   const API_URL = "http://localhost:8080";
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) { router.push("/"); return; }
+        if (!token) {
+          router.push("/");
+          return;
+        }
+
+        
+        const decoded = jwtDecode(token);
+        if (decoded.exp < Date.now() / 1000) {
+          localStorage.removeItem("token");
+          toast.error("Seu login expirou.");
+          setTimeout(() => router.push("/login"), 3000);
+          return;
+        }
 
         const res = await fetch(`${API_URL}/notificacoes`, {
           method: "GET",
-          headers: { 
-            'Content-Type': 'application/json', 
-            'Authorization': `Bearer ${token}` 
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           }
         });
 
@@ -45,7 +61,7 @@ export default function Notificacoes() {
 
   const handleNotificationClick = async (notification) => {
     setSelected({ ...notification, visualizado: 1 });
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === notification.id ? { ...n, visualizado: 1 } : n)
     );
 
@@ -55,41 +71,41 @@ export default function Notificacoes() {
       const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/notificacoes/${notification.id}/marcarvista`, {
         method: 'PUT',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}` 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
       });
       if (!response.ok) throw new Error('Erro ao marcar notificação como vista');
     } catch (error) {
       console.error("Erro ao marcar notificação como vista:", error);
-      setNotifications(prev => 
+      setNotifications(prev =>
         prev.map(n => n.id === notification.id ? { ...n, visualizado: 0 } : n)
       );
       setSelected(notification);
     }
   };
 
-  if (isLoading) return <Loading />;
-
   return (
-    <Layout>
+    <LayoutTecnico>
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
       <div className="container-fluid vh-100">
         <div className="row h-100">
           <main className="col p-4 d-flex flex-column flex-md-row gap-4">
             <div className="card">
               <div className="card-body">
                 <h1 className="card-title mb-3">Notificações</h1>
-
-                {error ? (
-                  <p className="text-danger text-center mt-3">{error}</p>
-                ) : notifications.length === 0 ? (
-                  <p className="text-muted text-center mt-3">Nenhuma notificação.</p>
-                ) : (
-                  <ul className="list-group list-group-flush">
-                    {notifications.map(n => (
-                      <li 
-                        key={n.id} 
+                <ul className="list-group list-group-flush">
+                  {isLoading ? (
+                    <div className="d-flex justify-content-center align-items-center mt-3">
+                      <Loading />
+                    </div>
+                  ) : notifications.length === 0 ? (
+                    <p className="text-muted text-center mt-3">Nenhuma notificação.</p>
+                  ) : (
+                    notifications.map(n => (
+                      <li
+                        key={n.id}
                         className="list-group-item d-flex justify-content-between"
                         onClick={() => handleNotificationClick(n)}
                       >
@@ -98,18 +114,15 @@ export default function Notificacoes() {
                           <span className="badge bg-danger rounded-circle p-2"></span>
                         )}
                       </li>
-                    ))}
-                  </ul>
-                )}
+                    ))
+                  )}
+                </ul>
               </div>
             </div>
 
             {selected && (
               <div className="card shadow-sm flex-grow-1 rounded-4 animate__animated animate__fadeInRight">
-                <div 
-                  className="card-header d-flex justify-content-between align-items-center text-white rounded-top-4" 
-                  style={{ backgroundColor: '#b10000', height: '60px' }}
-                >
+                <div className="card-header d-flex justify-content-between align-items-center text-white rounded-top-4" style={{ backgroundColor: '#b10000', height: '60px' }}>
                   <h6 className="mb-0">Detalhes da Notificação</h6>
                   <button className="btn-close btn-close-white" onClick={() => setSelected(null)}></button>
                 </div>
@@ -121,6 +134,6 @@ export default function Notificacoes() {
           </main>
         </div>
       </div>
-    </Layout>
+    </LayoutTecnico>
   );
 }

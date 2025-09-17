@@ -1,9 +1,12 @@
 "use client";
+
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import LayoutUser from "@/components/LayoutUser/layout";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function PerfilUsuario() {
   const [dadosUsuario, setDadosUsuario] = useState(null);
@@ -23,16 +26,16 @@ export default function PerfilUsuario() {
         }
 
         const decoded = jwtDecode(token);
+
         if (!["admin", "tecnico", "usuario"].includes(decoded.funcao)) {
           router.push("/");
           return;
         }
 
-
         if (decoded.exp < Date.now() / 1000) {
           localStorage.removeItem("token");
-          alert("Seu Login Expirou.");
-          router.push("/login");
+          toast.error("Seu login expirou.");
+          setTimeout(() => router.push("/login"), 3000);
           return;
         }
 
@@ -44,7 +47,7 @@ export default function PerfilUsuario() {
 
         if (!res.ok) throw new Error("Usuário não encontrado");
 
-        const data = await res.json(); // aguarda a resposta JSON
+        const data = await res.json();
 
         setDadosUsuario({
           nome: data.nome || "",
@@ -69,7 +72,7 @@ export default function PerfilUsuario() {
     };
 
     fetchUsuario();
-  }, []);
+  }, [router]);
 
   if (loading) return <p className={styles.loading}>Carregando perfil...</p>;
   if (error) return <p className={styles.error}>{error}</p>;
@@ -77,6 +80,8 @@ export default function PerfilUsuario() {
 
   return (
     <LayoutUser>
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
+      
       <main className={styles.main}>
         <div className={styles.card}>
           <div className={styles.header}>

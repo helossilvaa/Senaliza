@@ -2,9 +2,11 @@
 import HeaderAdmin from '@/components/HeaderAdmin/headerAdmin';
 import { SidebarProvider } from '@/components/HeaderAdmin/sidebarContext';
 import styles from './layout.module.css';
+import VerifyRole from '@/components/verifyRole/verifyRole';
 
 export default function layoutAdmin({ children }) {
   return (
+    <VerifyRole permitido={['admin']}>
     <SidebarProvider>
       <div className={styles.container}>
         <HeaderAdmin />
@@ -13,5 +15,6 @@ export default function layoutAdmin({ children }) {
         </main>
       </div>
     </SidebarProvider>
+    </VerifyRole>
   );
 }

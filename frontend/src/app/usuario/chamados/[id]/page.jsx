@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode"; 
 import { useEffect, useState } from "react";
 import Loading from "@/app/loading";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function InfoPage({ params }) {
   const { id } = React.use(params); 
@@ -28,8 +30,8 @@ export default function InfoPage({ params }) {
     const decoded = jwtDecode(token);
     if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem("token");
-      alert("Seu login expirou.");
-      router.push("/login");
+      toast.error("Seu login expirou.");
+      setTimeout(() => router.push("/login"), 3000);
       return;
     }
 
@@ -62,7 +64,7 @@ export default function InfoPage({ params }) {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Você precisa estar logado.");
+      toast.error("Você precisa estar logado.");
       router.push("/login");
       return;
     }
@@ -89,7 +91,7 @@ export default function InfoPage({ params }) {
       setShowModal(false);
     } catch (error) {
       console.error(error);
-      alert("Erro ao enviar comentário. Tente novamente.");
+      toast.error("Erro ao enviar comentário. Tente novamente.");
     }
   };
 
@@ -98,6 +100,9 @@ export default function InfoPage({ params }) {
 
   return (
     <LayoutUser>
+     
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
+
       <div className={styles.page}>
         <div className="container-fluid p-4">
           <div className={styles.conteudoPrincipal}>
@@ -136,7 +141,7 @@ export default function InfoPage({ params }) {
                 </div>
               </div>
 
-              {/* Comentários do usuário */}
+              
               {timelineItems
                 .filter((item) => item.tipo === "usuario")
                 .map((item) => (
@@ -157,7 +162,7 @@ export default function InfoPage({ params }) {
                 ))}
             </div>
 
-            {/* Timeline com apontamentos técnicos */}
+            
             <div className={styles.timelineContainer}>
               <div className={styles.linhaTempo}>
                 <div className={styles.tituloLinhaTempo}>
@@ -185,8 +190,7 @@ export default function InfoPage({ params }) {
                                   year: "numeric",
                                 }
                               )}{" "}
-                              —{" "}
-                              <b>Técnico</b>
+                              — <b>Técnico</b>
                             </p>
                           </div>
                         </div>
@@ -202,7 +206,7 @@ export default function InfoPage({ params }) {
             </div>
           </div>
 
-          {/* Modal para adicionar comentário */}
+         
           {showModal && chamado.status !== "finalizado" && (
             <div className={styles.modalOverlay}>
               <div className={styles.modal}>

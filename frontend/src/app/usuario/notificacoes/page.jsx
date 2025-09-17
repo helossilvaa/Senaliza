@@ -1,10 +1,13 @@
 'use client'
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Header from '@/components/Header/header';
+import LayoutUser from '@/components/LayoutUser/layout'
 import { SidebarProvider } from '@/components/Header/sidebarContext';
 import "./notificacoes.css";
 import Loading from '@/app/loading';
+import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Notificacoes() {
   const [selected, setSelected] = useState(null);
@@ -19,35 +22,48 @@ export default function Notificacoes() {
     const fetchNotifications = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) { router.push("/"); return; }
+        if (!token) {
+          router.push("/");
+          return;
+        }
+
+        
+        const decoded = jwtDecode(token);
+        if (decoded.exp < Date.now() / 1000) {
+          localStorage.removeItem("token");
+          toast.error("Seu login expirou.");
+          setTimeout(() => router.push("/login"), 3000);
+          return;
+        }
 
         const res = await fetch(`${API_URL}/notificacoes`, {
           method: "GET",
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
         });
 
         if (!res.ok) throw new Error('Erro ao buscar notificações');
 
         const data = await res.json();
         setNotifications(data);
-        setIsLoading(false);
-        console.log("Notificações:", data);
       } catch (err) {
         console.error("Erro:", err);
         setError("Erro ao carregar notificações.");
+      } finally {
         setIsLoading(false);
       }
     };
 
     fetchNotifications();
-
-
-
   }, [router]);
 
   const handleNotificationClick = async (notification) => {
     setSelected({ ...notification, visualizado: 1 });
-    setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, visualizado: 1 } : n));
+    setNotifications(prev =>
+      prev.map(n => n.id === notification.id ? { ...n, visualizado: 1 } : n)
+    );
 
     if (notification.visualizado === 1) return;
 
@@ -55,21 +71,28 @@ export default function Notificacoes() {
       const token = localStorage.getItem('token');
       const response = await fetch(`${API_URL}/notificacoes/${notification.id}/marcarvista`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (!response.ok) throw new Error('Erro ao marcar notificação como vista');
     } catch (error) {
       console.error("Erro ao marcar notificação como vista:", error);
-      setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, visualizado: 0 } : n));
+      setNotifications(prev =>
+        prev.map(n => n.id === notification.id ? { ...n, visualizado: 0 } : n)
+      );
       setSelected(notification);
     }
   };
 
   return (
-    <SidebarProvider>
+    <LayoutUser>
+      
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
+
       <div className="container-fluid vh-100">
         <div className="row h-100">
-          <Header />
           <main className="col p-4 d-flex flex-column flex-md-row gap-4">
             <div className="card">
               <div className="card-body">
@@ -89,13 +112,16 @@ export default function Notificacoes() {
                         onClick={() => handleNotificationClick(n)}
                       >
                         <span>{n.mensagem}</span>
-                        {n.visualizado === 0 && <span className="badge bg-danger rounded-circle p-2"></span>}
+                        {n.visualizado === 0 && (
+                          <span className="badge bg-danger rounded-circle p-2"></span>
+                        )}
                       </li>
                     ))
                   )}
                 </ul>
               </div>
             </div>
+
             {selected && (
               <div className="card shadow-sm flex-grow-1 rounded-4 animate__animated animate__fadeInRight">
                 <div className="card-header d-flex justify-content-between align-items-center text-white rounded-top-4" style={{ backgroundColor: '#b10000', height: '60px' }}>
@@ -110,6 +136,6 @@ export default function Notificacoes() {
           </main>
         </div>
       </div>
-    </SidebarProvider>
+    </LayoutUser>
   );
 }

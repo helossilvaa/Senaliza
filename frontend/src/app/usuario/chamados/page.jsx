@@ -5,6 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import LayoutUser from '@/components/LayoutUser/layout'; 
 import Loading from '@/app/loading';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Chamados() {
     const [filtro, setFiltro] = useState("Todas");
@@ -26,10 +28,11 @@ export default function Chamados() {
             try {
                 const decoded = jwtDecode(token);
 
+               
                 if (decoded.exp < Date.now() / 1000) {
                     localStorage.removeItem("token");
-                    alert('Seu Login expirou.');
-                    router.push("/login");
+                    toast.error('Seu login expirou.');
+                    setTimeout(() => router.push("/login"), 3000);
                     return;
                 }
 
@@ -67,6 +70,9 @@ export default function Chamados() {
 
     return (
         <LayoutUser>
+           
+            <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
+
             <div className="container-fluid p-4">
                 <h2 className="fw-bold mb-5">Meus Chamados</h2>
 

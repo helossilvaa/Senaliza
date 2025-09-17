@@ -8,13 +8,15 @@
 
 .container {
     display: flex;
-    min-height: 100vh;
+    height: 100vh; 
+    overflow: hidden; 
 }
 
 .chamadas {
     background-color: var(--fundo);
     flex: 1;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .titulo h1 {
@@ -24,11 +26,13 @@
     padding: 10px;
 }
 
-.card {
+.cardsContainer {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: flex-start;
+    align-items: flex-start;
+    overflow-y: auto;
 }
 
 @media (max-width: 768px) {

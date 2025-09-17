@@ -57,7 +57,7 @@ export default function Chamadas() {
       <div className={styles.container}>
         <div className={styles.chamadas}>
           <h1>Histórico</h1>
-          <div className={styles.card}>
+          <div className={styles.cardsContainer}>
             {chamados.length === 0 ? (
               <p>Sem chamados concluídos.</p>
             ) : (

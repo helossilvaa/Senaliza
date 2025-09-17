@@ -25,9 +25,12 @@
     padding: 10px;
 }
 
-.card {
+
+.cardsContainer {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: flex-start;
+    align-items: flex-start;
+    overflow-y: auto;
 }

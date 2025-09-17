@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from "react";
 import Card from "@/components/Card/Card";
@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import LayoutTecnico from '@/components/LayoutTecnico/layout'; 
 import Loading from "@/app/loading";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Chamadas() {
   const [chamados, setChamados] = useState([]);
@@ -26,8 +28,8 @@ export default function Chamadas() {
 
     if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem("token");
-      alert("Seu login expirou.");
-      router.push("/login");
+      toast.error("Seu login expirou.");
+      setTimeout(() => router.push("/login"), 3000);
       return;
     }
 
@@ -44,6 +46,7 @@ export default function Chamadas() {
         const data = await res.json();
         setChamados(data);
       } catch (err) {
+        toast.error("Erro ao carregar chamados.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -61,7 +64,7 @@ export default function Chamadas() {
     }
 
     if (statusUsuario === "inativo") {
-      alert("Você não pode assumir chamados porque seu status está inativo.");
+      toast.warn("Você não pode assumir chamados porque seu status está inativo.");
       return;
     }
 
@@ -79,36 +82,37 @@ export default function Chamadas() {
         throw new Error(errorData.mensagem || "Erro ao assumir chamado");
       }
 
+      toast.success("Chamado assumido com sucesso!");
       setChamados((prev) => prev.filter((c) => c.id !== chamadoId));
     } catch (err) {
       console.error(err);
-      alert(err.message);
+      toast.error(err.message || "Erro ao assumir chamado.");
     }
   };
 
-  if (loading) return <Loading />; ;
+  if (loading) return <Loading />;
 
   return (
     <LayoutTecnico>
-    <div className={styles.container}>
-      <div className={styles.chamadas}>
-        <h1>Chamados Pendentes</h1>
-        <div className={styles.card}>
-          {chamados.map((chamado) => (
-            <Card
-              key={chamado.id}
-              id={chamado.id}
-              titulo={chamado.titulo}
-              data={new Date(chamado.criado_em).toLocaleDateString()}
-              onAceitar={aceitarChamado}
-              disabled={statusUsuario === "inativo"} 
-            />
-          ))}
-          {chamados.length === 0 && <p>Sem chamados pendentes</p>}
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
+      <div className={styles.container}>
+        <div className={styles.chamadas}>
+          <h1>Chamados Pendentes</h1>
+          <div className={styles.cardsContainer}>
+            {chamados.map((chamado) => (
+              <Card
+                key={chamado.id}
+                id={chamado.id}
+                titulo={chamado.titulo}
+                data={new Date(chamado.criado_em).toLocaleDateString()}
+                onAceitar={aceitarChamado}
+                disabled={statusUsuario === "inativo"} 
+              />
+            ))}
+            {chamados.length === 0 && <p>Sem chamados pendentes</p>}
+          </div>
         </div>
       </div>
-    </div>
     </LayoutTecnico>
   );
-
 }

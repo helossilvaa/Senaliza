@@ -9,8 +9,9 @@
 }
 
 .card {
-    width: 30%;
-    height: 25vh;
+    width: 100%;
+    max-width: 25%;
+    max-height: 25vh;
     background-color: white;
     border-radius: 15px;
     margin-bottom: 2%;
@@ -32,8 +33,17 @@
     background-color: var(--bola);
 }
 
-.titulo h5 {
+.titulo {
+    max-width: 85%; 
+    overflow: hidden;
+}
+
+.titulo h5{
     font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .data p {
@@ -44,7 +54,7 @@
 
 .botoes {
     display: flex;
-    gap: 48%;
+    gap: 60%;
     margin: 12px 0 0 8px;
 }
 

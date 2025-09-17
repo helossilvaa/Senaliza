@@ -64,7 +64,7 @@ export default function MeusChamadosPage() {
             <h1>Meus Chamados</h1>
           </div>
 
-          <div className={styles.card}>
+          <div className={styles.cardsContainer}>
             {loading ? (
               <Loading /> 
             ) : chamadosFiltrados.length === 0 ? (

@@ -60,26 +60,7 @@ const obterChamadoPorId = async (id) => {
   }
 }
  
-const atualizarChamado = async (req, res) => {
-  try {
-    await update('chamados', chamadoData, `id = ${id}`);
-      const { id } = req.params;
-      const { descricao } = req.body;
- 
-      const chamadoExistente = await obterChamadoPorId(id);
-      if (!chamadoExistente) {
-          return res.status(404).json({ mensagem: 'Chamado não encontrado' });
-      }
- 
-      const descricaoAtualizada = `${chamadoExistente.descricao}\n\n${descricao}`;
-     
-      await atualizarChamado(id, { descricao: descricaoAtualizada });
-      res.status(200).json({ mensagem: 'Chamado atualizado com sucesso' });
-  } catch (error) {
-      console.error('Erro ao atualizar chamado: ', error);
-      res.status(500).json({ mensagem: 'Erro ao atualizar chamado.' });
-  }
-};
+
  
 const atualizarStatusChamado = async (chamadoId, novoStatus) => {
   try {
