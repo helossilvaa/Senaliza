@@ -5,7 +5,9 @@ import styles from './page.module.css';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import Layout from '@/components/LayoutTecnico/layout';
-import Loading from '@/app/loading'; // importando o Loading
+import Loading from '@/app/loading'; 
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function MeusChamadosPage() {
   const [chamados, setChamados] = useState([]);
@@ -28,8 +30,8 @@ export default function MeusChamadosPage() {
 
         if (decoded.exp < Date.now() / 1000) {
           localStorage.removeItem("token");
-          alert("Seu login expirou.");
-          router.push("/login");
+          toast.warning("Seu login expirou.");
+          setTimeout(() => router.push("/login"), 3000);
           return;
         }
 
@@ -58,6 +60,7 @@ export default function MeusChamadosPage() {
 
   return (
     <Layout>
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
       <div className={styles.container}>
         <div className={styles.chamadas}>
           <div className={styles.titulo}>

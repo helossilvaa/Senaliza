@@ -56,7 +56,7 @@ export default function InfoPage({ params }) {
 
     if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem("token");
-      alert("Seu login expirou.");
+      toast.warning("Seu login expirou.");
       router.push("/login");
       return;
     }

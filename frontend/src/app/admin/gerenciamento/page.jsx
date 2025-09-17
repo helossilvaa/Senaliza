@@ -5,12 +5,16 @@ import CardAdmin from "@/components/CardAdmin/page";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import LayoutAdmin from "@/components/LayoutAdmin/layout"; 
+import LayoutAdmin from "@/components/LayoutAdmin/layout";
 import Loading from "@/app/loading";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ChamadosAdmin() {
   const [activeTab, setActiveTab] = useState("chamados");
+  const [activeSubTab, setActiveSubTab] = useState("todos"); 
   const [chamados, setChamados] = useState([]);
+  const [todosChamados, setTodosChamados] = useState({});
   const [pools, setPools] = useState([]);
   const [tecnicos, setTecnicos] = useState([]);
   const [selectedPool, setSelectedPool] = useState("");
@@ -32,30 +36,47 @@ export default function ChamadosAdmin() {
     const decoded = jwtDecode(token);
     if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem("token");
-      alert("Seu login expirou.");
-      router.push("/login");
+      toast.warning("Seu login expirou.");
+      setTimeout(() => router.push("/login"), 3000);
       return;
     }
 
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [chamadosRes, poolsRes, tecnicosRes, salasRes, equipamentosRes] = await Promise.all([
+        const [
+          chamadosRes,
+          poolsRes,
+          tecnicosRes,
+          salasRes,
+          equipamentosRes,
+          todosChamadosRes,
+        ] = await Promise.all([
           fetch(`${API_URL}/chamados/pendentes`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`${API_URL}/pools`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`${API_URL}/usuarios/tecnicosPools`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`${API_URL}/salas`, { headers: { Authorization: `Bearer ${token}` } }),
-          fetch(`${API_URL}/equipamentos`, { headers: { Authorization: `Bearer ${token}` } })
+          fetch(`${API_URL}/equipamentos`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${API_URL}/chamados/portecnico`, { headers: { Authorization: `Bearer ${token}` } }),
         ]);
 
-        if (!chamadosRes.ok || !poolsRes.ok || !tecnicosRes.ok) throw new Error("Erro ao buscar dados.");
+        if (!chamadosRes.ok || !poolsRes.ok || !tecnicosRes.ok || !todosChamadosRes.ok)
+          throw new Error("Erro ao buscar dados.");
 
-        const [chamadosData, poolsData, tecnicosData, salasData, equipamentosData] = await Promise.all([
+        const [
+          chamadosData,
+          poolsData,
+          tecnicosData,
+          salasData,
+          equipamentosData,
+          todosChamadosData,
+        ] = await Promise.all([
           chamadosRes.json(),
           poolsRes.json(),
           tecnicosRes.json(),
           salasRes.json(),
-          equipamentosRes.json()
+          equipamentosRes.json(),
+          todosChamadosRes.json(),
         ]);
 
         setChamados(chamadosData);
@@ -63,6 +84,11 @@ export default function ChamadosAdmin() {
         setTecnicos(tecnicosData);
         setSalas(salasData);
         setEquipamentos(equipamentosData);
+        setTodosChamados(todosChamadosData);
+
+        
+
+      
       } catch (err) {
         console.error(err);
       } finally {
@@ -76,7 +102,7 @@ export default function ChamadosAdmin() {
   const atribuirChamado = async (chamadoId, tecnicoId) => {
     const token = localStorage.getItem("token");
     const tecnicoIdNumerico = parseInt(tecnicoId, 10);
-    if (isNaN(tecnicoIdNumerico)) return alert("Erro: ID do técnico inválido.");
+    if (isNaN(tecnicoIdNumerico)) return toast.error("Erro: ID do técnico inválido.");
 
     try {
       const res = await fetch(`${API_URL}/chamados/${chamadoId}/atribuir`, {
@@ -91,12 +117,14 @@ export default function ChamadosAdmin() {
       }
 
       setChamados((prev) =>
-        prev.map((c) => c.id === chamadoId ? { ...c, tecnico_id: tecnicoIdNumerico, status: "em andamento" } : c)
+        prev.map((c) =>
+          c.id === chamadoId ? { ...c, tecnico_id: tecnicoIdNumerico, status: "em andamento" } : c
+        )
       );
-      alert("Chamado atribuído com sucesso!");
+      toast.success("Chamado atribuído com sucesso!");
     } catch (err) {
       console.error(err);
-      alert(`Falha ao atribuir chamado: ${err.message}`);
+      toast.error(`Falha ao atribuir chamado: ${err.message}`);
     }
   };
 
@@ -127,14 +155,16 @@ export default function ChamadosAdmin() {
     ? chamados.filter((chamado) => chamado.tipo_id === parseInt(selectedPool, 10))
     : chamados;
 
-  if (loading) return <Loading />; // Spinner global enquanto carrega os dados
+  if (loading) return <Loading />;
 
   return (
     <LayoutAdmin>
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
       <div className={styles.page}>
         <div className="container-fluid p-4">
           <h1 className={styles.titulo}>Painel de Administração</h1>
 
+        
           <div className={styles.tabs}>
             <button
               className={`${styles.tabButton} ${activeTab === "chamados" ? styles.active : ""}`}
@@ -156,7 +186,7 @@ export default function ChamadosAdmin() {
             </button>
           </div>
 
-          {/* Conteúdo das Tabs */}
+         
           {activeTab === "chamados" && (
             <section className={styles.section}>
               <div className={styles.filterContainer}>
@@ -204,6 +234,7 @@ export default function ChamadosAdmin() {
             </section>
           )}
 
+          
           {activeTab === "tecnicos" && (
             <section className={styles.section}>
               <div className={styles.cardsContainer}>
@@ -213,9 +244,6 @@ export default function ChamadosAdmin() {
                       <h3>{tec.nome}</h3>
                       <p><strong>Email:</strong> {tec.email}</p>
                       <p><strong>Setor:</strong> {tec.setor || "Não informado"}</p>
-                      <p>
-                        <strong>Criado em:</strong> {new Date(tec.criado_em).toLocaleDateString("pt-BR")}
-                      </p>
                     </div>
                     <select
                       value={tec.status}
@@ -231,11 +259,12 @@ export default function ChamadosAdmin() {
             </section>
           )}
 
+          
           {activeTab === "porTecnico" && (
             <section className={styles.section}>
               <h2>Chamados por Técnico</h2>
               <div className={styles.filterContainer}>
-                <label htmlFor="tecnico-select">Selecione o Técnico:</label>
+                <label className="tecnico-select">Selecione o Técnico:</label>
                 <select
                   id="tecnico-select"
                   value={selectedTecnico}
@@ -252,29 +281,70 @@ export default function ChamadosAdmin() {
                 const tecnico = tecnicos.find((t) => t.id === Number(selectedTecnico));
                 if (!tecnico) return <p>Técnico não encontrado.</p>;
 
-                const chamadosDoTecnico = chamados.filter((c) => Number(c.tecnico_id) === Number(tecnico.id));
-                const emAndamento = chamadosDoTecnico.filter((c) => c.status.toLowerCase() === "em andamento");
+                const chamadosDoTecnico = todosChamados[tecnico.id] || [];
+
+                const emAndamento = chamadosDoTecnico.filter(
+                  (c) => c.status.toLowerCase() === "em andamento"
+                );
+                const finalizados = chamadosDoTecnico.filter(
+                  (c) => c.status.toLowerCase() === "concluído" || c.status.toLowerCase() === "finalizado"
+                );
+
+                
+                let chamadosExibidos = chamadosDoTecnico;
+                if (activeSubTab === "emAndamento") chamadosExibidos = emAndamento;
+                if (activeSubTab === "finalizados") chamadosExibidos = finalizados;
 
                 return (
                   <div className={styles.tecnicoInfo}>
                     <h3>{tecnico.nome}</h3>
                     <p><strong>Total de Chamados:</strong> {chamadosDoTecnico.length}</p>
+                    <p><strong>Em Andamento:</strong> {emAndamento.length}</p>
+                    <p><strong>Finalizados:</strong> {finalizados.length}</p>
 
-                    <h4>Chamados em Andamento</h4>
-                    {emAndamento.length > 0 ? (
-                      <div className={styles.cardList}>
-                        {emAndamento.map((chamado) => (
+                    
+                    <div className={styles.tabs}>
+                      <button
+                        className={`${styles.tabButton} ${activeSubTab === "todos" ? styles.active : ""}`}
+                        onClick={() => setActiveSubTab("todos")}
+                      >
+                        Todos
+                      </button>
+                      <button
+                        className={`${styles.tabButton} ${activeSubTab === "emAndamento" ? styles.active : ""}`}
+                        onClick={() => setActiveSubTab("emAndamento")}
+                      >
+                        Em Andamento
+                      </button>
+                      <button
+                        className={`${styles.tabButton} ${activeSubTab === "finalizados" ? styles.active : ""}`}
+                        onClick={() => setActiveSubTab("finalizados")}
+                      >
+                        Finalizados
+                      </button>
+                    </div>
+
+                    
+                    <div className={styles.cardList}>
+                      {chamadosExibidos.length === 0 ? (
+                        <p>Nenhum chamado encontrado.</p>
+                      ) : (
+                        chamadosExibidos.map((chamado) => (
                           <CardAdmin
                             key={chamado.id}
                             id={chamado.id}
                             titulo={chamado.titulo}
+                            equipamentos={equipamentos}
+                            pools={pools}
+                            salas={salas}
                             data={chamado.criado_em}
-                            tecnicos={[]}
+                            tecnicos={[tecnico]}
                             onAtribuir={atribuirChamado}
+                            chamado={chamado}
                           />
-                        ))}
-                      </div>
-                    ) : <p>Nenhum chamado em andamento.</p>}
+                        ))
+                      )}
+                    </div>
                   </div>
                 );
               })()}

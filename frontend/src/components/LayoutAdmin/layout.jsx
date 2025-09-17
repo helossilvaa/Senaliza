@@ -9,7 +9,9 @@ export default function layoutAdmin({ children }) {
     <VerifyRole permitido={['admin']}>
     <SidebarProvider>
       <div className={styles.container}>
+      <div className={styles.sidebar}>
         <HeaderAdmin />
+        </div>
         <main className={styles.mainContent}>
           {children}
         </main>

@@ -15,6 +15,8 @@ import {
   Tooltip,
   Legend
 } from "chart.js";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -33,14 +35,14 @@ export default function RelatoriosPage() {
   const [rawPdfs, setRawPdfs] = useState([]);
   const [pdfsGerados, setPdfsGerados] = useState([]);
   const [selectedChamado, setSelectedChamado] = useState("");
-  const [loading, setLoading] = useState(true); // Loading global inicial
+  const [loading, setLoading] = useState(true); 
   const [modalAberto, setModalAberto] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
 
   const API_URL = "http://localhost:8080";
   const router = useRouter();
 
-  // Atualiza a linha ativa das abas
+  
   useEffect(() => {
     const current = refs[activeTab]?.current;
     if (current) {
@@ -51,7 +53,7 @@ export default function RelatoriosPage() {
     }
   }, [activeTab]);
 
-  // Buscar dados iniciais
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,11 +63,12 @@ export default function RelatoriosPage() {
         const decoded = jwtDecode(token);
         if (decoded.exp < Date.now() / 1000) {
           localStorage.removeItem("token");
-          alert("Login expirou");
-          return router.push("/login");
+          toast.warning("Seu login expirou.");
+          setTimeout(() => router.push("/login"), 3000);
+          return;
         }
 
-        // Requisições simultâneas
+       
         const [resChamados, resTecnicos, resEquip, resPdfs] = await Promise.all([
           fetch(`${API_URL}/chamados/historico`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -81,17 +84,25 @@ export default function RelatoriosPage() {
           })
         ]);
 
-        const [chamadosData, tecnicosData, equipamentosData, pdfsData] = await Promise.all([
-          resChamados.ok ? resChamados.json() : [],
-          resTecnicos.ok ? resTecnicos.json() : [],
-          resEquip.ok ? resEquip.json() : [],
-          resPdfs.ok ? resPdfs.json() : []
-        ]);
+        const extrairArray = (data) => {
+          if (Array.isArray(data)) return data;          
+          if (data.relatorio) return data.relatorio;    
+          if (data.historico) return data.historico;     
+          return [];                                     
+        };
+        
+        const chamadosData = extrairArray(await resChamados.json());
+        const tecnicosData = extrairArray(await resTecnicos.json());
+        const equipamentosData = extrairArray(await resEquip.json());
+        const pdfsData = extrairArray(await resPdfs.json());
+        
 
         setChamadosConcluidos(chamadosData);
         setTecnicos(tecnicosData);
         setEquipamentos(equipamentosData);
         setRawPdfs(pdfsData);
+
+        console.log(equipamentosData)
       } catch (err) {
         console.error(err);
       } finally {
@@ -101,6 +112,8 @@ export default function RelatoriosPage() {
 
     fetchData();
   }, [router]);
+
+  
 
   const handleGerarPdf = async () => {
     if (!selectedChamado) return alert("Selecione um chamado");
@@ -155,7 +168,7 @@ export default function RelatoriosPage() {
   return (
   <div className={styles.mainContent}>
     <LayoutAdmin>
-      
+    <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
       <div className={styles.page}>
         <div className="container-fluid p-4">
           <h1>Relatórios</h1>

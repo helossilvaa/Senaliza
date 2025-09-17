@@ -180,6 +180,22 @@
 .graficoObjetos{
   margin-top: -30px;
 }
+
+.verTodosRelatorios {
+  margin-top: 10px;
+  background-color: #640d14;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.verTodosRelatorios:hover {
+  background-color: #920101;
+}
+
  
 @media (max-width: 1024px) {
   .cardsContainer {

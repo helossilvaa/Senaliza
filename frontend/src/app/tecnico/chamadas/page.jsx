@@ -28,7 +28,7 @@ export default function Chamadas() {
 
     if (decoded.exp < Date.now() / 1000) {
       localStorage.removeItem("token");
-      toast.error("Seu login expirou.");
+      toast.warning("Seu login expirou.");
       setTimeout(() => router.push("/login"), 3000);
       return;
     }

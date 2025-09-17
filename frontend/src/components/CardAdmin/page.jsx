@@ -1,6 +1,7 @@
 import Link from "next/link";
 import styles from "./Card.module.css";
-import {useState} from "react"; 
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function CardAdmin({ pools, equipamentos, salas, titulo, id, data, tecnicos, onAtribuir, chamado }) {
   const [tecnicoSelecionado, setTecnicoSelecionado] = useState('');
@@ -12,10 +13,10 @@ export default function CardAdmin({ pools, equipamentos, salas, titulo, id, data
       if (!isNaN(tecnicoIdNumerico)) {
         onAtribuir(id, tecnicoIdNumerico);
       } else {
-        alert("Erro: ID do técnico inválido.");
+        toast.error("Erro: ID do técnico inválido.");
       }
     } else {
-      alert("Por favor, selecione um técnico.");
+      toast.error("Por favor, selecione um técnico.");
     }
   };
 
@@ -33,34 +34,37 @@ export default function CardAdmin({ pools, equipamentos, salas, titulo, id, data
           </p>
 
           <div className={styles.botoes}>
-            {/* Botão que abre o modal */}
-            <button
+            
+            <div
               type="button"
               className={styles.botaoVeja}
               onClick={() => setShowModal(true)}
             >
               Ver mais
-            </button>
-
-            <div className={styles.atribuirForm}>
-              <select
-                value={tecnicoSelecionado}
-                onChange={(e) => setTecnicoSelecionado(e.target.value)}
-              >
-                <option value="">Atribuir a...</option>
-                {tecnicos.map(tecnico => (
-                  <option key={tecnico.id} value={tecnico.id}>
-                    {tecnico.nome}
-                  </option>
-                ))}
-              </select>
-              <button onClick={handleAtribuir}>Atribuir</button>
             </div>
+
+            
+            {!chamado.tecnico_id && (
+              <div className={styles.atribuirForm}>
+                <select
+                  value={tecnicoSelecionado}
+                  onChange={(e) => setTecnicoSelecionado(e.target.value)}
+                >
+                  <option value="">Atribuir a...</option>
+                  {tecnicos.map(tecnico => (
+                    <option key={tecnico.id} value={tecnico.id}>
+                      {tecnico.nome}
+                    </option>
+                  ))}
+                </select>
+                <button onClick={handleAtribuir}>Atribuir</button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Modal flutuante */}
+
       {showModal && (
         <div className="modal-backdrop">
           <div className="modal show d-block" tabIndex={-1} role="dialog">
@@ -75,12 +79,26 @@ export default function CardAdmin({ pools, equipamentos, salas, titulo, id, data
                   />
                 </div>
                 <div className="modal-body">
-                <p><strong>Tipo de assistência: </strong> {pools?.find(p => p.id === chamado.tipo_id)?.titulo || "N/A"}</p>
-                <p><strong>Sala: </strong> {salas?.find(s => s.id === chamado.sala_id)?.nome_sala || "N/A"}</p>
-                <p><strong>Equipamento: </strong> {equipamentos?.find(eq => eq.patrimonio === chamado.equipamento_id)?.equipamento || "N/A"}</p>
+                  <p>
+                    <strong>Tipo de assistência: </strong>
+                    {pools?.find(p => Number(p.id) === Number(chamado.tipo_id))?.titulo || "Não encontrado"}
+                  </p>
 
-                  <p><strong>Descrição: </strong>{chamado?.descricao || "N/A"} </p>
+                  <p>
+                    <strong>Sala: </strong>
+                    {salas?.find(s => Number(s.id) === Number(chamado.sala_id))?.nome_sala || "Não encontrado"}
+                  </p>
+
+                  <p>
+                    <strong>Equipamento: </strong>
+                    {equipamentos?.find(eq => Number(eq.patrimonio) === Number(chamado.equipamento_id))?.equipamento || "Não encontrado"}
+                  </p>
+
+                  <p>
+                    <strong>Descrição: </strong>{chamado.descricao}
+                  </p>
                 </div>
+
                 <div className="modal-footer">
                   <button
                     type="button"
@@ -89,12 +107,10 @@ export default function CardAdmin({ pools, equipamentos, salas, titulo, id, data
                   >
                     Fechar
                   </button>
-                  
                 </div>
               </div>
             </div>
           </div>
-          {/* Clicar fora fecha o modal */}
           <div
             className="modal-backdrop fade show"
             onClick={() => setShowModal(false)}

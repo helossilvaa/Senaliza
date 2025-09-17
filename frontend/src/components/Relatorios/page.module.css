@@ -37,7 +37,12 @@
     margin: 0;
     font-weight: bold;
     font-family: var(--fonte);
-    overflow-wrap: break-word;
+    overflow: hidden;            
+    display: -webkit-box;        
+    -webkit-line-clamp: 2;       
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;     
+    word-break: break-word;
 }
  
 .link p {

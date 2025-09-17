@@ -31,8 +31,8 @@ export default function PerfilUsuario() {
 
         if (decoded.exp < Date.now() / 1000) {
           localStorage.removeItem("token");
-          alert("Seu Login Expirou.");
-          router.push("/login");
+          toast.warning("Seu login expirou.");
+          setTimeout(() => router.push("/login"), 3000);
           return;
         }
 
@@ -44,7 +44,7 @@ export default function PerfilUsuario() {
 
         if (!res.ok) throw new Error("Usuário não encontrado");
 
-        const data = await res.json(); // aguarda a resposta JSON
+        const data = await res.json(); 
 
         setDadosUsuario({
           nome: data.nome || "",

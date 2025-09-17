@@ -4,33 +4,69 @@
     --fonte: 'Poppins', sans-serif;
     --cordata: #535355;
     --botao: #640d14;
-
+ 
 }
-
+ 
 .container {
     display: flex;
     min-height: 100vh;
-}
-
-.chamadas {
-    background-color: var(--fundo);
-    flex: 1;
+    overflow-x: hidden;
     padding: 20px;
 }
+ 
 
+ 
 .titulo h1 {
     font-family: var(--fonte);
     color: var(--cordata);
     font-size: 30px;
-    padding: 10px;
+    margin: 0;
 }
-
-
+ 
 .cardsContainer {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: flex-start;
+    justify-content: flex-start; /* muda pra center no mobile */
     align-items: flex-start;
     overflow-y: auto;
+    margin-top: 30px;
 }
+
+/* Cards */
+.card {
+    flex: 1 1 23%; /* Flex-grow:1, Flex-shrink:1, Flex-basis: 23% */
+    max-width: 23%; 
+    background-color: white;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    padding: 2%;
+    font-family: var(--fonte);
+    box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+    .card {
+        flex: 1 1 45%;
+        max-width: 45%;
+    }
+}
+
+@media (max-width: 768px) {
+    .cardsContainer {
+        justify-content: center;
+    }
+
+    .card {
+        flex: 1 1 90%;
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+

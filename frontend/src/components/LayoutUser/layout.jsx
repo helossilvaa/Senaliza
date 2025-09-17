@@ -9,7 +9,9 @@ export default function LayoutUser({ children }) {
      <VerifyRole permitido={['usuario']}>
     <SidebarProvider>
       <div className={styles.container}>
+      <div className={styles.sidebar}>
         <Header />
+        </div>
         <main className={styles.mainContent}>
           {children}
         </main>

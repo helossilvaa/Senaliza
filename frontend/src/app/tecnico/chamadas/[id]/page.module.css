@@ -16,7 +16,6 @@
 }
  
 .conteudoPrincipal {
-  display: flex;
   gap: 2rem;
   width: 100%;
   align-items: flex-start;
@@ -271,100 +270,120 @@
 }
  
  
+.tituloApontamento h4{
+  font-size: 1.3rem;
+}
+
 @media (max-width: 1024px) {
-  .conteudoPrincipal {
-    flex-direction: column;
-  }
- 
-  .colunaEsquerda, .colunaDireita {
-    width: 100%;
-  }
+.conteudoPrincipal {
+  flex-direction: column;
 }
- 
+
+.colunaEsquerda, .colunaDireita {
+  width: 100%;
+}
+}
+
 @media (max-width: 768px) {
-  .page{
-    flex-direction: column;
-  }
-  .card {
-    padding: 1rem;
-    min-height: auto;
-  }
- 
-  .card h2 {
-    font-size: 1.2rem;
-  }
- 
-  .card p {
-    font-size: 0.9rem;
-  }
- 
-  .tituloLinhaTempo p {
-    font-size: 1rem;
-  }
- 
-  .formTimeline textarea {
-    min-height: 80px;
-  }
- 
-  .btnEnviar, .botao button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
- 
-  .colunaDireita {
-    min-width: 100%;
-  }
- 
-  .linhaTempo {
-    margin-top: 1rem;
-  }
+.page{
+  flex-direction: column;
 }
- 
+.card {
+  padding: 1rem;
+  min-height: auto;
+}
+
+.card h2 {
+  font-size: 1.2rem;
+}
+
+.card p {
+  font-size: 0.9rem;
+}
+.infos h3 {
+  font-size: 2rem;  
+  margin-bottom: 0.8rem;
+}
+
+.tituloApontamento h4{
+  font-size: 1rem;
+}
+.tituloLinhaTempo p {
+  font-size: 1rem;
+}
+
+.formTimeline textarea {
+  min-height: 80px;
+}
+
+.btnEnviar, .botao button {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.colunaDireita {
+  min-width: 100%;
+}
+
+.linhaTempo {
+  margin-top: 1rem;
+}
+}
+
 @media (max-width: 480px) {
-  .page {
-    padding: 1rem;
-  }
- 
-  .card {
-    padding: 0.8rem;
-  }
- 
-  .card h2 {
-    font-size: 1rem;
-  }
- 
-  .card p {
-    font-size: 0.85rem;
-  }
- 
-  .tituloLinhaTempo p {
-    font-size: 0.9rem;
-  }
- 
-  .formTimeline textarea {
-    font-size: 0.9rem;
-    min-height: 60px;
-  }
- 
-  .btnEnviar, .botao button {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-  }
- 
-  .linhaTempo {
-    margin-top: 0.8rem;
-  }
- 
-  .ponto {
-    width: 8px;
-    height: 8px;
-  }
- 
-  .informacoesLinhaTempo h4 {
-    font-size: 0.9rem;
-  }
- 
-  .dataLinhaTempo {
-    font-size: 0.75rem;
-  }
+.page {
+  margin-top: 15%;
+}
+
+.card {
+  padding: 0.8rem;
+}
+
+.card h2 {
+  font-size: 1rem;
+}
+
+.card p {
+  font-size: 0.85rem;
+}
+
+  .infos h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.tituloApontamento h4{
+  font-size: 0.9rem;
+}
+
+.tituloLinhaTempo p {
+  font-size: 0.9rem;
+}
+
+.formTimeline textarea {
+  font-size: 0.9rem;
+  min-height: 60px;
+}
+
+.btnEnviar, .botao button {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.linhaTempo {
+  margin-top: 0.8rem;
+}
+
+.ponto {
+  width: 8px;
+  height: 8px;
+}
+
+.informacoesLinhaTempo h4 {
+  font-size: 0.9rem;
+}
+
+.dataLinhaTempo {
+  font-size: 0.75rem;
+}
 }

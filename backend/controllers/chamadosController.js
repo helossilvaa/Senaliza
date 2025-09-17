@@ -393,6 +393,26 @@ const listarTodosChamadosDoTecnicoController = async (req, res) => {
     }
 };
 
+const listarChamadosPorTecnicoController = async (req, res) => {
+    try {
+        const todosChamados = await listarChamado();
+
+        
+        const agrupados = todosChamados.reduce((acc, chamado) => {
+            const id = chamado.tecnico_id || "sem_tecnico";
+            if (!acc[id]) acc[id] = [];
+            acc[id].push(chamado);
+            return acc;
+        }, {});
+
+        res.status(200).json(agrupados);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ mensagem: "Erro ao listar chamados por técnico" });
+    }
+};
+
+
 const listarHistoricoChamadosController = async (req, res) => {
     try {
         const todosChamados = await listarChamado();
@@ -451,4 +471,4 @@ const listarChamadosConcluidosDoTecnicoController = async (req, res) => {
     }
 };
 
-export { listarChamadosController,criarChamadoController, obterChamadoPorIdController, criarApontamentoController, assumirChamadoController, listarChamadosPendentesController, listarTodosChamadosDoTecnicoController, atualizarStatusChamadoController, listarHistoricoChamadosController, estipularPrazoController, listarChamadosPorCategoriaController, listarRankingTecnicosController, listarChamadosDoUsuarioController, listarChamadosConcluidosDoTecnicoController, atribuirChamadoController, listarApontamentosController};
+export { listarChamadosController,criarChamadoController, obterChamadoPorIdController, criarApontamentoController, assumirChamadoController, listarChamadosPendentesController, listarTodosChamadosDoTecnicoController, atualizarStatusChamadoController, listarHistoricoChamadosController, estipularPrazoController, listarChamadosPorCategoriaController, listarRankingTecnicosController, listarChamadosDoUsuarioController, listarChamadosConcluidosDoTecnicoController, atribuirChamadoController, listarApontamentosController, listarChamadosPorTecnicoController};

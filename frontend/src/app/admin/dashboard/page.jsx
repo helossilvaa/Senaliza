@@ -8,7 +8,10 @@ import styles from "@/app/admin/Dashboard/page.module.css";
 import LayoutAdmin from "@/components/LayoutAdmin/layout";
 import Relatorios from "@/components/Relatorios/page";
 import CategoriasChamados from "@/components/Grafico/page";
-import Loading from "@/app/loading"; // importando Loading
+import Loading from "@/app/loading";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function DashboardAdmin() {
     const [nomeUsuario, setNomeUsuario] = useState("");
@@ -16,7 +19,7 @@ export default function DashboardAdmin() {
     const [categorias, setCategorias] = useState([]);
     const [tecnicos, setTecnicos] = useState([]);
     const [relatoriosRecentes, setRelatoriosRecentes] = useState([]);
-    const [loading, setLoading] = useState(true); // estado de loading
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     const API_URL = "http://localhost:8080";
@@ -31,8 +34,8 @@ export default function DashboardAdmin() {
         const decoded = jwtDecode(token);
         if (decoded.exp < Date.now() / 1000) {
             localStorage.removeItem("token");
-            console.error("Seu login expirou.");
-            router.push("/login");
+            toast.warning("Seu login expirou.");
+            setTimeout(() => router.push("/login"), 3000);
             return;
         }
 
@@ -49,16 +52,16 @@ export default function DashboardAdmin() {
                     fetch(`${API_URL}/relatorios/recentes?limite=5`, { headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } }),
                 ]);
 
-                // Chamados
+
                 if (!resChamados.ok) throw new Error("Erro ao buscar chamados");
                 const dataChamados = await resChamados.json();
                 setChamados(dataChamados);
 
-                // Categorias
+
                 const dataCategorias = resCategorias.ok ? await resCategorias.json() : [];
                 setCategorias(Array.isArray(dataCategorias) ? dataCategorias : []);
 
-                // Ranking Técnicos
+
                 if (resRanking.ok) {
                     const dados = await resRanking.json();
                     if (Array.isArray(dados) && dados.length > 0) {
@@ -71,7 +74,7 @@ export default function DashboardAdmin() {
                     } else setTecnicos([]);
                 } else setTecnicos([]);
 
-                // Relatórios
+
                 if (resRelatorios.ok) {
                     const dataRelatorios = await resRelatorios.json();
                     setRelatoriosRecentes(Array.isArray(dataRelatorios) ? dataRelatorios : []);
@@ -79,7 +82,7 @@ export default function DashboardAdmin() {
             } catch (err) {
                 console.error("Erro ao buscar dados do dashboard:", err);
             } finally {
-                setLoading(false); // termina o loading
+                setLoading(false);
             }
         };
 
@@ -93,15 +96,16 @@ export default function DashboardAdmin() {
         "concluído": chamados.filter(c => c.status?.toLowerCase().includes("concluído")).length,
     };
 
-    if (loading) return <Loading />; // exibe o spinner enquanto carrega
+    if (loading) return <Loading />;
 
     return (
         <LayoutAdmin>
+            <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
             <div className={styles.page}>
                 <div className={styles.dashboardContainer}>
                     <h2 className={styles.welcome}>Olá, {nomeUsuario}!</h2>
                     <div className={styles.cardsContainer}>
-                        {/* Status Chamados */}
+
                         <div className={styles.cardStatusChamados}>
                             <h3>Status de todos os chamados da rede:</h3>
                             <p className={styles.numeroChamados}>{totalChamados}</p>
@@ -123,17 +127,25 @@ export default function DashboardAdmin() {
                             </ul>
                         </div>
 
-                        {/* Relatórios */}
+
                         <div className={styles.cardRelatorios}>
                             <h3>Relatórios recentes</h3>
                             {relatoriosRecentes.length > 0 ? (
-                                relatoriosRecentes.map((relatorio, index) => <Relatorios key={index} relatorio={relatorio} />)
+                                <>
+                                    {relatoriosRecentes.slice(0, 3).map((relatorio, index) => (
+                                        <Relatorios key={index} relatorio={relatorio} />
+                                    ))}
+                                    {relatoriosRecentes.length > 3 && (
+                                        <div className={styles.verTodosRelatorios} onClick={() => router.push("/admin/relatorios")}> Ver todos os relatórios </div>
+                                    )}
+                                </>
                             ) : (
                                 <p>Nenhum relatório recente encontrado.</p>
                             )}
                         </div>
 
-                        {/* Técnicos e Categorias */}
+
+
                         <div className={styles.cardLarge}>
                             <div className={styles.graficoTecnicos}>
                                 <h4>Técnicos que mais resolvem chamados</h4>

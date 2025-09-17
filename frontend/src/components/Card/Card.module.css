@@ -34,11 +34,11 @@
 }
 
 .titulo {
-    max-width: 85%; 
+    max-width: 85%;
     overflow: hidden;
 }
 
-.titulo h5{
+.titulo h5 {
     font-size: 17px;
     white-space: nowrap;
     overflow: hidden;
@@ -81,8 +81,8 @@
 }
 
 .botaoAceitar button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 
@@ -120,18 +120,18 @@
 @media (max-width: 480px) {
     .card {
         width: 100%;
-        padding: 5%;
+        padding: 2%;
+        align-items: center;
     }
 
     .cabecalho {
-        flex-direction: column;
+        display: flex;
         align-items: flex-start;
     }
 
     .titulo h5 {
         font-size: 14px;
-        margin-top: -15px;
-        margin-left: 10px;
+        margin-top: 2px;
     }
 
     .data p {
@@ -148,3 +148,4 @@
         width: 100%;
     }
 }
+

@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react";
 import Card from "@/components/Card/Card";
 import LayoutTecnico from "@/components/LayoutTecnico/layout";
-import styles from "@/app/tecnico/Chamadas/page.module.css";
+import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
 import {jwtDecode}  from "jwt-decode";
 import Loading from "@/app/loading"; 
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Chamadas() {
   const [chamados, setChamados] = useState([]);
@@ -25,12 +28,12 @@ export default function Chamadas() {
       try {
         const decoded = jwtDecode(token);
 
-        if (decoded.exp < Date.now() / 1000) {
-          localStorage.removeItem("token");
-          alert("Seu login expirou.");
-          router.push("/login");
-          return;
-        }
+       if (decoded.exp < Date.now() / 1000) {
+             localStorage.removeItem("token");
+             toast.warning("Seu login expirou.");
+             setTimeout(() => router.push("/login"), 3000);
+             return;
+           }
 
         const res = await fetch(`${API_URL}/chamados/historico`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -54,8 +57,9 @@ export default function Chamadas() {
 
   return (
     <LayoutTecnico>
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
       <div className={styles.container}>
-        <div className={styles.chamadas}>
+        <div className={styles.historico}>
           <h1>Histórico</h1>
           <div className={styles.cardsContainer}>
             {chamados.length === 0 ? (

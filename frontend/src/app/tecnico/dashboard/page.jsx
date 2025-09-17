@@ -7,6 +7,10 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import Layout from '@/components/LayoutTecnico/layout';
 import Loading from "@/app/loading";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 export default function DashboardTecnico() {
   const [chamados, setChamados] = useState([]);
@@ -31,11 +35,11 @@ export default function DashboardTecnico() {
       try {
         const decoded = jwtDecode(token);
         if (decoded.exp < Date.now() / 1000) {
-          localStorage.removeItem("token");
-          alert("Seu login expirou.");
-          router.push("/login");
-          return;
-        }
+              localStorage.removeItem("token");
+              toast.warning("Seu login expirou.");
+              setTimeout(() => router.push("/login"), 3000);
+              return;
+            }
 
         setNomeUsuario(decoded.nome || 'Usuário não encontrado');
         setTecnicoId(decoded.id);
@@ -125,6 +129,7 @@ export default function DashboardTecnico() {
 
   return (
     <Layout>
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
       <div className={styles.page}>
         <div className={styles.dashboardContainer}>
           <h2 className={styles.welcome}>Olá, {nomeUsuario}!</h2>
@@ -163,12 +168,14 @@ export default function DashboardTecnico() {
               ) : (
                 chamadosRecentes.map(c => (
                   <div key={c.id} className={styles.chamadoItem}>
-                    <div>
-                      <h4>{c.titulo}</h4>
+                    <div className={styles.informacoesChamado}>
+                      <div className={styles.tituloLongo}>
+                        <h4>{c.titulo}</h4>
+                      </div>
                       <p>{c.nome_sala}</p>
                     </div>
                     <div>
-                      <button className={styles.btnVerMais}>Ver mais</button>
+                      <button className={styles.btnVerMais} onClick={() => router.push(`/tecnico/chamadas/${c.id}`)}>Ver mais</button>
                       <button
                         className={styles.btnAceitar}
                         onClick={() => aceitarChamado(c.id)}

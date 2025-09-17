@@ -73,6 +73,7 @@ const listarTecnicosComPools = async () => {
         u.nome,
         u.setor,
         u.status,
+        u.email,
         p.id AS pool_id,
         p.titulo AS pool_nome
       FROM usuarios u
@@ -85,7 +86,7 @@ const listarTecnicosComPools = async () => {
     const tecnicosMap = {};
     rows.forEach(row => {
         if (!tecnicosMap[row.id]) {
-            tecnicosMap[row.id] = { id: row.id, nome: row.nome, setor: row.setor, status: row.status, pools: [] };
+            tecnicosMap[row.id] = { id: row.id, nome: row.nome, setor: row.setor, status: row.status, pools: [], email: row.email };
         }
         if (row.pool_id) {
             tecnicosMap[row.id].pools.push({ id: row.pool_id, nome: row.pool_nome });

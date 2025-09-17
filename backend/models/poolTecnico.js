@@ -1,6 +1,6 @@
-import { read, readAll, create, update, deleteRecord, query} from "../config/database.js";
+import { read, create, update, deleteRecord, query} from "../config/database.js";
 
-// Listar pools, com controle de função
+
 const listarPoolsTecnico = async (tecnicoId) => {
     try {
         const sql = `SELECT id_pool FROM pool_tecnico WHERE tecnico_id = ?`;
@@ -12,13 +12,13 @@ const listarPoolsTecnico = async (tecnicoId) => {
     }
 };
 
-// Obter pool por id, com verificação de acesso
+
 const obterPoolTecnicoId = async (id, user, usuarioFuncao) => {
     try {
         const pool = await read('pool', `id = ${id}`);
         if (!pool) return null;
 
-        // Checa se o usuário tem acesso
+        
         if (usuarioFuncao === 'admin' || pool.tecnico_id === user.id) {
             return pool;
         } else {
@@ -30,7 +30,7 @@ const obterPoolTecnicoId = async (id, user, usuarioFuncao) => {
     }
 };
 
-// Criar pool (admin direciona chamado para técnico)
+
 const criarPoolTecnico = async (poolTecnicoData, usuarioFuncao) => {
     try {
         if (usuarioFuncao !== 'admin') throw new Error('Apenas admin pode criar pools');
@@ -41,13 +41,13 @@ const criarPoolTecnico = async (poolTecnicoData, usuarioFuncao) => {
     }
 };
 
-// Atualizar pool (admin ou técnico pode atualizar status)
+
 const atualizarPoolTecnico = async (id, poolTecnicoData, usuarioFuncao) => {
     try {
         const pool = await read('pool', `id = ${id}`);
         if (!pool) throw new Error('Pool não encontrado');
 
-        // Admin pode atualizar qualquer coisa, técnico só status
+        
         if (usuarioFuncao === 'admin') {
             return await update('pool', poolTecnicoData, `id = ${id}`);
         } else {
@@ -59,7 +59,7 @@ const atualizarPoolTecnico = async (id, poolTecnicoData, usuarioFuncao) => {
     }
 };
 
-// Deletar pool (somente admin)
+
 const deletarPoolTecnico = async (id, usuarioFuncao) => {
     try {
         if (usuarioFuncao !== 'admin') throw new Error('Apenas admin pode deletar pools');

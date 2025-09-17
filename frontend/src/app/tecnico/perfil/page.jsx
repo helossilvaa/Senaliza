@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import LayoutTecnico from "@/components/LayoutTecnico/layout";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function PerfilUsuario() {
   const [dadosUsuario, setDadosUsuario] = useState(null);
@@ -28,11 +31,10 @@ export default function PerfilUsuario() {
           return;
         }
 
-
         if (decoded.exp < Date.now() / 1000) {
           localStorage.removeItem("token");
-          alert("Seu Login Expirou.");
-          router.push("/login");
+          toast.warning("Seu login expirou.");
+          setTimeout(() => router.push("/login"), 3000);
           return;
         }
 
@@ -77,6 +79,7 @@ export default function PerfilUsuario() {
 
   return (
     <LayoutTecnico>
+      <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
       <main className={styles.main}>
         <div className={styles.card}>
           <div className={styles.header}>

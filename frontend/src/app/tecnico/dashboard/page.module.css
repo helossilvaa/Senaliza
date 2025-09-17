@@ -14,7 +14,6 @@
   font-family: var(--fonte);
 }
  
- 
 .dashboardContainer {
   flex: 1;
   padding: 2rem;
@@ -23,7 +22,6 @@
   flex-direction: column;
   transition: margin-left 0.3s ease;
 }
- 
  
 .welcome {
   font-size: 1.8rem;
@@ -161,10 +159,34 @@
   font-weight: 600;
 }
  
+.tituloLongo {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+ 
+.tituloLongo h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+ 
+.informacoesChamado {
+  flex: 1;
+  min-width: 0;
+}
+ 
 .chamadoItem p {
   font-size: 0.85rem;
   color: var(--cordata);
   margin: 0;
+}
+ 
+.informacoesChamado {
+  flex: 1;
+  min-width: 0;
 }
  
 .btnVerMais {

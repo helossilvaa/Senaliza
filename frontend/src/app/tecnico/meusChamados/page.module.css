@@ -4,28 +4,31 @@
     --fonte: 'Poppins', sans-serif;
     --cordata: #535355;
     --botao: #640d14;
-
+ 
 }
-
+ 
 .container {
     display: flex;
     min-height: 100vh;
+    overflow-x: hidden;
 }
-
+ 
 .chamadas {
     background-color: var(--fundo);
     flex: 1;
     padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
 }
-
+ 
 .titulo h1 {
     font-family: var(--fonte);
     color: var(--cordata);
     font-size: 30px;
     padding: 10px;
 }
-
-
+ 
+ 
 .cardsContainer {
     display: flex;
     flex-wrap: wrap;
@@ -34,16 +37,34 @@
     align-items: flex-start;
     overflow-y: auto;
 }
-
+ 
 @media (max-width: 768px) {
+ 
+    .cardsContainer {
+        gap: 20px;
+        display: block;
+        overflow-y: auto;
+    }
+ 
     .titulo h1 {
+        font-family: var(--fonte);
+        color: var(--cordata);
         margin-top: 60px;
+       
     }
 }
-
+ 
 @media (max-width: 480px) {
- .titulo h1 {
+    .cardsContainer {
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .titulo h1 {
+        font-family: var(--fonte);
+        color: var(--cordata);
         margin-top: 60px;
     }
-
 }
