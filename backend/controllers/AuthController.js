@@ -1,9 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { read, compare } from '../config/database.js';
 import { JWT_SECRET } from '../config/jwt.js'; 
-import { criarNotificacao } from '../models/notificacoes.js';
-import notificacaoTextos from '../utils/notificacoesTextos.js';
-import { verificarPrimeiroLogin, marcarLoginFeito } from '../models/usuario.js';
 
 
 const loginController = async (req, res) => {

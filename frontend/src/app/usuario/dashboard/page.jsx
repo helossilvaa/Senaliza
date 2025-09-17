@@ -5,7 +5,7 @@ import TarefasPage from '@/components/ListaTarefa/listaTarefa';
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import Layout from '@/components/LayoutTecnico/layout';
+import LayoutUser from '@/components/LayoutUser/layout';
 import Loading from "@/app/loading";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -132,8 +132,8 @@ export default function DashboardTecnico() {
   }
 
   return (
-    <Layout>
-      <>
+    <LayoutUser>
+    
         <div className={styles.page}>
           <div className={styles.dashboardContainer}>
             <h2 className={styles.welcome}>Olá, {nomeUsuario}!</h2>
@@ -197,7 +197,6 @@ export default function DashboardTecnico() {
         </div>
 
         <ToastContainer position="top-right" autoClose={3000} pauseOnHover={false} theme="light" />
-      </>
-    </Layout>
+  </LayoutUser>
   );
 }

@@ -7,11 +7,13 @@ import Loader from '@/app/loading';
 import styles from './403.module.css'
 
 export default function VerifyRole({ permitido = [], children }) {
+    
     const [tipoUser, setTipoUser] = useState(null);
     const [redirecionar, setRedirecionar] = useState('/');
     const router = useRouter();
 
     useEffect(() => {
+
         const token = localStorage.getItem('token');
 
         if (!token) {

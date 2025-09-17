@@ -26,6 +26,7 @@ const authMiddleware = async (req, res, next) => {
     req.usuarioFuncao = decoded.funcao;
     req.usuarioSetor = decoded.setor;
     next();
+    
   } catch (error) {
     console.error('Erro no middleware de autenticação:', error);
     return res.status(403).json({ mensagem: 'Não autorizado: Token inválido' });
