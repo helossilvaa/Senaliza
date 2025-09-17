@@ -1,5 +1,5 @@
-import {create, readAll, read, update, query} from '../config/database.js';
- 
+import { create, readAll, read, update, query } from '../config/database.js';
+
 const criarChamado = async (chamadoData) => {
   try {
     return await create('chamados', chamadoData);
@@ -8,27 +8,33 @@ const criarChamado = async (chamadoData) => {
     throw error;
   }
 };
- 
+
 const listarChamado = async () => {
   try {
-    return await readAll('chamados');
+    const sql = `
+      SELECT c.*, s.nome_sala
+      FROM chamados c
+      JOIN salas s ON c.sala_id = s.id;
+    `;
+    return await query(sql);
   } catch (error) {
     console.error('Erro ao listar chamados: ', error);
     throw error;
   }
-}
- 
+};
+
 const listarChamadosPendentes = async (poolsIds) => {
   try {
     if (!poolsIds || poolsIds.length === 0) {
       return [];
     }
- 
+
     const placeholders = poolsIds.map(() => '?').join(', ');
     const sql = `
-      SELECT c.*
+      SELECT c.*, s.nome_sala
       FROM chamados c
       JOIN pool p ON c.tipo_id = p.id
+      JOIN salas s ON c.sala_id = s.id
       WHERE c.status = 'pendente' AND p.id IN (${placeholders});
     `;
     return await query(sql, poolsIds);
@@ -37,59 +43,66 @@ const listarChamadosPendentes = async (poolsIds) => {
     throw error;
   }
 };
- 
+
 const listarTodosChamadosPendentes = async () => {
-    try {
-        const sql = `
-            SELECT * FROM chamados
-            WHERE status = 'pendente';
-        `;
-        return await query(sql);
-    } catch (error) {
-        console.error('Erro ao buscar todos os chamados pendentes:', error);
-        throw error;
-    }
+  try {
+    const sql = `
+      SELECT c.*, s.nome_sala
+      FROM chamados c
+      JOIN salas s ON c.sala_id = s.id
+      WHERE c.status = 'pendente';
+    `;
+    return await query(sql);
+  } catch (error) {
+    console.error('Erro ao buscar todos os chamados pendentes:', error);
+    throw error;
+  }
 };
- 
+
 const obterChamadoPorId = async (id) => {
   try {
-    return await read('chamados', `id = ${id}`);
+    const sql = `
+      SELECT c.*, s.nome_sala
+      FROM chamados c
+      JOIN salas s ON c.sala_id = s.id
+      WHERE c.id = ?;
+    `;
+    const result = await query(sql, [id]);
+    return result[0] || null;
   } catch (error) {
     console.error('Erro ao obter chamado por ID: ', error);
     throw error;
   }
-}
- 
+};
 
- 
 const atualizarStatusChamado = async (chamadoId, novoStatus) => {
   try {
-      const dadosParaAtualizar = { status: novoStatus };
-      const id = `id = ${chamadoId}`;
- 
-      return await update('chamados', dadosParaAtualizar, id);
+    const dadosParaAtualizar = { status: novoStatus };
+    const id = `id = ${chamadoId}`;
+
+    return await update('chamados', dadosParaAtualizar, id);
   } catch (error) {
-      console.error('Erro ao atualizar o status do chamado:', error);
-      throw error;
+    console.error('Erro ao atualizar o status do chamado:', error);
+    throw error;
   }
 };
- 
+
 const criarApontamentos = async (id, apontamentoData) => {
-  try{
-    await create('apontamentos', {...apontamentoData, chamado_id: id});
+  try {
+    await create('apontamentos', { ...apontamentoData, chamado_id: id });
   } catch (error) {
     console.error('Erro ao criar apontamento: ', error);
     throw error;
   }
-}
- 
+};
+
 const assumirChamado = async (id, tecnicoId) => {
   try {
     const chamado = await read('chamados', `id = ${id}`);
     if (!chamado) throw new Error('Chamado não encontrado');
     if (chamado.tecnico_id) throw new Error('Chamado já foi assumido');
- 
-    return await update('chamados', { tecnico_id: tecnicoId, status: 'em andamento'}, `id = ${id}`);
+
+    return await update('chamados', { tecnico_id: tecnicoId, status: 'em andamento' }, `id = ${id}`);
   } catch (error) {
     console.error('Erro ao assumir chamado: ', error);
     throw error;

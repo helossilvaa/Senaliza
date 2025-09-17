@@ -1,23 +1,57 @@
 :root {
-    --fundo: #f8f8fa;
-    --branco: #ffffff;
-    --preto: #000000;
-    --bola: #b10000;
-    --fonte: 'Poppins', sans-serif;
-    --cordata: #535355;
-    --vermelhoEscuro: #640d14;
+  --fundo: #f8f8fa;
+  --branco: #ffffff;
+  --preto: #000000;
+  --bola: #b10000;
+  --fonte: 'Poppins', sans-serif;
+  --cordata: #535355;
+  --vermelhoEscuro: #640d14;
 }
 
-.h4{
-    margin: 0;
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  background: var(--branco);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  font-family: var(--fonte);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto; 
+  min-width: 0; 
+}
+
+.titulo {
+  margin: 0;
   font-size: 1rem;
   font-weight: 600;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  max-width: 100%;
+  display: block;
 }
 
-.p {
+.sala {
+  margin: 4px 0 0 0;
   font-size: 0.85rem;
   color: var(--cordata);
-  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .btnVerMais {
@@ -28,11 +62,10 @@
   border-radius: 6px;
   margin-right: 6px;
   cursor: pointer;
-  transition: background 0.3s ease;
-  transition: color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.btnVerMais:hover{
+.btnVerMais:hover {
   background-color: var(--vermelhoEscuro);
   color: var(--branco);
 }
@@ -48,16 +81,20 @@
   transition: background 0.3s ease;
 }
 
-.btnAceitar:hover{
+.btnAceitar:hover {
   background-color: var(--vermelhoEscuro);
 }
 
 @media (max-width: 480px) {
-    .btnAceitar {
+  .btnAceitar {
     width: 100%;
   }
 
   .btnVerMais {
     flex: 1;
+  }
+
+  .card {
+    gap: 8px;
   }
 }

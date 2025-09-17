@@ -79,7 +79,7 @@ export default function CardAdmin({ pools, equipamentos, salas, titulo, id, data
                 <p><strong>Sala: </strong> {salas?.find(s => s.id === chamado.sala_id)?.nome_sala || "N/A"}</p>
                 <p><strong>Equipamento: </strong> {equipamentos?.find(eq => eq.patrimonio === chamado.equipamento_id)?.equipamento || "N/A"}</p>
 
-                  <p><strong>Descrição: </strong>{chamado.descricao} </p>
+                  <p><strong>Descrição: </strong>{chamado?.descricao || "N/A"} </p>
                 </div>
                 <div className="modal-footer">
                   <button

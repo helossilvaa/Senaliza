@@ -3,10 +3,10 @@ import bcrypt from 'bcryptjs';
  
  
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'Senaliza',
+    host: '10.189.80.68',
+    user: 'Beatriz',
+    password: 'Senaliza@123',
+    database: 'senaliza',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
