@@ -121,7 +121,7 @@ export default function InfoPage({ params }) {
                 </div>
                 <p className={styles.descricao}>{chamado.descricao}</p>
  
-                {/* Aqui colocamos o texto do prazo e o botão lado a lado */}
+                
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1rem" }}>
                   <p style={{ margin: 0, fontWeight: "bold" }}>
                     {chamado.prazo

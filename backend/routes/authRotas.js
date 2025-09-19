@@ -6,8 +6,8 @@ const router = express.Router();
 
 const fakeUsers = [
   {
-    registro: '12345678',
-    nome: 'William',
+    registro: '24166210',
+    nome: 'HELOISE SOARES SILVA',
     senha: '12345',
     email: '12345678@educ123.sp.senai.br',
     funcao: 'usuario',
