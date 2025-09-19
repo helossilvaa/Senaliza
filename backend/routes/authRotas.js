@@ -9,7 +9,7 @@ const fakeUsers = [
     registro: '24166210',
     nome: 'HELOISE SOARES SILVA',
     senha: '12345',
-    email: '12345678@educ123.sp.senai.br',
+    email: '24166210@educ123.sp.senai.br',
     funcao: 'usuario',
   },
 
